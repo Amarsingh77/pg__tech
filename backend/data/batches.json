@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "course": "Full-Stack Engineering",
+        "startDate": "Spring 2026",
+        "mode": "On-Campus",
+        "seats": 30,
+        "status": "Open"
+    },
+    {
+        "id": 2,
+        "course": "Data Science PGP",
+        "startDate": "Spring 2026",
+        "mode": "Hybrid",
+        "seats": 25,
+        "status": "Filling Fast"
+    },
+    {
+        "id": 3,
+        "course": "Cloud Architecture",
+        "startDate": "Winter 2025",
+        "mode": "Online (Live)",
+        "seats": 40,
+        "status": "Open"
+    },
+    {
+        "id": 4,
+        "course": "Cybersecurity Diploma",
+        "startDate": "Winter 2025",
+        "mode": "Evening School",
+        "seats": 20,
+        "status": "Waitlist"
+    }
+]

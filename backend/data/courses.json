@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "title": "Advanced Diploma in Full-Stack Engineering",
+        "description": "A comprehensive curriculum covering modern software architecture, distributed systems, and full-cycle web development.",
+        "duration": "2 Semesters",
+        "level": "Advanced",
+        "image": "https://placehold.co/600x400/4F46E5/FFFFFF?text=Full-Stack+Engineering"
+    },
+    {
+        "id": 2,
+        "title": "Post-Graduate Program in Data Science",
+        "description": "Rigorous training in statistical analysis, machine learning algorithms, and big data technologies for predictive modeling.",
+        "duration": "3 Semesters",
+        "level": "Post-Graduate",
+        "image": "https://placehold.co/600x400/9333EA/FFFFFF?text=Data+Science"
+    },
+    {
+        "id": 3,
+        "title": "Certification in Cloud Architecture",
+        "description": "Specialized training in designing scalable, resilient, and secure cloud infrastructure on enterprise platforms.",
+        "duration": "1 Semester",
+        "level": "Professional",
+        "image": "https://placehold.co/600x400/0EA5E9/FFFFFF?text=Cloud+Architecture"
+    },
+    {
+        "id": 4,
+        "title": "Diploma in Cybersecurity & InfoSec",
+        "description": "In-depth study of network security, cryptography, and ethical hacking to safeguard organizational assets.",
+        "duration": "2 Semesters",
+        "level": "Intermediate",
+        "image": "https://placehold.co/600x400/EF4444/FFFFFF?text=Cybersecurity"
+    }
+]
