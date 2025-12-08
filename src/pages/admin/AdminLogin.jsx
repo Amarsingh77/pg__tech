@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogIn, Mail, Lock, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { API_ENDPOINTS } from '../../config/api';
 
 const AdminLogin = () => {
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ const AdminLogin = () => {
         setLoading(true);
 
         try {
-            const res = await fetch('http://localhost:3001/api/auth/login', {
+            const res = await fetch(API_ENDPOINTS.login, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)

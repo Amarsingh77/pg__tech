@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, X, Upload } from 'lucide-react';
 import ImageUpload from '../../components/ui/ImageUpload';
+import { API_ENDPOINTS } from '../../config/api';
 
 const ManageGallery = () => {
     const [images, setImages] = useState([]);
@@ -18,7 +19,7 @@ const ManageGallery = () => {
 
     const fetchGallery = async () => {
         try {
-            const res = await fetch('http://localhost:3001/api/gallery');
+            const res = await fetch(API_ENDPOINTS.gallery);
             const data = await res.json();
             setImages(data);
         } catch (error) {
@@ -37,7 +38,7 @@ const ManageGallery = () => {
         }
 
         try {
-            await fetch('http://localhost:3001/api/gallery', {
+            await fetch(API_ENDPOINTS.gallery, {
                 method: 'POST',
                 body: data // No Content-Type header needed, browser sets it for FormData
             });
@@ -51,7 +52,7 @@ const ManageGallery = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this image?')) {
             try {
-                await fetch(`http://localhost:3001/api/gallery/${id}`, { method: 'DELETE' });
+                await fetch(API_ENDPOINTS.galleryItem(id), { method: 'DELETE' });
                 fetchGallery();
             } catch (error) {
                 console.error('Error deleting image:', error);

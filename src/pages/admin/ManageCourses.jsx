@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, X, Upload } from 'lucide-react';
 import ImageUpload from '../../components/ui/ImageUpload';
+import { API_ENDPOINTS } from '../../config/api';
 
 const ManageCourses = () => {
     const [courses, setCourses] = useState([]);
@@ -10,8 +11,8 @@ const ManageCourses = () => {
         title: '',
         description: '',
         duration: '',
-        level: 'Beginner',
-        image: null
+        level: '',
+        image: ''
     });
 
     useEffect(() => {
@@ -20,7 +21,7 @@ const ManageCourses = () => {
 
     const fetchCourses = async () => {
         try {
-            const res = await fetch('http://localhost:3001/api/courses');
+            const res = await fetch(API_ENDPOINTS.courses);
             const data = await res.json();
             setCourses(data);
         } catch (error) {
@@ -31,8 +32,8 @@ const ManageCourses = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const url = currentCourse
-            ? `http://localhost:3001/api/courses/${currentCourse.id}`
-            : 'http://localhost:3001/api/courses';
+            ? API_ENDPOINTS.course(currentCourse.id)
+            : API_ENDPOINTS.courses;
 
         const method = currentCourse ? 'PUT' : 'POST';
 
@@ -63,7 +64,7 @@ const ManageCourses = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this course?')) {
             try {
-                await fetch(`http://localhost:3001/api/courses/${id}`, { method: 'DELETE' });
+                await fetch(API_ENDPOINTS.course(id), { method: 'DELETE' });
                 fetchCourses();
             } catch (error) {
                 console.error('Error deleting course:', error);

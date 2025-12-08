@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, X } from 'lucide-react';
+import { API_ENDPOINTS } from '../../config/api';
 
 const ManageBatches = () => {
     const [batches, setBatches] = useState([]);
@@ -23,7 +24,7 @@ const ManageBatches = () => {
 
     const fetchBatches = async () => {
         try {
-            const res = await fetch('http://localhost:3001/api/batches');
+            const res = await fetch(API_ENDPOINTS.batches);
             const data = await res.json();
             setBatches(data);
         } catch (error) {
@@ -34,8 +35,8 @@ const ManageBatches = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const url = currentBatch
-            ? `http://localhost:3001/api/batches/${currentBatch.id}`
-            : 'http://localhost:3001/api/batches';
+            ? API_ENDPOINTS.batch(currentBatch.id)
+            : API_ENDPOINTS.batches;
 
         const method = currentBatch ? 'PUT' : 'POST';
 
@@ -55,7 +56,7 @@ const ManageBatches = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this batch?')) {
             try {
-                await fetch(`http://localhost:3001/api/batches/${id}`, { method: 'DELETE' });
+                await fetch(API_ENDPOINTS.batch(id), { method: 'DELETE' });
                 fetchBatches();
             } catch (error) {
                 console.error('Error deleting batch:', error);

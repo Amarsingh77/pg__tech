@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Shield, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
+import { API_ENDPOINTS } from '../../config/api';
 
 const AdminOTP = () => {
     const navigate = useNavigate();
@@ -82,7 +83,7 @@ const AdminOTP = () => {
 
         try {
             console.log('📡 Sending OTP verification request...');
-            const res = await fetch('http://localhost:3001/api/auth/verify-otp', {
+            const res = await fetch(API_ENDPOINTS.verifyOtp, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, otp: otpCode })

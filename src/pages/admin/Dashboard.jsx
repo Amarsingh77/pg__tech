@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Users, BookOpen, Calendar, MessageSquare } from 'lucide-react';
+import { API_ENDPOINTS } from '../../config/api';
 
 const Dashboard = () => {
     const [stats, setStats] = useState({
@@ -14,10 +15,10 @@ const Dashboard = () => {
         const fetchStats = async () => {
             try {
                 const [enrollmentsRes, coursesRes, batchesRes, testimonialsRes] = await Promise.all([
-                    fetch('http://localhost:3001/api/enrollments'),
-                    fetch('http://localhost:3001/api/courses'),
-                    fetch('http://localhost:3001/api/batches'),
-                    fetch('http://localhost:3001/api/testimonials')
+                    fetch(API_ENDPOINTS.enrollments),
+                    fetch(API_ENDPOINTS.courses),
+                    fetch(API_ENDPOINTS.batches),
+                    fetch(API_ENDPOINTS.testimonials)
                 ]);
 
                 const enrollments = await enrollmentsRes.json();

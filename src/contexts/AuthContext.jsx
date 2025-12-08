@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { API_ENDPOINTS } from '../config/api';
 
 const AuthContext = createContext();
 
@@ -32,7 +33,7 @@ export const AuthProvider = ({ children }) => {
         }
 
         try {
-            const res = await fetch('http://localhost:3001/api/auth/check', {
+            const res = await fetch(API_ENDPOINTS.checkAuth, {
                 headers: {
                     'Authorization': `Bearer ${savedToken}`
                 }
@@ -68,7 +69,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await fetch('http://localhost:3001/api/auth/logout', {
+            await fetch(API_ENDPOINTS.logout, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`

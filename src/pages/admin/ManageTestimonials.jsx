@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, X, Star, Upload } from 'lucide-react';
 import ImageUpload from '../../components/ui/ImageUpload';
+import { API_ENDPOINTS } from '../../config/api';
 
 const ManageTestimonials = () => {
     const [testimonials, setTestimonials] = useState([]);
@@ -20,7 +21,7 @@ const ManageTestimonials = () => {
 
     const fetchTestimonials = async () => {
         try {
-            const res = await fetch('http://localhost:3001/api/testimonials');
+            const res = await fetch(API_ENDPOINTS.testimonials);
             const data = await res.json();
             setTestimonials(data);
         } catch (error) {
@@ -31,8 +32,8 @@ const ManageTestimonials = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const url = currentTestimonial
-            ? `http://localhost:3001/api/testimonials/${currentTestimonial.id}`
-            : 'http://localhost:3001/api/testimonials';
+            ? API_ENDPOINTS.testimonial(currentTestimonial.id)
+            : API_ENDPOINTS.testimonials;
 
         const method = currentTestimonial ? 'PUT' : 'POST';
 
@@ -62,7 +63,7 @@ const ManageTestimonials = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this testimonial?')) {
             try {
-                await fetch(`http://localhost:3001/api/testimonials/${id}`, { method: 'DELETE' });
+                await fetch(API_ENDPOINTS.testimonial(id), { method: 'DELETE' });
                 fetchTestimonials();
             } catch (error) {
                 console.error('Error deleting testimonial:', error);

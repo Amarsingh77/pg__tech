@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Mail, Phone, Calendar } from 'lucide-react';
+import { API_ENDPOINTS } from '../../config/api';
 
 const ViewEnrollments = () => {
     const [enrollments, setEnrollments] = useState([]);
@@ -11,7 +12,7 @@ const ViewEnrollments = () => {
 
     const fetchEnrollments = async () => {
         try {
-            const res = await fetch('http://localhost:3001/api/enrollments');
+            const res = await fetch(API_ENDPOINTS.enrollments);
             const data = await res.json();
             setEnrollments(data);
         } catch (error) {
