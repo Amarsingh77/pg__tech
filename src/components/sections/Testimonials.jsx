@@ -1,22 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Quote, Star } from 'lucide-react';
-import { testimonialsData } from '../../data/mockData';
+import { API_ENDPOINTS } from '../../config/api';
 
 const Testimonials = () => {
     const [index, setIndex] = useState(0);
+    const [testimonials, setTestimonials] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setIndex((prev) => (prev + 1) % testimonialsData.length);
-        }, 6000);
-        return () => clearInterval(interval);
+        const fetchTestimonials = async () => {
+            try {
+                const res = await fetch(API_ENDPOINTS.testimonials);
+                const data = await res.json();
+                setTestimonials(data);
+            } catch (error) {
+                console.error('Error fetching testimonials:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchTestimonials();
     }, []);
 
-    const nextSlide = () => setIndex((prev) => (prev + 1) % testimonialsData.length);
-    const prevSlide = () => setIndex((prev) => (prev - 1 + testimonialsData.length) % testimonialsData.length);
+    useEffect(() => {
+        if (testimonials.length === 0) return;
+        const interval = setInterval(() => {
+            setIndex((prev) => (prev + 1) % testimonials.length);
+        }, 6000);
+        return () => clearInterval(interval);
+    }, [testimonials.length]);
 
-    const testimonial = testimonialsData[index];
+    const nextSlide = () => testimonials.length > 0 && setIndex((prev) => (prev + 1) % testimonials.length);
+    const prevSlide = () => testimonials.length > 0 && setIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+
+    const testimonial = testimonials[index] || {};
+
+    if (loading || testimonials.length === 0) {
+        return null; // Don't render section if no data
+    }
 
     return (
         <section id="testimonials" className="py-32 bg-[#030014] text-white relative overflow-hidden">

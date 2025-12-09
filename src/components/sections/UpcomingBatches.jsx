@@ -1,9 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, Users, ArrowRight, CheckCircle2 } from 'lucide-react';
-import { batchesData } from '../../data/mockData';
+import { API_ENDPOINTS } from '../../config/api';
 
 const UpcomingBatches = ({ onEnrollClick }) => {
+    const [batches, setBatches] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchBatches = async () => {
+            try {
+                const res = await fetch(API_ENDPOINTS.batches);
+                const data = await res.json();
+                setBatches(data);
+            } catch (error) {
+                console.error('Error fetching batches:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchBatches();
+    }, []);
+
+    if (loading || batches.length === 0) {
+        return null; // Don't render section if no data
+    }
     return (
         <section id="batches" className="py-32 bg-[#030014] text-white relative">
             <div className="container mx-auto px-6 relative z-10">
@@ -31,7 +52,7 @@ const UpcomingBatches = ({ onEnrollClick }) => {
 
                 <div className="max-w-5xl mx-auto">
                     <div className="grid gap-6">
-                        {batchesData.map((batch, i) => (
+                        {batches.map((batch, i) => (
                             <motion.div
                                 key={batch.id}
                                 initial={{ opacity: 0, x: -20 }}

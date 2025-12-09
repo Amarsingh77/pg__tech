@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { BarChart, Users, ArrowRight } from 'lucide-react';
-import { coursesData } from '../../data/mockData';
+import { BarChart, Users, ArrowRight, Code, Cpu, Building, Cog } from 'lucide-react';
+import { API_ENDPOINTS } from '../../config/api';
 
 const SpotlightCard = ({ children, className = "" }) => {
     const divRef = useRef(null);
@@ -58,7 +58,40 @@ const SpotlightCard = ({ children, className = "" }) => {
     );
 };
 
+// Map course titles to icons
+const getIconForCourse = (title) => {
+    const lowerTitle = title?.toLowerCase() || '';
+    if (lowerTitle.includes('computer') || lowerTitle.includes('software') || lowerTitle.includes('programming')) return Code;
+    if (lowerTitle.includes('mechanical') || lowerTitle.includes('robotics')) return Cog;
+    if (lowerTitle.includes('civil') || lowerTitle.includes('construction')) return Building;
+    return Cpu;
+};
+
 const CoursesSection = ({ onEnrollClick }) => {
+    const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const res = await fetch(API_ENDPOINTS.courses);
+                const data = await res.json();
+                setCourses(data);
+            } catch (error) {
+                console.error('Error fetching courses:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchCourses();
+    }, []);
+
+    if (loading || courses.length === 0) {
+        return null;
+    }
+
+    const colors = ['from-blue-500 to-cyan-500', 'from-purple-500 to-pink-500', 'from-orange-500 to-red-500', 'from-green-500 to-emerald-500'];
+
     return (
         <section id="courses" className="py-32 bg-[#030014] text-white relative">
             <div className="container mx-auto px-6 relative z-10">
@@ -85,45 +118,48 @@ const CoursesSection = ({ onEnrollClick }) => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {coursesData.map((course, i) => (
-                        <motion.div
-                            key={course.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: i * 0.1 }}
-                        >
-                            <SpotlightCard className="h-full flex flex-col">
-                                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${course.color} flex items-center justify-center mb-8 shadow-lg`}>
-                                    <course.icon size={32} className="text-white" />
-                                </div>
-
-                                <h3 className="text-2xl font-bold mb-4 text-white">{course.title}</h3>
-                                <p className="text-gray-400 mb-8 flex-grow leading-relaxed">
-                                    {course.description}
-                                </p>
-
-                                <div className="space-y-4 mb-8">
-                                    <div className="flex items-center text-sm text-gray-300">
-                                        <BarChart size={16} className="mr-3 text-blue-400" />
-                                        <span>{course.level}</span>
+                    {courses.map((course, i) => {
+                        const IconComponent = getIconForCourse(course.title);
+                        return (
+                            <motion.div
+                                key={course.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5, delay: i * 0.1 }}
+                            >
+                                <SpotlightCard className="h-full flex flex-col">
+                                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${colors[i % colors.length]} flex items-center justify-center mb-8 shadow-lg`}>
+                                        <IconComponent size={32} className="text-white" />
                                     </div>
-                                    <div className="flex items-center text-sm text-gray-300">
-                                        <Users size={16} className="mr-3 text-purple-400" />
-                                        <span>{course.duration}</span>
-                                    </div>
-                                </div>
 
-                                <button
-                                    onClick={() => onEnrollClick(course)}
-                                    className="w-full py-4 rounded-xl bg-white text-black font-bold hover:bg-gray-200 transition-colors flex items-center justify-center group"
-                                >
-                                    Enroll Now
-                                    <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
-                                </button>
-                            </SpotlightCard>
-                        </motion.div>
-                    ))}
+                                    <h3 className="text-2xl font-bold mb-4 text-white">{course.title}</h3>
+                                    <p className="text-gray-400 mb-8 flex-grow leading-relaxed">
+                                        {course.description}
+                                    </p>
+
+                                    <div className="space-y-4 mb-8">
+                                        <div className="flex items-center text-sm text-gray-300">
+                                            <BarChart size={16} className="mr-3 text-blue-400" />
+                                            <span>{course.level || 'All Levels'}</span>
+                                        </div>
+                                        <div className="flex items-center text-sm text-gray-300">
+                                            <Users size={16} className="mr-3 text-purple-400" />
+                                            <span>{course.duration || '6 Months'}</span>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        onClick={() => onEnrollClick(course)}
+                                        className="w-full py-4 rounded-xl bg-white text-black font-bold hover:bg-gray-200 transition-colors flex items-center justify-center group"
+                                    >
+                                        Enroll Now
+                                        <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
+                                    </button>
+                                </SpotlightCard>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             </div>
         </section>
