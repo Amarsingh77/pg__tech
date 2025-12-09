@@ -1,73 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Clock, MapPin, Users, Filter, ArrowRight, CheckCircle } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 
 const Batches = ({ onEnrollClick }) => {
     const [filterCourse, setFilterCourse] = useState('All');
     const [filterMode, setFilterMode] = useState('All');
+    const [batches, setBatches] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const batches = [
-        {
-            id: 1,
-            course: 'Computer Science Engineering',
-            stream: 'CSE',
-            startDate: 'Oct 15, 2023',
-            time: '10:00 AM - 12:00 PM',
-            days: 'Mon, Wed, Fri',
-            mode: 'Online',
-            status: 'Filling Fast',
-            seatsLeft: 5,
-            instructor: 'Dr. Sarah Johnson'
-        },
-        {
-            id: 2,
-            course: 'Mechanical Engineering',
-            stream: 'ME',
-            startDate: 'Oct 20, 2023',
-            time: '02:00 PM - 04:00 PM',
-            days: 'Tue, Thu, Sat',
-            mode: 'Offline',
-            status: 'Open',
-            seatsLeft: 12,
-            instructor: 'Prof. Alan Grant'
-        },
-        {
-            id: 3,
-            course: 'Civil Engineering',
-            stream: 'CE',
-            startDate: 'Nov 01, 2023',
-            time: '06:00 PM - 08:00 PM',
-            days: 'Mon, Wed, Fri',
-            mode: 'Online',
-            status: 'Open',
-            seatsLeft: 20,
-            instructor: 'Eng. Emily Davis'
-        },
-        {
-            id: 4,
-            course: 'Full Stack Development',
-            stream: 'CSE',
-            startDate: 'Nov 05, 2023',
-            time: '08:00 PM - 10:00 PM',
-            days: 'Weekends',
-            mode: 'Online',
-            status: 'Filling Fast',
-            seatsLeft: 3,
-            instructor: 'Mark Zuckerberg (Guest)'
-        },
-        {
-            id: 5,
-            course: 'Robotics & Automation',
-            stream: 'ME',
-            startDate: 'Nov 10, 2023',
-            time: '11:00 AM - 01:00 PM',
-            days: 'Tue, Thu',
-            mode: 'Offline',
-            status: 'Waitlist',
-            seatsLeft: 0,
-            instructor: 'Elon Musk (Guest)'
-        }
-    ];
+    useEffect(() => {
+        const fetchBatches = async () => {
+            try {
+                const res = await fetch(API_ENDPOINTS.batches);
+                const data = await res.json();
+                setBatches(data);
+            } catch (error) {
+                console.error('Error fetching batches:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchBatches();
+    }, []);
 
     const filteredBatches = batches.filter(batch => {
         const matchCourse = filterCourse === 'All' || batch.stream === filterCourse;
@@ -142,14 +97,14 @@ const Batches = ({ onEnrollClick }) => {
                                 <div className="flex-grow">
                                     <div className="flex items-center gap-3 mb-2">
                                         <span className={`px-3 py-1 rounded-full text-xs font-bold ${batch.stream === 'CSE' ? 'bg-blue-500/20 text-blue-400' :
-                                                batch.stream === 'ME' ? 'bg-orange-500/20 text-orange-400' :
-                                                    'bg-green-500/20 text-green-400'
+                                            batch.stream === 'ME' ? 'bg-orange-500/20 text-orange-400' :
+                                                'bg-green-500/20 text-green-400'
                                             }`}>
                                             {batch.stream}
                                         </span>
                                         <span className={`px-3 py-1 rounded-full text-xs font-bold ${batch.status === 'Filling Fast' ? 'bg-yellow-500/20 text-yellow-400' :
-                                                batch.status === 'Waitlist' ? 'bg-red-500/20 text-red-400' :
-                                                    'bg-emerald-500/20 text-emerald-400'
+                                            batch.status === 'Waitlist' ? 'bg-red-500/20 text-red-400' :
+                                                'bg-emerald-500/20 text-emerald-400'
                                             }`}>
                                             {batch.status}
                                         </span>
@@ -186,8 +141,8 @@ const Batches = ({ onEnrollClick }) => {
                                         onClick={() => onEnrollClick && onEnrollClick(batch)}
                                         disabled={batch.seatsLeft === 0}
                                         className={`px-6 py-2 rounded-lg font-bold flex items-center gap-2 transition-all ${batch.seatsLeft === 0
-                                                ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
-                                                : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20'
+                                            ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                                            : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20'
                                             }`}
                                     >
                                         {batch.seatsLeft === 0 ? 'Waitlist' : 'Enroll Now'}

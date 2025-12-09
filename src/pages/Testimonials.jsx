@@ -1,58 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Quote, Star, User, Briefcase, Linkedin } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 
 const Testimonials = () => {
-    const testimonials = [
-        {
-            id: 1,
-            name: 'Sarah Johnson',
-            role: 'Full Stack Developer at Google',
-            image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-            quote: "The curriculum here is unmatched. It didn't just teach me to code; it taught me how to think like an engineer. I went from zero to a job at Google in 6 months.",
-            rating: 5
-        },
-        {
-            id: 2,
-            name: 'Michael Chen',
-            role: 'Data Scientist at Amazon',
-            image: 'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-            quote: "The hands-on projects were the game changer. I had a portfolio of real-world applications before I even graduated. Highly recommended!",
-            rating: 5
-        },
-        {
-            id: 3,
-            name: 'Emily Davis',
-            role: 'Product Manager at Microsoft',
-            image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-            quote: "TechInstitute gave me the technical foundation I needed to transition from marketing to product management. The mentors are incredible.",
-            rating: 5
-        },
-        {
-            id: 4,
-            name: 'David Wilson',
-            role: 'Frontend Engineer at Netflix',
-            image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-            quote: "I loved the community aspect. Learning alongside such motivated peers pushed me to be my best. The career support is also top-notch.",
-            rating: 5
-        },
-        {
-            id: 5,
-            name: 'Jessica Brown',
-            role: 'UX Designer at Apple',
-            image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-            quote: "The design thinking workshops were eye-opening. I learned how to build user-centric products that solve real problems.",
-            rating: 4
-        },
-        {
-            id: 6,
-            name: 'Chris Lee',
-            role: 'Cloud Architect at AWS',
-            image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-            quote: "From basic networking to advanced cloud architecture, the depth of knowledge provided here is impressive. It accelerated my career by years.",
-            rating: 5
-        }
-    ];
+    const [testimonials, setTestimonials] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchTestimonials = async () => {
+            try {
+                const res = await fetch(API_ENDPOINTS.testimonials);
+                const data = await res.json();
+                setTestimonials(data);
+            } catch (error) {
+                console.error('Error fetching testimonials:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchTestimonials();
+    }, []);
+
 
     return (
         <div className="min-h-screen bg-gray-900 text-white pt-20">
