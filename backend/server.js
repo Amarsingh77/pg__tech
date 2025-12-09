@@ -19,6 +19,22 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Auth routes
 app.use('/api/auth', authRoutes);
 
+// Health check route
+app.get('/', (req, res) => {
+    res.json({
+        status: 'ok',
+        message: 'PG Tech API is running!',
+        endpoints: {
+            auth: '/api/auth',
+            courses: '/api/courses',
+            batches: '/api/batches',
+            testimonials: '/api/testimonials',
+            gallery: '/api/gallery',
+            enrollments: '/api/enrollments'
+        }
+    });
+});
+
 // Ensure uploads directory exists
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
