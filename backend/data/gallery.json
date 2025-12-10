@@ -1,1 +1,56 @@
-[]
+[
+    {
+        "id": 1733840000001,
+        "title": "AWS Cloud Practitioner Certificate",
+        "category": "Certifications",
+        "image": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80"
+    },
+    {
+        "id": 1733840000002,
+        "title": "Google Cloud Professional Certificate",
+        "category": "Certifications",
+        "image": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80"
+    },
+    {
+        "id": 1733840000003,
+        "title": "Microsoft Azure Fundamentals",
+        "category": "Certifications",
+        "image": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80"
+    },
+    {
+        "id": 1733840000004,
+        "title": "Best Tech Institute Award 2023",
+        "category": "Achievements",
+        "image": "https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=800&q=80"
+    },
+    {
+        "id": 1733840000005,
+        "title": "National Hackathon Winners",
+        "category": "Achievements",
+        "image": "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=80"
+    },
+    {
+        "id": 1733840000006,
+        "title": "Excellence in Education Award",
+        "category": "Achievements",
+        "image": "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80"
+    },
+    {
+        "id": 1733840000007,
+        "title": "Annual Tech Fest 2023",
+        "category": "Festivals",
+        "image": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80"
+    },
+    {
+        "id": 1733840000008,
+        "title": "Cultural Night Celebration",
+        "category": "Festivals",
+        "image": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80"
+    },
+    {
+        "id": 1733840000009,
+        "title": "Graduation Ceremony 2023",
+        "category": "Festivals",
+        "image": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80"
+    }
+]
