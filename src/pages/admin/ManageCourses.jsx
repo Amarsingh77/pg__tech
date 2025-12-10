@@ -11,7 +11,8 @@ const ManageCourses = () => {
         title: '',
         description: '',
         duration: '',
-        level: '',
+        level: 'Beginner',
+        stream: 'CSE',
         image: ''
     });
 
@@ -42,6 +43,7 @@ const ManageCourses = () => {
         data.append('description', formData.description);
         data.append('duration', formData.duration);
         data.append('level', formData.level);
+        data.append('stream', formData.stream);
         if (formData.image instanceof File) {
             data.append('image', formData.image);
         } else if (formData.image) {
@@ -125,7 +127,12 @@ const ManageCourses = () => {
                         <div className="p-5 flex-grow">
                             <h3 className="text-xl font-bold text-white mb-2">{course.title}</h3>
                             <p className="text-gray-400 text-sm mb-4 line-clamp-2">{course.description}</p>
-                            <div className="text-sm text-blue-400 font-medium">{course.duration}</div>
+                            <div className="flex items-center justify-between text-sm">
+                                <span className="text-blue-400 font-medium">{course.duration}</span>
+                                {course.stream && (
+                                    <span className="px-2 py-1 rounded bg-purple-500/20 text-purple-400 text-xs font-medium">{course.stream}</span>
+                                )}
+                            </div>
                         </div>
                         <div className="p-4 border-t border-gray-700 flex justify-end gap-3">
                             <button onClick={() => openModal(course)} className="text-blue-400 hover:text-blue-300">
@@ -195,6 +202,19 @@ const ManageCourses = () => {
                                         <option value="Advanced">Advanced</option>
                                     </select>
                                 </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm text-gray-400 mb-1">Stream</label>
+                                <select
+                                    value={formData.stream}
+                                    onChange={(e) => setFormData({ ...formData, stream: e.target.value })}
+                                    className="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:outline-none focus:border-blue-500"
+                                >
+                                    <option value="CSE">Computer Science (CSE)</option>
+                                    <option value="ME">Mechanical Engineering (ME)</option>
+                                    <option value="CE">Civil Engineering (CE)</option>
+                                    <option value="EE">Electrical Engineering (EE)</option>
+                                </select>
                             </div>
                             <div>
                                 <ImageUpload
