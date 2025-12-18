@@ -111,39 +111,88 @@ const ManageCourses = () => {
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {courses.map((course) => (
-                    <div key={course.id} className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 shadow-lg flex flex-col">
-                        <div className="h-40 bg-gray-700 relative">
-                            {course.image ? (
-                                <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
+            <div className="space-y-12">
+                {['CSE', 'ME', 'CE', 'EE'].map((stream) => {
+                    const streamCourses = courses.filter(c => c.stream === stream);
+                    const streamLabels = {
+                        'CSE': 'Computer Science (CSE)',
+                        'ME': 'Mechanical Engineering (ME)',
+                        'CE': 'Civil Engineering (CE)',
+                        'EE': 'Electrical Engineering (EE)'
+                    };
+
+                    return (
+                        <div key={stream} className="bg-gray-800/50 rounded-2xl p-6 border border-gray-700/50">
+                            <div className="flex items-center mb-6">
+                                <h3 className="text-2xl font-bold text-white border-l-4 border-blue-500 pl-4">
+                                    {streamLabels[stream]}
+                                </h3>
+                                <span className="ml-4 px-3 py-1 bg-gray-700 rounded-full text-sm text-gray-400">
+                                    {streamCourses.length} Courses
+                                </span>
+                            </div>
+
+                            {streamCourses.length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {streamCourses.map((course) => (
+                                        <div key={course.id} className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 shadow-lg flex flex-col hover:border-blue-500/50 transition-colors">
+                                            <div className="h-40 bg-gray-700 relative group">
+                                                {course.image ? (
+                                                    <img src={course.image} alt={course.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center text-gray-500 bg-gray-800">
+                                                        <Upload size={24} className="mb-2 opacity-50" />
+                                                    </div>
+                                                )}
+                                                <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md px-2 py-1 rounded text-xs text-white border border-white/10">
+                                                    {course.level}
+                                                </div>
+                                            </div>
+                                            <div className="p-5 flex-grow">
+                                                <h3 className="text-xl font-bold text-white mb-2 line-clamp-1" title={course.title}>{course.title}</h3>
+                                                <p className="text-gray-400 text-sm mb-4 line-clamp-2 h-10">{course.description}</p>
+                                                <div className="flex items-center justify-between text-sm mt-auto">
+                                                    <span className="text-blue-400 font-medium bg-blue-500/10 px-2 py-1 rounded">
+                                                        {course.duration}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="p-4 border-t border-gray-700 flex justify-end gap-3 bg-gray-800/50">
+                                                <button
+                                                    onClick={() => openModal(course)}
+                                                    className="p-2 text-blue-400 hover:text-white hover:bg-blue-600 rounded-lg transition-all"
+                                                    title="Edit Course"
+                                                >
+                                                    <Edit size={18} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(course.id)}
+                                                    className="p-2 text-red-400 hover:text-white hover:bg-red-600 rounded-lg transition-all"
+                                                    title="Delete Course"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center text-gray-500">No Image</div>
+                                <div className="text-center py-12 border-2 border-dashed border-gray-700 rounded-xl bg-gray-800/30">
+                                    <p className="text-gray-500 mb-4">No courses added for {streamLabels[stream]} yet.</p>
+                                    <button
+                                        onClick={() => {
+                                            openModal();
+                                            setFormData(prev => ({ ...prev, stream }));
+                                        }}
+                                        className="text-blue-400 hover:text-blue-300 text-sm font-medium flex items-center justify-center"
+                                    >
+                                        <Plus size={16} className="mr-1" /> Add {stream} Course
+                                    </button>
+                                </div>
                             )}
-                            <div className="absolute top-2 right-2 bg-black/60 px-2 py-1 rounded text-xs text-white">
-                                {course.level}
-                            </div>
                         </div>
-                        <div className="p-5 flex-grow">
-                            <h3 className="text-xl font-bold text-white mb-2">{course.title}</h3>
-                            <p className="text-gray-400 text-sm mb-4 line-clamp-2">{course.description}</p>
-                            <div className="flex items-center justify-between text-sm">
-                                <span className="text-blue-400 font-medium">{course.duration}</span>
-                                {course.stream && (
-                                    <span className="px-2 py-1 rounded bg-purple-500/20 text-purple-400 text-xs font-medium">{course.stream}</span>
-                                )}
-                            </div>
-                        </div>
-                        <div className="p-4 border-t border-gray-700 flex justify-end gap-3">
-                            <button onClick={() => openModal(course)} className="text-blue-400 hover:text-blue-300">
-                                <Edit size={18} />
-                            </button>
-                            <button onClick={() => handleDelete(course.id)} className="text-red-400 hover:text-red-300">
-                                <Trash2 size={18} />
-                            </button>
-                        </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
             {/* Modal */}
