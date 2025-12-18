@@ -27,14 +27,15 @@ import ManageCourses from './pages/admin/ManageCourses';
 import ManageBatches from './pages/admin/ManageBatches';
 import ManageTestimonials from './pages/admin/ManageTestimonials';
 import ManageGallery from './pages/admin/ManageGallery';
-import ViewEnrollments from './pages/admin/ViewEnrollments';
-import ViewLeads from './pages/admin/ViewLeads';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminOTP from './pages/admin/AdminOTP';
 
 // UI Components - Lazy Loaded
 const EnrollModal = React.lazy(() => import('./components/ui/EnrollModal'));
 const AdvisorModal = React.lazy(() => import('./components/ui/AdvisorModal'));
+const ViewEnrollments = React.lazy(() => import('./pages/admin/ViewEnrollments'));
+const ViewLeads = React.lazy(() => import('./pages/admin/ViewLeads'));
+const AdminSettings = React.lazy(() => import('./pages/admin/AdminSettings'));
 
 // Wrapper to handle scroll progress bar and modals which need access to state
 const AppContent = () => {
@@ -108,9 +109,9 @@ const AppContent = () => {
             <Route path="batches" element={<ManageBatches />} />
             <Route path="testimonials" element={<ManageTestimonials />} />
             <Route path="gallery" element={<ManageGallery />} />
-
             <Route path="enrollments" element={<ViewEnrollments />} />
             <Route path="leads" element={<ViewLeads />} />
+            <Route path="settings" element={<AdminSettings />} />
           </Route>
         </Routes>
       </main>

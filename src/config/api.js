@@ -11,6 +11,12 @@ export const API_ENDPOINTS = {
     checkAuth: `${API_BASE_URL}/api/auth/check`,
     logout: `${API_BASE_URL}/api/auth/logout`,
 
+    // Auth Management
+    forgotPassword: `${API_BASE_URL}/api/auth/forgot-password`,
+    changePassword: `${API_BASE_URL}/api/auth/change-password`,
+    addAdmin: `${API_BASE_URL}/api/auth/add-admin`,
+    admins: `${API_BASE_URL}/api/auth/admins`,
+
     // Courses
     courses: `${API_BASE_URL}/api/courses`,
     course: (id) => `${API_BASE_URL}/api/courses/${id}`,
