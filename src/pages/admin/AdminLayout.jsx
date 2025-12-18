@@ -15,6 +15,7 @@ const AdminLayout = () => {
         { path: '/admin/testimonials', icon: MessageSquare, label: 'Testimonials' },
         { path: '/admin/gallery', icon: Image, label: 'Gallery' },
         { path: '/admin/enrollments', icon: Users, label: 'Enrollments' },
+        { path: '/admin/leads', icon: BookOpen, label: 'Leads' },
     ];
 
     const handleLogout = async () => {

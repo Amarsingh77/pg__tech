@@ -28,6 +28,7 @@ import ManageBatches from './pages/admin/ManageBatches';
 import ManageTestimonials from './pages/admin/ManageTestimonials';
 import ManageGallery from './pages/admin/ManageGallery';
 import ViewEnrollments from './pages/admin/ViewEnrollments';
+import ViewLeads from './pages/admin/ViewLeads';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminOTP from './pages/admin/AdminOTP';
 
@@ -107,7 +108,9 @@ const AppContent = () => {
             <Route path="batches" element={<ManageBatches />} />
             <Route path="testimonials" element={<ManageTestimonials />} />
             <Route path="gallery" element={<ManageGallery />} />
+
             <Route path="enrollments" element={<ViewEnrollments />} />
+            <Route path="leads" element={<ViewLeads />} />
           </Route>
         </Routes>
       </main>
