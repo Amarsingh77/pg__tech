@@ -30,7 +30,8 @@ app.get('/', (req, res) => {
             batches: '/api/batches',
             testimonials: '/api/testimonials',
             gallery: '/api/gallery',
-            enrollments: '/api/enrollments'
+            enrollments: '/api/enrollments',
+            leads: '/api/leads/syllabus'
         }
     });
 });
@@ -64,7 +65,8 @@ const files = {
     batches: path.join(DATA_DIR, 'batches.json'),
     testimonials: path.join(DATA_DIR, 'testimonials.json'),
     gallery: path.join(DATA_DIR, 'gallery.json'),
-    enrollments: path.join(DATA_DIR, 'enrollments.json')
+    enrollments: path.join(DATA_DIR, 'enrollments.json'),
+    leads: path.join(DATA_DIR, 'leads.json')
 };
 
 // Helper to read/write data
@@ -239,6 +241,19 @@ app.post('/api/enrollments', (req, res) => {
     enrollments.push(newEnrollment);
     writeData(files.enrollments, enrollments);
     res.json(newEnrollment);
+});
+
+// --- Leads ---
+app.get('/api/leads/syllabus', (req, res) => {
+    res.json(readData(files.leads));
+});
+
+app.post('/api/leads/syllabus', (req, res) => {
+    const leads = readData(files.leads);
+    const newLead = { id: Date.now(), ...req.body };
+    leads.push(newLead);
+    writeData(files.leads, leads);
+    res.json(newLead);
 });
 
 app.listen(PORT, () => {

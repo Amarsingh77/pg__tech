@@ -44,10 +44,13 @@ const getTheme = (id) => {
     };
 };
 
+import SyllabusDownloadModal from '../components/ui/SyllabusDownloadModal';
+
 const CourseDetail = ({ onEnrollClick }) => {
     const { courseId } = useParams();
     const navigate = useNavigate();
     const [course, setCourse] = useState(null);
+    const [isSyllabusModalOpen, setIsSyllabusModalOpen] = useState(false);
     const theme = getTheme(courseId);
 
     useEffect(() => {
@@ -66,17 +69,21 @@ const CourseDetail = ({ onEnrollClick }) => {
         );
     }
 
-    const handleDownloadCurriculum = () => {
+    const handleDownloadClick = () => {
         if (course.details?.syllabusPdf) {
-            const link = document.createElement('a');
-            link.href = course.details.syllabusPdf;
-            link.download = `${course.title.replace(/\s+/g, '_')}_Curriculum.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            setIsSyllabusModalOpen(true);
         } else {
             alert('Curriculum PDF not available for this course yet.');
         }
+    };
+
+    const performDownload = () => {
+        const link = document.createElement('a');
+        link.href = course.details.syllabusPdf;
+        link.download = `${course.title.replace(/\s+/g, '_')}_Curriculum.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     return (
@@ -136,7 +143,7 @@ const CourseDetail = ({ onEnrollClick }) => {
                                         <p className="text-gray-400">Download the detailed syllabus PDF</p>
                                     </div>
                                     <button
-                                        onClick={handleDownloadCurriculum}
+                                        onClick={handleDownloadClick}
                                         className="flex items-center px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-xl transition-colors border border-gray-600"
                                     >
                                         <Download className="mr-2" size={20} />
@@ -183,6 +190,13 @@ const CourseDetail = ({ onEnrollClick }) => {
                     </div>
                 </div>
             </div>
+
+            <SyllabusDownloadModal
+                isOpen={isSyllabusModalOpen}
+                onClose={() => setIsSyllabusModalOpen(false)}
+                course={course}
+                onDownload={performDownload}
+            />
         </div>
     );
 };

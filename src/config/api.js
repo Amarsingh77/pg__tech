@@ -29,6 +29,9 @@ export const API_ENDPOINTS = {
 
     // Enrollments
     enrollments: `${API_BASE_URL}/api/enrollments`,
+
+    // Leads
+    syllabusLeads: `${API_BASE_URL}/api/leads/syllabus`,
 };
 
 export default API_BASE_URL;
