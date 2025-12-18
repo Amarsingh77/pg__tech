@@ -86,13 +86,34 @@ app.get('/api/courses', (req, res) => {
     res.json(readData(files.courses));
 });
 
+app.get('/api/courses/:id', (req, res) => {
+    const courses = readData(files.courses);
+    const course = courses.find(c => c.id == req.params.id);
+    if (course) {
+        res.json(course);
+    } else {
+        res.status(404).json({ message: 'Course not found' });
+    }
+});
+
 app.post('/api/courses', upload.single('image'), (req, res) => {
     const courses = readData(files.courses);
     const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : req.body.image;
 
+    let curriculum = req.body.curriculum;
+    try {
+        if (typeof curriculum === 'string') {
+            curriculum = JSON.parse(curriculum);
+        }
+    } catch (e) {
+        console.error('Error parsing curriculum:', e);
+        curriculum = [];
+    }
+
     const newCourse = {
         id: Date.now(),
         ...req.body,
+        curriculum, // Use parsed curriculum
         image: imageUrl
     };
     courses.push(newCourse);
@@ -105,7 +126,18 @@ app.put('/api/courses/:id', upload.single('image'), (req, res) => {
     const index = courses.findIndex(c => c.id == req.params.id);
     if (index !== -1) {
         const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : (req.body.image || courses[index].image);
-        courses[index] = { ...courses[index], ...req.body, image: imageUrl };
+
+        let curriculum = req.body.curriculum;
+        try {
+            if (typeof curriculum === 'string') {
+                curriculum = JSON.parse(curriculum);
+            }
+        } catch (e) {
+            // If not JSON, maybe keep existing or empty
+            curriculum = courses[index].curriculum;
+        }
+
+        courses[index] = { ...courses[index], ...req.body, curriculum: curriculum || courses[index].curriculum, image: imageUrl };
         writeData(files.courses, courses);
         res.json(courses[index]);
     } else {

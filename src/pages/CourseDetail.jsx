@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Download, CheckCircle, Clock, BarChart } from 'lucide-react';
-import { getCourseById } from '../data/courseDetails';
+import { ArrowLeft, Download, CheckCircle, Clock, BarChart, BookOpen } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 
 const getTheme = (id) => {
     if (id?.startsWith('me-')) {
@@ -54,8 +54,21 @@ const CourseDetail = ({ onEnrollClick }) => {
     const theme = getTheme(courseId);
 
     useEffect(() => {
-        const foundCourse = getCourseById(courseId);
-        setCourse(foundCourse);
+        const fetchCourse = async () => {
+            try {
+                const res = await fetch(API_ENDPOINTS.course(courseId));
+                if (res.ok) {
+                    const data = await res.json();
+                    setCourse(data);
+                } else {
+                    setCourse(null);
+                }
+            } catch (error) {
+                console.error('Error fetching course:', error);
+                setCourse(null);
+            }
+        };
+        fetchCourse();
     }, [courseId]);
 
     if (!course) {
@@ -70,7 +83,7 @@ const CourseDetail = ({ onEnrollClick }) => {
     }
 
     const handleDownloadClick = () => {
-        if (course.details?.syllabusPdf) {
+        if (course.syllabusPdf) {
             setIsSyllabusModalOpen(true);
         } else {
             alert('Curriculum PDF not available for this course yet.');
@@ -79,7 +92,7 @@ const CourseDetail = ({ onEnrollClick }) => {
 
     const performDownload = () => {
         const link = document.createElement('a');
-        link.href = course.details.syllabusPdf;
+        link.href = course.syllabusPdf;
         link.download = `${course.title.replace(/\s+/g, '_')}_Curriculum.pdf`;
         document.body.appendChild(link);
         link.click();
@@ -115,8 +128,8 @@ const CourseDetail = ({ onEnrollClick }) => {
                             <div className="bg-gray-800 rounded-2xl p-8 border border-gray-700 mb-10">
                                 <h3 className="text-2xl font-bold mb-6">What you'll learn</h3>
                                 <ul className="space-y-4">
-                                    {course.details?.curriculum ? (
-                                        course.details.curriculum.map((item, index) => (
+                                    {course.curriculum && course.curriculum.length > 0 ? (
+                                        course.curriculum.map((item, index) => (
                                             <li key={index} className="flex items-start">
                                                 <CheckCircle className={`${theme.text} mr-3 mt-1 flex-shrink-0`} size={20} />
                                                 <span className="text-gray-300">{item}</span>
@@ -163,17 +176,21 @@ const CourseDetail = ({ onEnrollClick }) => {
                             transition={{ delay: 0.2 }}
                         >
                             <div className="flex items-center mb-6">
-                                <course.icon size={48} className={theme.icon} />
+                                {course.image ? (
+                                    <img src={course.image} alt={course.title} className="w-full h-48 object-cover rounded-xl shadow-lg" />
+                                ) : (
+                                    <BookOpen size={48} className={theme.icon} />
+                                )}
                             </div>
 
                             <div className="space-y-6 mb-8">
                                 <div className="flex items-center text-gray-300">
                                     <Clock className="mr-3 text-gray-500" size={20} />
-                                    <span>Duration: {course.details?.duration || '6 Months'}</span>
+                                    <span>Duration: {course.duration || '6 Months'}</span>
                                 </div>
                                 <div className="flex items-center text-gray-300">
                                     <BarChart className="mr-3 text-gray-500" size={20} />
-                                    <span>Level: {course.details?.level || 'Beginner to Advanced'}</span>
+                                    <span>Level: {course.level || 'Beginner to Advanced'}</span>
                                 </div>
                             </div>
 

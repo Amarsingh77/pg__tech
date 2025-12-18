@@ -13,7 +13,9 @@ const ManageCourses = () => {
         duration: '',
         level: 'Beginner',
         stream: 'CSE',
-        image: ''
+        image: '',
+        curriculum: '',
+        syllabusPdf: ''
     });
 
     useEffect(() => {
@@ -44,6 +46,13 @@ const ManageCourses = () => {
         data.append('duration', formData.duration);
         data.append('level', formData.level);
         data.append('stream', formData.stream);
+
+        // Handle curriculum as JSON string
+        const curriculumArray = formData.curriculum.split('\n').filter(line => line.trim() !== '');
+        data.append('curriculum', JSON.stringify(curriculumArray));
+
+        data.append('syllabusPdf', formData.syllabusPdf);
+
         if (formData.image instanceof File) {
             data.append('image', formData.image);
         } else if (formData.image) {
@@ -79,7 +88,9 @@ const ManageCourses = () => {
             setCurrentCourse(item);
             setFormData({
                 ...item,
-                image: item.image // Keep existing URL
+                image: item.image, // Keep existing URL
+                curriculum: Array.isArray(item.curriculum) ? item.curriculum.join('\n') : (item.curriculum || ''),
+                syllabusPdf: item.syllabusPdf || ''
             });
         } else {
             setCurrentCourse(null);
@@ -88,7 +99,10 @@ const ManageCourses = () => {
                 description: '',
                 duration: '',
                 level: 'Beginner',
-                image: null
+                stream: 'CSE',
+                image: null,
+                curriculum: '',
+                syllabusPdf: ''
             });
         }
         setIsModalOpen(true);
@@ -264,6 +278,25 @@ const ManageCourses = () => {
                                     <option value="CE">Civil Engineering (CE)</option>
                                     <option value="EE">Electrical Engineering (EE)</option>
                                 </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm text-gray-400 mb-1">Curriculum (One item per line)</label>
+                                <textarea
+                                    value={formData.curriculum}
+                                    onChange={(e) => setFormData({ ...formData, curriculum: e.target.value })}
+                                    className="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:outline-none focus:border-blue-500 h-32 font-mono text-sm"
+                                    placeholder="Topic 1&#10;Topic 2&#10;Topic 3"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm text-gray-400 mb-1">Syllabus PDF URL</label>
+                                <input
+                                    type="text"
+                                    value={formData.syllabusPdf}
+                                    onChange={(e) => setFormData({ ...formData, syllabusPdf: e.target.value })}
+                                    className="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:outline-none focus:border-blue-500"
+                                    placeholder="/curriculum/sample.pdf or https://..."
+                                />
                             </div>
                             <div>
                                 <ImageUpload

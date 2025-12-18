@@ -1,34 +1,206 @@
 [
     {
-        "id": 1,
-        "title": "Advanced Diploma in Full-Stack Engineering",
-        "description": "A comprehensive curriculum covering modern software architecture, distributed systems, and full-cycle web development.",
-        "duration": "2 Semesters",
-        "level": "Advanced",
-        "image": "https://placehold.co/600x400/4F46E5/FFFFFF?text=Full-Stack+Engineering"
+        "id": "cse-full-stack",
+        "title": "Full Stack Development",
+        "description": "Master MERN stack and build modern web apps.",
+        "duration": "6 Months",
+        "level": "Beginner to Advanced",
+        "stream": "CSE",
+        "image": "https://placehold.co/600x400/4F46E5/FFFFFF?text=Full+Stack",
+        "curriculum": [
+            "HTML, CSS, JavaScript Fundamentals",
+            "React.js for Frontend Development",
+            "Node.js and Express for Backend",
+            "MongoDB Database Management",
+            "Deployment and DevOps Basics"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
     },
     {
-        "id": 2,
-        "title": "Post-Graduate Program in Data Science",
-        "description": "Rigorous training in statistical analysis, machine learning algorithms, and big data technologies for predictive modeling.",
-        "duration": "3 Semesters",
-        "level": "Post-Graduate",
-        "image": "https://placehold.co/600x400/9333EA/FFFFFF?text=Data+Science"
-    },
-    {
-        "id": 3,
-        "title": "Certification in Cloud Architecture",
-        "description": "Specialized training in designing scalable, resilient, and secure cloud infrastructure on enterprise platforms.",
-        "duration": "1 Semester",
-        "level": "Professional",
-        "image": "https://placehold.co/600x400/0EA5E9/FFFFFF?text=Cloud+Architecture"
-    },
-    {
-        "id": 4,
-        "title": "Diploma in Cybersecurity & InfoSec",
-        "description": "In-depth study of network security, cryptography, and ethical hacking to safeguard organizational assets.",
-        "duration": "2 Semesters",
+        "id": "cse-dsa",
+        "title": "Data Structures & Algo",
+        "description": "Ace coding interviews with deep DSA knowledge.",
+        "duration": "4 Months",
         "level": "Intermediate",
-        "image": "https://placehold.co/600x400/EF4444/FFFFFF?text=Cybersecurity"
+        "stream": "CSE",
+        "image": "https://placehold.co/600x400/4F46E5/FFFFFF?text=DSA",
+        "curriculum": [
+            "Arrays, Linked Lists, Stacks, Queues",
+            "Trees, Graphs, Heaps",
+            "Dynamic Programming",
+            "Greedy Algorithms",
+            "Time and Space Complexity"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
+    },
+    {
+        "id": "cse-cloud",
+        "title": "Cloud Computing",
+        "description": "Learn AWS, Azure, and DevOps practices.",
+        "duration": "5 Months",
+        "level": "Intermediate",
+        "stream": "CSE",
+        "image": "https://placehold.co/600x400/4F46E5/FFFFFF?text=Cloud+Computing",
+        "curriculum": [
+            "Cloud Concepts and Architecture",
+            "AWS Core Services (EC2, S3, RDS)",
+            "Docker and Kubernetes",
+            "CI/CD Pipelines",
+            "Infrastructure as Code (Terraform)"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
+    },
+    {
+        "id": "cse-dbms",
+        "title": "Database Management",
+        "description": "Design scalable databases with SQL and NoSQL.",
+        "duration": "3 Months",
+        "level": "Beginner",
+        "stream": "CSE",
+        "image": "https://placehold.co/600x400/4F46E5/FFFFFF?text=DBMS",
+        "curriculum": [
+            "Relational Database Design (SQL)",
+            "Normalization and Indexing",
+            "NoSQL Databases (MongoDB, Redis)",
+            "Database Administration",
+            "Performance Tuning"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
+    },
+    {
+        "id": "me-autocad",
+        "title": "AutoCAD & SolidWorks",
+        "description": "Master 2D drafting and 3D modeling tools.",
+        "duration": "3 Months",
+        "level": "Beginner",
+        "stream": "ME",
+        "image": "https://placehold.co/600x400/EA580C/FFFFFF?text=AutoCAD",
+        "curriculum": [
+            "AutoCAD Interface and Basic Drawing",
+            "Advanced Drafting Techniques",
+            "SolidWorks 3D Modeling",
+            "Assembly and Simulation",
+            "Rendering and Presentation"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
+    },
+    {
+        "id": "me-robotics",
+        "title": "Robotics & Automation",
+        "description": "Build and program intelligent robots.",
+        "duration": "6 Months",
+        "level": "Advanced",
+        "stream": "ME",
+        "image": "https://placehold.co/600x400/EA580C/FFFFFF?text=Robotics",
+        "curriculum": [
+            "Introduction to Robotics",
+            "Sensors and Actuators",
+            "Microcontrollers (Arduino/Raspberry Pi)",
+            "Kinematics and Dynamics",
+            "Robot Programming (ROS)"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
+    },
+    {
+        "id": "me-automobile",
+        "title": "Automobile Engineering",
+        "description": "Understand vehicle dynamics and engine systems.",
+        "duration": "4 Months",
+        "level": "Intermediate",
+        "stream": "ME",
+        "image": "https://placehold.co/600x400/EA580C/FFFFFF?text=Automobile",
+        "curriculum": [
+            "Internal Combustion Engines",
+            "Vehicle Aerodynamics",
+            "Transmission Systems",
+            "Electric Vehicle Technology",
+            "Automotive Safety Systems"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
+    },
+    {
+        "id": "me-maintenance",
+        "title": "Industrial Maintenance",
+        "description": "Learn machinery upkeep and safety protocols.",
+        "duration": "3 Months",
+        "level": "Beginner",
+        "stream": "ME",
+        "image": "https://placehold.co/600x400/EA580C/FFFFFF?text=Maintenance",
+        "curriculum": [
+            "Preventive Maintenance Strategies",
+            "Hydraulics and Pneumatics",
+            "Industrial Safety Standards",
+            "Troubleshooting Techniques",
+            "Maintenance Management Systems"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
+    },
+    {
+        "id": "ce-structural",
+        "title": "Structural Analysis",
+        "description": "Analyze and design safe structures.",
+        "duration": "5 Months",
+        "level": "Advanced",
+        "stream": "CE",
+        "image": "https://placehold.co/600x400/16A34A/FFFFFF?text=Structural",
+        "curriculum": [
+            "Statics and Strength of Materials",
+            "Structural Analysis Methods",
+            "Reinforced Concrete Design",
+            "Steel Structure Design",
+            "Seismic Analysis"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
+    },
+    {
+        "id": "ce-surveying",
+        "title": "Surveying & Geomatics",
+        "description": "Master land surveying techniques and GPS.",
+        "duration": "3 Months",
+        "level": "Beginner",
+        "stream": "CE",
+        "image": "https://placehold.co/600x400/16A34A/FFFFFF?text=Surveying",
+        "curriculum": [
+            "Linear and Angular Measurements",
+            "Leveling and Contouring",
+            "Total Station Surveying",
+            "GPS and GIS Applications",
+            "Remote Sensing Basics"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
+    },
+    {
+        "id": "ce-construction",
+        "title": "Construction Management",
+        "description": "Plan and execute construction projects efficiently.",
+        "duration": "6 Months",
+        "level": "Intermediate",
+        "stream": "CE",
+        "image": "https://placehold.co/600x400/16A34A/FFFFFF?text=Construction",
+        "curriculum": [
+            "Project Planning and Scheduling",
+            "Cost Estimation and Budgeting",
+            "Construction Safety and Law",
+            "Quality Control",
+            "Green Building Practices"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
+    },
+    {
+        "id": "ce-autocad",
+        "title": "AutoCAD for Civil",
+        "description": "Create precise architectural and engineering drawings.",
+        "duration": "3 Months",
+        "level": "Beginner",
+        "stream": "CE",
+        "image": "https://placehold.co/600x400/16A34A/FFFFFF?text=AutoCAD+Civil",
+        "curriculum": [
+            "Architectural Drafting Standards",
+            "Floor Plans and Elevations",
+            "Sectional Views",
+            "3D Modeling for Civil",
+            "Plotting and Printing"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
     }
 ]
