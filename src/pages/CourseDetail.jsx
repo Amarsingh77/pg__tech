@@ -196,6 +196,7 @@ const CourseDetail = ({ onEnrollClick }) => {
                 onClose={() => setIsSyllabusModalOpen(false)}
                 course={course}
                 onDownload={performDownload}
+                theme={theme}
             />
         </div>
     );

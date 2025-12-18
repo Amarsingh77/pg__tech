@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Download, User, Mail, Phone, FileText, CheckCircle } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config/api';
 
-const SyllabusDownloadModal = ({ isOpen, onClose, course, onDownload }) => {
+const SyllabusDownloadModal = ({ isOpen, onClose, course, onDownload, theme }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -12,6 +12,14 @@ const SyllabusDownloadModal = ({ isOpen, onClose, course, onDownload }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState('');
+
+    // Default theme if not provided
+    const activeTheme = theme || {
+        gradientText: 'from-blue-400 to-purple-500',
+        buttonGradient: 'from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700',
+        icon: 'text-blue-400',
+        border: 'border-blue-500'
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -82,8 +90,8 @@ const SyllabusDownloadModal = ({ isOpen, onClose, course, onDownload }) => {
                     className="bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 rounded-2xl p-8 w-full max-w-md border border-gray-700 shadow-2xl relative overflow-hidden"
                 >
                     {/* Decorative elements */}
-                    <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl -z-10" />
-                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl -z-10" />
+                    <div className={`absolute top-0 right-0 w-40 h-40 bg-gradient-to-br ${activeTheme.gradientText} opacity-10 rounded-full blur-3xl -z-10`} />
+                    <div className={`absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr ${activeTheme.gradientText} opacity-10 rounded-full blur-3xl -z-10`} />
 
                     {/* Close Button */}
                     <button
@@ -99,8 +107,8 @@ const SyllabusDownloadModal = ({ isOpen, onClose, course, onDownload }) => {
                             animate={{ opacity: 1, scale: 1 }}
                             className="text-center py-8"
                         >
-                            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-green-500/20 flex items-center justify-center">
-                                <CheckCircle className="text-green-400" size={48} />
+                            <div className={`w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br ${activeTheme.gradientText} opacity-20 flex items-center justify-center`}>
+                                <CheckCircle className={activeTheme.icon} size={48} />
                             </div>
                             <h3 className="text-2xl font-bold text-white mb-2">Thank You!</h3>
                             <p className="text-gray-400">Your download will begin shortly...</p>
@@ -109,13 +117,13 @@ const SyllabusDownloadModal = ({ isOpen, onClose, course, onDownload }) => {
                         <>
                             {/* Header */}
                             <div className="text-center mb-8">
-                                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
+                                <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${activeTheme.gradientText} flex items-center justify-center shadow-lg`}>
                                     <FileText className="text-white" size={32} />
                                 </div>
                                 <h3 className="text-2xl font-bold text-white mb-2">Download Syllabus</h3>
                                 <p className="text-gray-400 text-sm">
                                     Please enter your details to download the <br />
-                                    <span className="text-blue-400 font-medium">{course?.title || 'Course'}</span> syllabus
+                                    <span className={`font-medium text-transparent bg-clip-text bg-gradient-to-r ${activeTheme.gradientText}`}>{course?.title || 'Course'}</span> syllabus
                                 </p>
                             </div>
 
@@ -173,7 +181,7 @@ const SyllabusDownloadModal = ({ isOpen, onClose, course, onDownload }) => {
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-xl shadow-lg shadow-blue-500/25 transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                                    className={`w-full py-4 bg-gradient-to-r ${activeTheme.buttonGradient} text-white font-bold rounded-xl shadow-lg transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3`}
                                 >
                                     {isSubmitting ? (
                                         <>
