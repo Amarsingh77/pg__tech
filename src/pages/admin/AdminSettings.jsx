@@ -19,7 +19,7 @@ const AdminSettings = () => {
 
     // Team Management State
     const [admins, setAdmins] = useState([]);
-    const [newAdmin, setNewAdmin] = useState({ email: '', password: '' });
+    const [newAdmin, setNewAdmin] = useState({ email: '', password: '', mobile: '' });
     const [teamStatus, setTeamStatus] = useState({ type: '', message: '' });
     const [teamLoading, setTeamLoading] = useState(false);
 
@@ -91,7 +91,7 @@ const AdminSettings = () => {
 
             if (data.success) {
                 setTeamStatus({ type: 'success', message: data.message });
-                setNewAdmin({ email: '', password: '' });
+                setNewAdmin({ email: '', password: '', mobile: '' });
                 fetchAdmins(); // Refresh list
             } else {
                 setTeamStatus({ type: 'error', message: data.message });
@@ -238,6 +238,16 @@ const AdminSettings = () => {
                                 />
                             </div>
                             <div>
+                                <label className="block text-sm text-gray-400 mb-1">Mobile Number</label>
+                                <input
+                                    type="text"
+                                    value={newAdmin.mobile}
+                                    onChange={(e) => setNewAdmin({ ...newAdmin, mobile: e.target.value })}
+                                    className="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500"
+                                    placeholder="+91 9876543210"
+                                />
+                            </div>
+                            <div>
                                 <label className="block text-sm text-gray-400 mb-1">Initial Password</label>
                                 <input
                                     type="password"
@@ -272,7 +282,10 @@ const AdminSettings = () => {
                                         </div>
                                         <div>
                                             <p className="text-white font-medium">{admin.email}</p>
-                                            <p className="text-xs text-gray-400 capitalize">{admin.role.replace('_', ' ')}</p>
+                                            <div className="flex items-center gap-2 text-xs text-gray-400">
+                                                <span className="capitalize">{admin.role.replace('_', ' ')}</span>
+                                                {admin.mobile && <span>• {admin.mobile}</span>}
+                                            </div>
                                         </div>
                                     </div>
                                     {admin.email === user?.email && (

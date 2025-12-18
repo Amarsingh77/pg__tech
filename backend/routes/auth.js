@@ -39,11 +39,11 @@ router.post('/login', (req, res) => {
 
         otpStore.set(email, { otp, expiry: otpExpiry });
 
-        console.log(`\n🔐 OTP Generated for ${email}: ${otp}\n`);
+        console.log(`\n🔐 OTP Generated for ${email} (Mobile: ${user.mobile || 'N/A'}): ${otp}\n`);
 
         res.json({
             success: true,
-            message: 'OTP sent successfully. Check console.',
+            message: `OTP sent successfully to ${user.mobile || email}. Check console.`,
             email,
             otp // In production, don't send OTP in response!
         });
@@ -117,13 +117,13 @@ router.post('/logout', (req, res) => {
 router.get('/admins', (req, res) => {
     const users = readUsers();
     // Return only necessary info
-    const safeUsers = users.map(u => ({ id: u.id, email: u.email, role: u.role }));
+    const safeUsers = users.map(u => ({ id: u.id, email: u.email, role: u.role, mobile: u.mobile }));
     res.json(safeUsers);
 });
 
 // Add new admin
 router.post('/add-admin', (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, mobile } = req.body;
     const users = readUsers();
 
     if (users.length >= 10) {
@@ -138,7 +138,8 @@ router.post('/add-admin', (req, res) => {
         id: Date.now().toString(),
         email,
         password, // In production, hash this!
-        role: 'admin'
+        role: 'admin',
+        mobile: mobile || ''
     };
 
     users.push(newUser);
