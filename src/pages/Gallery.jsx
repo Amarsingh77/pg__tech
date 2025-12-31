@@ -21,8 +21,9 @@ const Gallery = () => {
         const fetchGallery = async () => {
             try {
                 const res = await fetch(API_ENDPOINTS.gallery);
+                if (!res.ok) throw new Error('Failed to fetch gallery');
                 const data = await res.json();
-                setImages(data);
+                setImages(data.data || []);
             } catch (error) {
                 console.error('Error fetching gallery:', error);
             } finally {
@@ -241,8 +242,8 @@ const Gallery = () => {
                                         setCurrentIndex(index);
                                     }}
                                     className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all duration-300 ${index === currentIndex
-                                            ? 'border-blue-500 scale-110 shadow-lg shadow-blue-500/30'
-                                            : 'border-transparent opacity-50 hover:opacity-100'
+                                        ? 'border-blue-500 scale-110 shadow-lg shadow-blue-500/30'
+                                        : 'border-transparent opacity-50 hover:opacity-100'
                                         }`}
                                 >
                                     <img

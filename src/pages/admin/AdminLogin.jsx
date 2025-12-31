@@ -22,23 +22,35 @@ const AdminLogin = () => {
         setLoading(true);
 
         try {
+            console.log('📡 Attempting login for:', formData.email);
             const res = await fetch(API_ENDPOINTS.login, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             });
 
+            console.log('📨 Login response status:', res.status);
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || 'Login failed');
+            }
+
             const data = await res.json();
+            console.log('📦 Login response data:', data);
 
             if (data.success) {
+                console.log('✅ Login successful, redirecting to OTP...');
                 sessionStorage.setItem('adminEmail', formData.email);
                 sessionStorage.setItem('tempOTP', data.otp);
                 navigate('/admin/verify-otp');
             } else {
-                setError(data.message);
+                console.error('❌ Login failed:', data.message);
+                setError(data.message || 'Invalid credentials');
             }
         } catch (error) {
-            setError('Login failed. Please try again.');
+            console.error('💥 Login error:', error);
+            setError('Login failed. Please check if the backend server is running.');
         } finally {
             setLoading(false);
         }
@@ -97,15 +109,15 @@ const AdminLogin = () => {
 
                             <form onSubmit={handleLoginSubmit} className="space-y-6">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+                                    <label className="block text-sm font-medium text-gray-300 mb-2">Email or Username</label>
                                     <div className="relative">
                                         <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                                         <input
-                                            type="email"
+                                            type="text"
                                             value={formData.email}
                                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                             className="w-full bg-gray-700/50 border border-gray-600 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
-                                            placeholder="admin@pgtech.com"
+                                            placeholder="admin@pgtech.com or admin"
                                             required
                                         />
                                     </div>

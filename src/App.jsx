@@ -29,6 +29,7 @@ import ManageTestimonials from './pages/admin/ManageTestimonials';
 import ManageGallery from './pages/admin/ManageGallery';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminOTP from './pages/admin/AdminOTP';
+import ResetPassword from './pages/admin/ResetPassword';
 
 // UI Components - Lazy Loaded
 const EnrollModal = React.lazy(() => import('./components/ui/EnrollModal'));
@@ -97,6 +98,7 @@ const AppContent = () => {
           {/* Admin Auth Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/verify-otp" element={<AdminOTP />} />
+          <Route path="/admin/reset-password/:token" element={<ResetPassword />} />
 
           {/* Protected Admin Routes */}
           <Route path="/admin" element={

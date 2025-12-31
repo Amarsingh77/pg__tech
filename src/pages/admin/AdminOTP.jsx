@@ -89,6 +89,11 @@ const AdminOTP = () => {
                 body: JSON.stringify({ email, otp: otpCode })
             });
 
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || 'Verification failed');
+            }
+
             const data = await res.json();
             console.log('📨 OTP Verification Response:', data);
 

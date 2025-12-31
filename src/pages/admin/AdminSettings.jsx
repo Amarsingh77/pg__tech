@@ -5,7 +5,7 @@ import { API_ENDPOINTS } from '../../config/api';
 import { useAuth } from '../../contexts/AuthContext';
 
 const AdminSettings = () => {
-    const { user } = useAuth();
+    const { user, token } = useAuth();
     const [activeTab, setActiveTab] = useState('security'); // 'security' or 'team'
 
     // Change Password State
@@ -31,7 +31,12 @@ const AdminSettings = () => {
 
     const fetchAdmins = async () => {
         try {
-            const res = await fetch(API_ENDPOINTS.admins);
+            const res = await fetch(API_ENDPOINTS.admins, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (!res.ok) throw new Error('Failed to fetch admins');
             const data = await res.json();
             setAdmins(data);
         } catch (error) {
@@ -52,13 +57,21 @@ const AdminSettings = () => {
         try {
             const res = await fetch(API_ENDPOINTS.changePassword, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({
                     currentEmail: user.email,
                     currentPassword: passwordData.currentPassword,
                     newPassword: passwordData.newPassword
                 })
             });
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || 'Failed to update password');
+            }
 
             const data = await res.json();
 
@@ -83,9 +96,17 @@ const AdminSettings = () => {
         try {
             const res = await fetch(API_ENDPOINTS.addAdmin, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(newAdmin)
             });
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || 'Failed to add admin');
+            }
 
             const data = await res.json();
 

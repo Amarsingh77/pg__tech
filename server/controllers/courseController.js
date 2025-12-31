@@ -5,12 +5,15 @@ import Course from '../models/Course.js';
 // @access  Public
 export const getCourses = async (req, res) => {
   try {
-    const { page = 1, limit = 10, sort = 'order', active = 'true' } = req.query;
+    const { page = 1, limit = 10, sort = 'order', active = 'true', homePage } = req.query;
 
     // Build query
     const query = {};
     if (active === 'true') {
       query.isActive = true;
+    }
+    if (homePage === 'true') {
+      query.showOnHomePage = true;
     }
 
     // Calculate pagination
@@ -83,7 +86,28 @@ export const getCourse = async (req, res) => {
 // @access  Private (Admin only)
 export const createCourse = async (req, res) => {
   try {
-    const course = await Course.create(req.body);
+    const courseData = { ...req.body };
+
+    // Handle file uploads
+    if (req.files) {
+      if (req.files.image) {
+        courseData.image = `/uploads/${req.files.image[0].filename}`;
+      }
+      if (req.files.syllabusPdf) {
+        courseData.syllabusPdf = `/uploads/${req.files.syllabusPdf[0].filename}`;
+      }
+    }
+
+    // Parse curriculum if it's a string (from FormData)
+    if (typeof courseData.curriculum === 'string') {
+      try {
+        courseData.curriculum = JSON.parse(courseData.curriculum);
+      } catch (e) {
+        courseData.curriculum = [];
+      }
+    }
+
+    const course = await Course.create(courseData);
 
     res.status(201).json({
       success: true,
@@ -104,9 +128,31 @@ export const createCourse = async (req, res) => {
 // @access  Private (Admin only)
 export const updateCourse = async (req, res) => {
   try {
+    const courseData = { ...req.body };
+
+    // Handle file uploads
+    if (req.files) {
+      if (req.files.image) {
+        courseData.image = `/uploads/${req.files.image[0].filename}`;
+      }
+      if (req.files.syllabusPdf) {
+        courseData.syllabusPdf = `/uploads/${req.files.syllabusPdf[0].filename}`;
+      }
+    }
+
+    // Parse curriculum if it's a string (from FormData)
+    if (typeof courseData.curriculum === 'string') {
+      try {
+        courseData.curriculum = JSON.parse(courseData.curriculum);
+      } catch (e) {
+        // Keep existing if parse fails or handle as needed
+        delete courseData.curriculum;
+      }
+    }
+
     const course = await Course.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      courseData,
       { new: true, runValidators: true }
     );
 
@@ -198,6 +244,7 @@ export const getCourseStats = async (req, res) => {
     });
   }
 };
+
 
 
 

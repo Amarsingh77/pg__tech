@@ -1,31 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Mail, Phone, Calendar, Download, FileText } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 import { API_ENDPOINTS } from '../../config/api';
 
 const ViewLeads = () => {
+    const { token } = useAuth();
     const [leads, setLeads] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const fetchLeads = async () => {
+            try {
+                const res = await fetch(API_ENDPOINTS.syllabusLeads, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) throw new Error('Failed to fetch leads');
+                const data = await res.json();
+                // Sort by date descending (newest first)
+                const sortedData = Array.isArray(data)
+                    ? data.sort((a, b) => new Date(b.downloadedAt || b.id) - new Date(a.downloadedAt || a.id))
+                    : [];
+                setLeads(sortedData);
+            } catch (error) {
+                console.error('Error fetching leads:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchLeads();
-    }, []);
-
-    const fetchLeads = async () => {
-        try {
-            const res = await fetch(API_ENDPOINTS.syllabusLeads);
-            const data = await res.json();
-            // Sort by date descending (newest first)
-            const sortedData = Array.isArray(data)
-                ? data.sort((a, b) => new Date(b.downloadedAt || b.id) - new Date(a.downloadedAt || a.id))
-                : [];
-            setLeads(sortedData);
-        } catch (error) {
-            console.error('Error fetching leads:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, [token]);
 
     const filteredLeads = leads.filter(lead =>
         lead.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||

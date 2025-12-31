@@ -15,22 +15,25 @@ const ManageCourses = () => {
         stream: 'CSE',
         image: '',
         curriculum: '',
-        syllabusPdf: ''
+        syllabusPdf: null,
+        showOnHomePage: true,
+        order: 0
     });
-
-    useEffect(() => {
-        fetchCourses();
-    }, []);
 
     const fetchCourses = async () => {
         try {
             const res = await fetch(API_ENDPOINTS.courses);
+            if (!res.ok) throw new Error('Failed to fetch courses');
             const data = await res.json();
-            setCourses(data);
+            setCourses(Array.isArray(data) ? data : (data.data || []));
         } catch (error) {
             console.error('Error fetching courses:', error);
         }
     };
+
+    useEffect(() => {
+        fetchCourses();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -51,7 +54,13 @@ const ManageCourses = () => {
         const curriculumArray = formData.curriculum.split('\n').filter(line => line.trim() !== '');
         data.append('curriculum', JSON.stringify(curriculumArray));
 
-        data.append('syllabusPdf', formData.syllabusPdf);
+        if (formData.syllabusPdf instanceof File) {
+            data.append('syllabusPdf', formData.syllabusPdf);
+        } else if (formData.syllabusPdf) {
+            data.append('syllabusPdf', formData.syllabusPdf);
+        }
+        data.append('showOnHomePage', formData.showOnHomePage);
+        data.append('order', formData.order);
 
         if (formData.image instanceof File) {
             data.append('image', formData.image);
@@ -90,7 +99,8 @@ const ManageCourses = () => {
                 ...item,
                 image: item.image, // Keep existing URL
                 curriculum: Array.isArray(item.curriculum) ? item.curriculum.join('\n') : (item.curriculum || ''),
-                syllabusPdf: item.syllabusPdf || ''
+                syllabusPdf: item.syllabusPdf || '',
+                order: item.order || 0
             });
         } else {
             setCurrentCourse(null);
@@ -102,7 +112,9 @@ const ManageCourses = () => {
                 stream: 'CSE',
                 image: null,
                 curriculum: '',
-                syllabusPdf: ''
+                syllabusPdf: null,
+                showOnHomePage: true,
+                order: 0
             });
         }
         setIsModalOpen(true);
@@ -142,11 +154,11 @@ const ManageCourses = () => {
                                     {streamLabels[stream]}
                                 </h3>
                                 <span className="ml-4 px-3 py-1 bg-gray-700 rounded-full text-sm text-gray-400">
-                                    {streamCourses.length} Courses
+                                    {Array.isArray(streamCourses) ? streamCourses.length : 0} Courses
                                 </span>
                             </div>
 
-                            {streamCourses.length > 0 ? (
+                            {streamCourses && streamCourses.length > 0 ? (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {streamCourses.map((course) => (
                                         <div key={course.id} className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 shadow-lg flex flex-col hover:border-blue-500/50 transition-colors">
@@ -211,8 +223,8 @@ const ManageCourses = () => {
 
             {/* Modal */}
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-gray-800 rounded-xl p-6 w-full max-w-lg border border-gray-700 shadow-2xl">
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 p-4 overflow-y-auto">
+                    <div className="bg-gray-800 rounded-xl p-6 w-full max-w-lg border border-gray-700 shadow-2xl my-8 relative">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-xl font-bold text-white">
                                 {currentCourse ? 'Edit Course' : 'Add Course'}
@@ -290,13 +302,41 @@ const ManageCourses = () => {
                             </div>
                             <div>
                                 <label className="block text-sm text-gray-400 mb-1">Syllabus PDF URL</label>
-                                <input
-                                    type="text"
-                                    value={formData.syllabusPdf}
-                                    onChange={(e) => setFormData({ ...formData, syllabusPdf: e.target.value })}
-                                    className="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:outline-none focus:border-blue-500"
-                                    placeholder="/curriculum/sample.pdf or https://..."
-                                />
+                                <div className="relative">
+                                    <input
+                                        type="file"
+                                        accept="application/pdf"
+                                        onChange={(e) => setFormData({ ...formData, syllabusPdf: e.target.files[0] })}
+                                        className="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:outline-none focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                                    />
+                                    {formData.syllabusPdf && !(formData.syllabusPdf instanceof File) && (
+                                        <p className="text-xs text-green-400 mt-1">Current: {formData.syllabusPdf.split('/').pop()}</p>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="flex items-center gap-2 bg-gray-700/50 p-3 rounded-lg border border-gray-600">
+                                    <input
+                                        type="checkbox"
+                                        id="showOnHomePage"
+                                        checked={formData.showOnHomePage}
+                                        onChange={(e) => setFormData({ ...formData, showOnHomePage: e.target.checked })}
+                                        className="w-5 h-5 rounded border-gray-600 text-blue-600 focus:ring-blue-500 bg-gray-800"
+                                    />
+                                    <label htmlFor="showOnHomePage" className="text-sm font-medium text-gray-200 cursor-pointer">
+                                        Show on Home Page
+                                    </label>
+                                </div>
+                                <div>
+                                    <label className="block text-sm text-gray-400 mb-1">Display Order</label>
+                                    <input
+                                        type="number"
+                                        value={formData.order}
+                                        onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
+                                        className="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:outline-none focus:border-blue-500"
+                                        placeholder="0"
+                                    />
+                                </div>
                             </div>
                             <div>
                                 <ImageUpload
@@ -312,9 +352,9 @@ const ManageCourses = () => {
                             </button>
                         </form>
                     </div>
-                </div>
+                </div >
             )}
-        </div>
+        </div >
     );
 };
 

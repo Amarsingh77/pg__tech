@@ -12,8 +12,9 @@ const Testimonials = () => {
         const fetchTestimonials = async () => {
             try {
                 const res = await fetch(API_ENDPOINTS.testimonials);
+                if (!res.ok) throw new Error('Failed to fetch testimonials');
                 const data = await res.json();
-                setTestimonials(data);
+                setTestimonials(data.data || []);
             } catch (error) {
                 console.error('Error fetching testimonials:', error);
             } finally {

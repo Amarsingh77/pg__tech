@@ -18,19 +18,20 @@ const ManageBatches = () => {
         instructor: ''
     });
 
-    useEffect(() => {
-        fetchBatches();
-    }, []);
-
     const fetchBatches = async () => {
         try {
             const res = await fetch(API_ENDPOINTS.batches);
+            if (!res.ok) throw new Error('Failed to fetch batches');
             const data = await res.json();
-            setBatches(data);
+            setBatches(Array.isArray(data) ? data : (data.data || []));
         } catch (error) {
             console.error('Error fetching batches:', error);
         }
     };
+
+    useEffect(() => {
+        fetchBatches();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -148,8 +149,8 @@ const ManageBatches = () => {
 
             {/* Modal */}
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-gray-800 rounded-xl p-6 w-full max-w-lg border border-gray-700 shadow-2xl">
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center z-50 p-4 overflow-y-auto">
+                    <div className="bg-gray-800 rounded-xl p-6 w-full max-w-lg border border-gray-700 shadow-2xl my-8 relative">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-xl font-bold text-white">
                                 {currentBatch ? 'Edit Batch' : 'Add New Batch'}

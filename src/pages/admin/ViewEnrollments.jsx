@@ -1,24 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Mail, Phone, Calendar } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 import { API_ENDPOINTS } from '../../config/api';
 
 const ViewEnrollments = () => {
+    const { token } = useAuth();
     const [enrollments, setEnrollments] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
+        const fetchEnrollments = async () => {
+            try {
+                const res = await fetch(API_ENDPOINTS.enrollments, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) throw new Error('Failed to fetch enrollments');
+                const data = await res.json();
+                setEnrollments(Array.isArray(data) ? data : (data.data || []));
+            } catch (error) {
+                console.error('Error fetching enrollments:', error);
+            }
+        };
         fetchEnrollments();
-    }, []);
-
-    const fetchEnrollments = async () => {
-        try {
-            const res = await fetch(API_ENDPOINTS.enrollments);
-            const data = await res.json();
-            setEnrollments(data);
-        } catch (error) {
-            console.error('Error fetching enrollments:', error);
-        }
-    };
+    }, [token]);
 
     const filteredEnrollments = enrollments.filter(student =>
         student.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Download, User, Mail, Phone, FileText, CheckCircle } from 'lucide-react';
+import { X, Download, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config/api';
 
 const SyllabusDownloadModal = ({ isOpen, onClose, course, onDownload, theme }) => {
@@ -9,201 +9,187 @@ const SyllabusDownloadModal = ({ isOpen, onClose, course, onDownload, theme }) =
         email: '',
         phone: ''
     });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
-    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(false);
 
-    // Default theme if not provided
-    const activeTheme = theme || {
-        gradientText: 'from-blue-400 to-purple-500',
-        buttonGradient: 'from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700',
-        icon: 'text-blue-400',
-        border: 'border-blue-500'
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setError(null);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
-        setIsSubmitting(true);
+        setLoading(true);
+        setError(null);
+
+        // Basic validation
+        if (!formData.name || !formData.email || !formData.phone) {
+            setError('Please fill in all fields');
+            setLoading(false);
+            return;
+        }
 
         try {
-            // Save lead to backend
-            await fetch(API_ENDPOINTS.syllabusLeads, {
+            const res = await fetch(API_ENDPOINTS.syllabusLeads, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({
                     ...formData,
-                    courseName: course?.title || 'Unknown Course',
-                    courseId: course?.id || 'unknown',
-                    downloadedAt: new Date().toISOString()
+                    message: `Downloaded syllabus for ${course.title}`,
+                    source: 'Syllabus Download',
+                    courseId: course._id
                 })
             });
 
-            setIsSuccess(true);
+            const data = await res.json();
 
-            // Trigger download after small delay
+            if (!res.ok) {
+                throw new Error(data.message || 'Failed to submit details');
+            }
+
+            setSuccess(true);
             setTimeout(() => {
                 onDownload();
                 setTimeout(() => {
                     onClose();
-                    resetForm();
-                }, 1000);
-            }, 500);
+                    setSuccess(false);
+                    setFormData({ name: '', email: '', phone: '' });
+                }, 2000);
+            }, 1000);
+
         } catch (err) {
-            console.error('Error saving lead:', err);
-            // Still allow download even if saving fails
-            onDownload();
-            onClose();
-            resetForm();
+            console.error('Lead submission error:', err);
+            setError(err.message || 'Something went wrong. Please try again.');
         } finally {
-            setIsSubmitting(false);
+            setLoading(false);
         }
-    };
-
-    const resetForm = () => {
-        setFormData({ name: '', email: '', phone: '' });
-        setIsSuccess(false);
-        setError('');
-    };
-
-    const handleClose = () => {
-        onClose();
-        resetForm();
     };
 
     if (!isOpen) return null;
 
     return (
         <AnimatePresence>
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={handleClose}
-                className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-            >
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                    onClick={(e) => e.stopPropagation()}
-                    className="bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 rounded-2xl p-8 w-full max-w-md border border-gray-700 shadow-2xl relative overflow-hidden"
-                >
-                    {/* Decorative elements */}
-                    <div className={`absolute top-0 right-0 w-40 h-40 bg-gradient-to-br ${activeTheme.gradientText} opacity-10 rounded-full blur-3xl -z-10`} />
-                    <div className={`absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr ${activeTheme.gradientText} opacity-10 rounded-full blur-3xl -z-10`} />
+            {isOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={onClose}
+                        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                    />
 
-                    {/* Close Button */}
-                    <button
-                        onClick={handleClose}
-                        className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                        className="relative w-full max-w-md bg-gray-800 rounded-2xl shadow-2xl border border-gray-700 overflow-hidden z-10"
                     >
-                        <X size={24} />
-                    </button>
-
-                    {isSuccess ? (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="text-center py-8"
-                        >
-                            <div className={`w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br ${activeTheme.gradientText} opacity-20 flex items-center justify-center`}>
-                                <CheckCircle className={activeTheme.icon} size={48} />
-                            </div>
-                            <h3 className="text-2xl font-bold text-white mb-2">Thank You!</h3>
-                            <p className="text-gray-400">Your download will begin shortly...</p>
-                        </motion.div>
-                    ) : (
-                        <>
-                            {/* Header */}
-                            <div className="text-center mb-8">
-                                <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${activeTheme.gradientText} flex items-center justify-center shadow-lg`}>
-                                    <FileText className="text-white" size={32} />
-                                </div>
-                                <h3 className="text-2xl font-bold text-white mb-2">Download Syllabus</h3>
-                                <p className="text-gray-400 text-sm">
-                                    Please enter your details to download the <br />
-                                    <span className={`font-medium text-transparent bg-clip-text bg-gradient-to-r ${activeTheme.gradientText}`}>{course?.title || 'Course'}</span> syllabus
-                                </p>
-                            </div>
-
-                            {/* Form */}
-                            <form onSubmit={handleSubmit} className="space-y-5">
+                        {/* Header */}
+                        <div className={`p-6 border-b border-gray-700 bg-gradient-to-r ${theme.gradientBg} relative overflow-hidden`}>
+                            <div className={`absolute top-0 right-0 w-32 h-32 rounded-full opacity-10 blur-2xl transform translate-x-10 -translate-y-10 ${theme.bg}`} />
+                            <div className="flex justify-between items-start relative z-10">
                                 <div>
-                                    <label className="block text-sm text-gray-400 mb-2 font-medium">Full Name</label>
-                                    <div className="relative">
-                                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
+                                    <h3 className="text-xl font-bold text-white mb-1">Download Syllabus</h3>
+                                    <p className="text-sm text-gray-300 flex items-center">
+                                        <FileText size={14} className="mr-1" />
+                                        {course.title}
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={onClose}
+                                    className="text-gray-400 hover:text-white transition-colors"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Content */}
+                        <div className="p-6">
+                            {success ? (
+                                <div className="text-center py-8">
+                                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full ${theme.bg}/20 mb-4`}>
+                                        <CheckCircle className={`w-8 h-8 ${theme.text}`} />
+                                    </div>
+                                    <h4 className="text-xl font-bold text-white mb-2">Success!</h4>
+                                    <p className="text-gray-400">Your download will start shortly.</p>
+                                </div>
+                            ) : (
+                                <form onSubmit={handleSubmit} className="space-y-4">
+                                    <div className="bg-gray-700/30 p-4 rounded-xl text-sm text-gray-300 mb-4 border border-gray-700/50">
+                                        Please provide your contact details to download the comprehensive curriculum PDF for this course.
+                                    </div>
+
+                                    {error && (
+                                        <div className="bg-red-900/20 border border-red-500/50 text-red-200 text-sm p-3 rounded-lg flex items-start">
+                                            <AlertCircle size={16} className="mr-2 mt-0.5 flex-shrink-0" />
+                                            {error}
+                                        </div>
+                                    )}
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-400 mb-1.5">Full Name</label>
                                         <input
                                             type="text"
+                                            name="name"
                                             value={formData.name}
-                                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                            placeholder="Enter your full name"
-                                            className="w-full bg-gray-700/50 border border-gray-600 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                                            onChange={handleChange}
+                                            className="w-full bg-gray-900 border border-gray-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all placeholder-gray-600"
+                                            placeholder="Enter your name"
                                             required
                                         />
                                     </div>
-                                </div>
 
-                                <div>
-                                    <label className="block text-sm text-gray-400 mb-2 font-medium">Email Address</label>
-                                    <div className="relative">
-                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-400 mb-1.5">Email Address</label>
                                         <input
                                             type="email"
+                                            name="email"
                                             value={formData.email}
-                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                            onChange={handleChange}
+                                            className="w-full bg-gray-900 border border-gray-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all placeholder-gray-600"
                                             placeholder="Enter your email"
-                                            className="w-full bg-gray-700/50 border border-gray-600 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
                                             required
                                         />
                                     </div>
-                                </div>
 
-                                <div>
-                                    <label className="block text-sm text-gray-400 mb-2 font-medium">Phone Number</label>
-                                    <div className="relative">
-                                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-400 mb-1.5">Phone Number</label>
                                         <input
                                             type="tel"
+                                            name="phone"
                                             value={formData.phone}
-                                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                            onChange={handleChange}
+                                            className="w-full bg-gray-900 border border-gray-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all placeholder-gray-600"
                                             placeholder="Enter your phone number"
-                                            className="w-full bg-gray-700/50 border border-gray-600 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
                                             required
                                         />
                                     </div>
-                                </div>
 
-                                {error && (
-                                    <p className="text-red-400 text-sm text-center">{error}</p>
-                                )}
-
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    className={`w-full py-4 bg-gradient-to-r ${activeTheme.buttonGradient} text-white font-bold rounded-xl shadow-lg transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3`}
-                                >
-                                    {isSubmitting ? (
-                                        <>
+                                    <button
+                                        type="submit"
+                                        disabled={loading}
+                                        className={`w-full py-3.5 mt-2 bg-gradient-to-r ${theme.buttonGradient} text-white font-bold rounded-xl shadow-lg transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:scale-100 flex items-center justify-center`}
+                                    >
+                                        {loading ? (
                                             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                            Processing...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Download size={20} />
-                                            Download Syllabus
-                                        </>
-                                    )}
-                                </button>
-
-                                <p className="text-center text-xs text-gray-500 mt-4">
-                                    By downloading, you agree to receive updates about our courses.
-                                </p>
-                            </form>
-                        </>
-                    )}
-                </motion.div>
-            </motion.div>
+                                        ) : (
+                                            <>
+                                                <Download className="w-5 h-5 mr-2" />
+                                                Get Syllabus PDF
+                                            </>
+                                        )}
+                                    </button>
+                                </form>
+                            )}
+                        </div>
+                    </motion.div>
+                </div>
+            )}
         </AnimatePresence>
     );
 };

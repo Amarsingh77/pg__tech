@@ -12,12 +12,22 @@ import testimonialRoutes from './routes/testimonials.js';
 import enrollmentRoutes from './routes/enrollments.js';
 import batchRoutes from './routes/batches.js';
 import authRoutes from './routes/auth.js';
+import galleryRoutes from './routes/gallery.js';
+import connectDB from './config/database.js';
 
 // Load environment variables
 dotenv.config();
 
+console.log('Loaded PORT from env:', process.env.PORT);
+
+// Connect to Database
+connectDB().then(() => {
+  // Seed default admin
+  import('./models/User.js').then(m => m.default.createDefaultAdmin());
+});
+
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Security middleware
 app.use(helmet());
@@ -37,7 +47,7 @@ app.use('/api/', limiter);
 // API rate limiting (stricter for API routes)
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 50, // limit each IP to 50 API requests per windowMs
+  max: 1000, // limit each IP to 1000 API requests per windowMs
   message: 'Too many API requests, please try again later.'
 });
 app.use('/api/', apiLimiter);
@@ -47,6 +57,9 @@ app.use(compression());
 
 // Logging
 app.use(morgan('combined'));
+
+// Serve uploaded files
+app.use('/uploads', express.static('uploads'));
 
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
@@ -66,6 +79,7 @@ app.use('/api/courses', courseRoutes);
 app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/enrollments', enrollmentRoutes);
 app.use('/api/batches', batchRoutes);
+app.use('/api/gallery', galleryRoutes);
 app.use('/api/auth', authRoutes);
 
 // 404 handler
@@ -144,6 +158,7 @@ process.on('SIGINT', () => {
 });
 
 export default app;
+
 
 
 

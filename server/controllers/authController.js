@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import User from '../models/User.js';
 
 // Generate JWT token
@@ -15,8 +16,13 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check if user exists
-    const user = await User.findOne({ email }).select('+password');
+    // Check if user exists (by email or username)
+    const user = await User.findOne({
+      $or: [
+        { email: email.toLowerCase() },
+        { username: email.toLowerCase() }
+      ]
+    }).select('+password');
 
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({
@@ -32,13 +38,24 @@ export const login = async (req, res) => {
       });
     }
 
-    // Update last login
-    await user.updateLastLogin();
+    // For admins, generate OTP instead of direct login
+    if (user.role === 'admin') {
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      user.otp = otp;
+      user.otpExpire = Date.now() + 10 * 60 * 1000; // 10 mins
+      await user.save();
 
-    // Generate token
+      return res.status(200).json({
+        success: true,
+        message: 'OTP sent to your email',
+        otp // In production, don't send this!
+      });
+    }
+
+    // For non-admins, direct login
+    await user.updateLastLogin();
     const token = generateToken(user._id);
 
-    // Send response
     res.status(200).json({
       success: true,
       message: 'Login successful',
@@ -60,6 +77,57 @@ export const login = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Server error during login'
+    });
+  }
+};
+
+// @desc    Verify OTP
+// @route   POST /api/auth/verify-otp
+// @access  Public
+export const verifyOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    const user = await User.findOne({
+      email,
+      otp,
+      otpExpire: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid or expired OTP'
+      });
+    }
+
+    // Clear OTP
+    user.otp = undefined;
+    user.otpExpire = undefined;
+    await user.updateLastLogin();
+
+    // Generate token
+    const token = generateToken(user._id);
+
+    res.status(200).json({
+      success: true,
+      message: 'OTP verified successfully',
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        permissions: user.permissions,
+        profile: user.profile,
+        lastLogin: user.lastLogin
+      }
+    });
+  } catch (error) {
+    console.error('Verify OTP error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error during OTP verification'
     });
   }
 };
@@ -191,7 +259,7 @@ export const updateProfile = async (req, res) => {
 };
 
 // @desc    Change password
-// @route   PUT /api/auth/change-password
+// @route   POST /api/auth/change-password
 // @access  Private
 export const changePassword = async (req, res) => {
   try {
@@ -224,6 +292,168 @@ export const changePassword = async (req, res) => {
     });
   }
 };
+
+// @desc    Get all admins
+// @route   GET /api/auth/admins
+// @access  Private/Admin
+export const getAdmins = async (req, res) => {
+  try {
+    const admins = await User.find({ role: 'admin' }).select('-password');
+    res.status(200).json(admins);
+  } catch (error) {
+    console.error('Get admins error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error fetching admins'
+    });
+  }
+};
+
+// @desc    Add new admin
+// @route   POST /api/auth/add-admin
+// @access  Private/Admin
+export const addAdmin = async (req, res) => {
+  try {
+    const { email, password, mobile } = req.body;
+
+    // Check admin limit
+    const adminCount = await User.countDocuments({ role: 'admin' });
+    if (adminCount >= 10) {
+      return res.status(400).json({
+        success: false,
+        message: 'Admin limit reached (maximum 10)'
+      });
+    }
+
+    // Check if user exists
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json({
+        success: false,
+        message: 'User with this email already exists'
+      });
+    }
+
+    // Create new admin
+    const username = email.split('@')[0];
+    const newAdmin = await User.create({
+      username,
+      email,
+      password,
+      role: 'admin',
+      profile: {
+        mobile
+      },
+      permissions: ['manage_courses', 'manage_enrollments', 'manage_testimonials', 'manage_batches', 'view_analytics']
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Admin added successfully',
+      data: {
+        id: newAdmin._id,
+        email: newAdmin.email,
+        role: newAdmin.role
+      }
+    });
+  } catch (error) {
+    console.error('Add admin error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error adding admin'
+    });
+  }
+};
+
+// @desc    Forgot password
+// @route   POST /api/auth/forgot-password
+// @access  Public
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'No user found with that email'
+      });
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(20).toString('hex');
+
+    // Hash token and set to field
+    user.resetPasswordToken = crypto
+      .createHash('sha256')
+      .update(resetToken)
+      .digest('hex');
+
+    // Set expire (10 mins)
+    user.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+
+    await user.save({ validateBeforeSave: false });
+
+    // In a real app, you would send an email here.
+    // For this project, we'll just return the token for demonstration/testing.
+    // The user would then use this token to reset their password.
+
+    res.status(200).json({
+      success: true,
+      message: 'Password reset token generated',
+      resetToken // In production, don't send this in response!
+    });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error during forgot password'
+    });
+  }
+};
+
+// @desc    Reset password
+// @route   PUT /api/auth/reset-password/:resetToken
+// @access  Public
+export const resetPassword = async (req, res) => {
+  try {
+    // Get hashed token
+    const resetPasswordToken = crypto
+      .createHash('sha256')
+      .update(req.params.resetToken)
+      .digest('hex');
+
+    const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid or expired token'
+      });
+    }
+
+    // Set new password
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Password reset successful'
+    });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error during password reset'
+    });
+  }
+};
+
 
 
 

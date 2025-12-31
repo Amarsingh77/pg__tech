@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Users, BookOpen, Calendar, MessageSquare } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config/api';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Dashboard = () => {
+    const { token } = useAuth();
     const [stats, setStats] = useState({
         enrollments: 0,
         courses: 0,
@@ -15,11 +17,17 @@ const Dashboard = () => {
         const fetchStats = async () => {
             try {
                 const [enrollmentsRes, coursesRes, batchesRes, testimonialsRes] = await Promise.all([
-                    fetch(API_ENDPOINTS.enrollments),
-                    fetch(API_ENDPOINTS.courses),
-                    fetch(API_ENDPOINTS.batches),
-                    fetch(API_ENDPOINTS.testimonials)
+                    fetch(API_ENDPOINTS.enrollments, { headers: { 'Authorization': `Bearer ${token}` } }),
+                    fetch(API_ENDPOINTS.courses, { headers: { 'Authorization': `Bearer ${token}` } }),
+                    fetch(API_ENDPOINTS.batches, { headers: { 'Authorization': `Bearer ${token}` } }),
+                    fetch(API_ENDPOINTS.testimonials, { headers: { 'Authorization': `Bearer ${token}` } })
                 ]);
+
+                // Check if any request failed (e.g. 429 rate limit)
+                const responses = [enrollmentsRes, coursesRes, batchesRes, testimonialsRes];
+                for (const r of responses) {
+                    if (!r.ok) throw new Error('Failed to fetch dashboard data');
+                }
 
                 const enrollments = await enrollmentsRes.json();
                 const courses = await coursesRes.json();
@@ -27,10 +35,10 @@ const Dashboard = () => {
                 const testimonials = await testimonialsRes.json();
 
                 setStats({
-                    enrollments: enrollments.length,
-                    courses: courses.length,
-                    batches: batches.length,
-                    testimonials: testimonials.length
+                    enrollments: Array.isArray(enrollments) ? enrollments.length : (enrollments.data || []).length || (enrollments.count || 0),
+                    courses: Array.isArray(courses) ? courses.length : (courses.data || []).length || (courses.count || 0),
+                    batches: Array.isArray(batches) ? batches.length : (batches.data || []).length || (batches.count || 0),
+                    testimonials: Array.isArray(testimonials) ? testimonials.length : (testimonials.data || []).length || (testimonials.count || 0)
                 });
             } catch (error) {
                 console.error('Error fetching stats:', error);

@@ -5,7 +5,12 @@ import {
   verifyToken,
   getProfile,
   updateProfile,
-  changePassword
+  changePassword,
+  getAdmins,
+  addAdmin,
+  forgotPassword,
+  resetPassword,
+  verifyOtp
 } from '../controllers/authController.js';
 import { protect } from '../middleware/auth.js';
 import { validateLogin, handleValidationErrors } from '../middleware/validation.js';
@@ -17,6 +22,11 @@ const router = express.Router();
 // @desc    Login user
 // @access  Public
 router.post('/login', validateLogin, login);
+
+// @route   POST /api/auth/verify-otp
+// @desc    Verify OTP
+// @access  Public
+router.post('/verify-otp', verifyOtp);
 
 // @route   POST /api/auth/logout
 // @desc    Logout user
@@ -45,17 +55,49 @@ router.put('/profile', [
   handleValidationErrors
 ], updateProfile);
 
-// @route   PUT /api/auth/change-password
+// @route   POST /api/auth/change-password
 // @desc    Change password
 // @access  Private
-router.put('/change-password', [
+router.post('/change-password', [
   protect,
   body('currentPassword').isLength({ min: 1 }).withMessage('Current password is required'),
   body('newPassword').isLength({ min: 6 }).withMessage('New password must be at least 6 characters'),
   handleValidationErrors
 ], changePassword);
 
+// @route   GET /api/auth/admins
+// @desc    Get all admins
+// @access  Private
+router.get('/admins', protect, getAdmins);
+
+// @route   POST /api/auth/add-admin
+// @desc    Add new admin
+// @access  Private
+router.post('/add-admin', [
+  protect,
+  body('email').isEmail().withMessage('Please enter a valid email'),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+  handleValidationErrors
+], addAdmin);
+
+// @route   POST /api/auth/forgot-password
+// @desc    Forgot password
+// @access  Public
+router.post('/forgot-password', [
+  body('email').isEmail().withMessage('Please enter a valid email'),
+  handleValidationErrors
+], forgotPassword);
+
+// @route   PUT /api/auth/reset-password/:resetToken
+// @desc    Reset password
+// @access  Public
+router.put('/reset-password/:resetToken', [
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+  handleValidationErrors
+], resetPassword);
+
 export default router;
+
 
 
 

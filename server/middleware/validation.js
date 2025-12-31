@@ -24,6 +24,7 @@ export const validateCourse = [
     .isLength({ min: 1, max: 100 })
     .withMessage('Title must be between 1 and 100 characters'),
   body('iconName')
+    .optional()
     .isIn(['Code', 'Brain', 'Cloud', 'Shield', 'Database', 'Book'])
     .withMessage('Invalid icon name'),
   body('duration')
@@ -153,14 +154,14 @@ export const validatePagination = [
 // User login validation
 export const validateLogin = [
   body('email')
-    .isEmail()
-    .normalizeEmail()
-    .withMessage('Please provide a valid email'),
+    .notEmpty()
+    .withMessage('Email or username is required'),
   body('password')
     .isLength({ min: 1 })
     .withMessage('Password is required'),
   handleValidationErrors
 ];
+
 
 
 

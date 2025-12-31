@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
         }
 
         try {
-            const res = await fetch(API_ENDPOINTS.checkAuth, {
+            const res = await fetch(API_ENDPOINTS.verify, {
                 headers: {
                     'Authorization': `Bearer ${savedToken}`
                 }
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
 
             if (res.ok) {
                 const data = await res.json();
-                setUser(data.user);
+                setUser(data.data.user);
                 setToken(savedToken);
             } else {
                 localStorage.removeItem('adminToken');
@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout, isAuthenticated: !!user }}>
+        <AuthContext.Provider value={{ user, token, loading, login, logout, isAuthenticated: !!user }}>
             {children}
         </AuthContext.Provider>
     );

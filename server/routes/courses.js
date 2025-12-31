@@ -7,6 +7,7 @@ import {
   deleteCourse,
   getCourseStats
 } from '../controllers/courseController.js';
+import upload from '../middleware/upload.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { validateCourse, validateId, validatePagination } from '../middleware/validation.js';
 
@@ -27,12 +28,12 @@ router.get('/:id', validateId, getCourse);
 // @route   POST /api/courses
 // @desc    Create new course
 // @access  Private (Admin)
-router.post('/', protect, authorize('admin'), validateCourse, createCourse);
+router.post('/', protect, authorize('admin'), upload.fields([{ name: 'image', maxCount: 1 }, { name: 'syllabusPdf', maxCount: 1 }]), validateCourse, createCourse);
 
 // @route   PUT /api/courses/:id
 // @desc    Update course
 // @access  Private (Admin)
-router.put('/:id', protect, authorize('admin'), validateId, validateCourse, updateCourse);
+router.put('/:id', protect, authorize('admin'), validateId, upload.fields([{ name: 'image', maxCount: 1 }, { name: 'syllabusPdf', maxCount: 1 }]), validateCourse, updateCourse);
 
 // @route   DELETE /api/courses/:id
 // @desc    Delete course
@@ -45,6 +46,7 @@ router.delete('/:id', protect, authorize('admin'), validateId, deleteCourse);
 router.get('/stats', protect, authorize('admin'), getCourseStats);
 
 export default router;
+
 
 
 

@@ -43,12 +43,17 @@ const userSchema = new mongoose.Schema({
     lastName: String,
     avatar: String,
     phone: String,
+    mobile: String,
     bio: String
   },
   permissions: [{
     type: String,
     enum: ['manage_courses', 'manage_enrollments', 'manage_testimonials', 'manage_batches', 'view_analytics']
-  }]
+  }],
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
+  otp: String,
+  otpExpire: Date
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
@@ -56,11 +61,11 @@ const userSchema = new mongoose.Schema({
 });
 
 // Index for authentication
-userSchema.index({ email: 1 }, { unique: true });
-userSchema.index({ username: 1 }, { unique: true });
+// userSchema.index({ email: 1 }, { unique: true }); // Removed duplicate
+// userSchema.index({ username: 1 }, { unique: true }); // Removed duplicate
 
 // Virtual for full name
-userSchema.virtual('fullName').get(function() {
+userSchema.virtual('fullName').get(function () {
   if (this.profile && this.profile.firstName && this.profile.lastName) {
     return `${this.profile.firstName} ${this.profile.lastName}`;
   }
@@ -68,7 +73,7 @@ userSchema.virtual('fullName').get(function() {
 });
 
 // Pre-save middleware to hash password
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   // Only hash the password if it has been modified (or is new)
   if (!this.isModified('password')) return next();
 
@@ -83,18 +88,18 @@ userSchema.pre('save', async function(next) {
 });
 
 // Instance method to check password
-userSchema.methods.comparePassword = async function(candidatePassword) {
+userSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
 // Instance method to update last login
-userSchema.methods.updateLastLogin = function() {
+userSchema.methods.updateLastLogin = function () {
   this.lastLogin = new Date();
   return this.save({ validateBeforeSave: false });
 };
 
 // Static method to create default admin user
-userSchema.statics.createDefaultAdmin = async function() {
+userSchema.statics.createDefaultAdmin = async function () {
   try {
     const adminExists = await this.findOne({ role: 'admin' });
     if (adminExists) return adminExists;
@@ -121,6 +126,7 @@ userSchema.statics.createDefaultAdmin = async function() {
 const User = mongoose.model('User', userSchema);
 
 export default User;
+
 
 
 

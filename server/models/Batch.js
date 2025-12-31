@@ -23,7 +23,7 @@ const batchSchema = new mongoose.Schema({
   mode: {
     type: String,
     required: [true, 'Mode is required'],
-    enum: ['Online (Live)', 'Offline (Weekday)', 'Offline (Weekend)', 'Hybrid (Online + Offline)'],
+    enum: ['Online (Live)', 'Offline (Weekday)', 'Offline (Weekend)', 'Hybrid (Online + Offline)', 'On-Campus', 'Evening School', 'Hybrid'],
     default: 'Online (Live)'
   },
   capacity: {
@@ -71,17 +71,17 @@ batchSchema.index({ status: 1 });
 batchSchema.index({ isActive: 1 });
 
 // Virtual for available seats
-batchSchema.virtual('availableSeats').get(function() {
+batchSchema.virtual('availableSeats').get(function () {
   return Math.max(0, this.capacity - this.enrolledCount);
 });
 
 // Virtual for isFull
-batchSchema.virtual('isFull').get(function() {
+batchSchema.virtual('isFull').get(function () {
   return this.enrolledCount >= this.capacity;
 });
 
 // Pre-save middleware to set courseId if course name matches
-batchSchema.pre('save', async function(next) {
+batchSchema.pre('save', async function (next) {
   if (this.course && !this.courseId) {
     try {
       const Course = mongoose.model('Course');
@@ -97,7 +97,7 @@ batchSchema.pre('save', async function(next) {
 });
 
 // Static method to get upcoming batches
-batchSchema.statics.getUpcoming = function() {
+batchSchema.statics.getUpcoming = function () {
   const today = new Date().toISOString().split('T')[0];
   return this.find({
     startDate: { $gte: today },
@@ -107,7 +107,7 @@ batchSchema.statics.getUpcoming = function() {
 };
 
 // Static method to get active batches
-batchSchema.statics.getActive = function() {
+batchSchema.statics.getActive = function () {
   return this.find({
     status: { $in: ['Upcoming', 'Ongoing'] },
     isActive: true
@@ -117,6 +117,7 @@ batchSchema.statics.getActive = function() {
 const Batch = mongoose.model('Batch', batchSchema);
 
 export default Batch;
+
 
 
 

@@ -21,7 +21,7 @@ const courseSchema = new mongoose.Schema({
   level: {
     type: String,
     required: [true, 'Level is required'],
-    enum: ['Beginner', 'Intermediate', 'Advanced'],
+    enum: ['Beginner', 'Intermediate', 'Advanced', 'Beginner to Advanced'],
     default: 'Beginner'
   },
   color: {
@@ -45,6 +45,25 @@ const courseSchema = new mongoose.Schema({
   order: {
     type: Number,
     default: 0
+  },
+  showOnHomePage: {
+    type: Boolean,
+    default: true
+  },
+  stream: {
+    type: String,
+    enum: ['CSE', 'ME', 'CE', 'Other'],
+    default: 'Other'
+  },
+  image: {
+    type: String,
+    default: 'https://placehold.co/600x400/4F46E5/FFFFFF?text=Course'
+  },
+  curriculum: [{
+    type: String
+  }],
+  syllabusPdf: {
+    type: String
   }
 }, {
   timestamps: true,
@@ -64,13 +83,14 @@ courseSchema.virtual('enrollmentCount', {
 });
 
 // Static method to get active courses
-courseSchema.statics.getActiveCourses = function() {
+courseSchema.statics.getActiveCourses = function () {
   return this.find({ isActive: true }).sort({ order: 1 });
 };
 
 const Course = mongoose.model('Course', courseSchema);
 
 export default Course;
+
 
 
 

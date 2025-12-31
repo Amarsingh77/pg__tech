@@ -2,13 +2,13 @@
 // In production, set VITE_API_URL environment variable to your backend URL
 // For local development, it defaults to http://localhost:3001
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
 export const API_ENDPOINTS = {
     // Auth
     login: `${API_BASE_URL}/api/auth/login`,
     verifyOtp: `${API_BASE_URL}/api/auth/verify-otp`,
-    checkAuth: `${API_BASE_URL}/api/auth/check`,
+    verify: `${API_BASE_URL}/api/auth/verify`,
     logout: `${API_BASE_URL}/api/auth/logout`,
 
     // Auth Management

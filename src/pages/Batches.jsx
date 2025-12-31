@@ -13,8 +13,9 @@ const Batches = ({ onEnrollClick }) => {
         const fetchBatches = async () => {
             try {
                 const res = await fetch(API_ENDPOINTS.batches);
+                if (!res.ok) throw new Error('Failed to fetch batches');
                 const data = await res.json();
-                setBatches(data);
+                setBatches(data.data || []);
             } catch (error) {
                 console.error('Error fetching batches:', error);
             } finally {
