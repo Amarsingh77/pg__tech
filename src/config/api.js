@@ -38,6 +38,18 @@ export const API_ENDPOINTS = {
 
     // Leads
     syllabusLeads: `${API_BASE_URL}/api/leads/syllabus`,
+
+    // Instructor Applications
+    instructorApply: `${API_BASE_URL}/api/instructors/apply`,
+
+    // Enquiries
+    enquiries: `${API_BASE_URL}/api/enquiries`,
+    enquiry: (id) => `${API_BASE_URL}/api/enquiries/${id}`,
+};
+
+export const getAuthHeaders = () => {
+    const token = localStorage.getItem('adminToken');
+    return token ? { 'Authorization': `Bearer ${token}` } : {};
 };
 
 export default API_BASE_URL;

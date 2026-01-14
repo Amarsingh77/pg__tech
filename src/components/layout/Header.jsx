@@ -7,6 +7,7 @@ import { API_ENDPOINTS } from '../../config/api';
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isServicesOpen, setIsServicesOpen] = useState(false);
     const [activeStream, setActiveStream] = useState(null);
     const [coursesByStream, setCoursesByStream] = useState({});
 
@@ -25,6 +26,13 @@ const Header = () => {
         'EE': 'Electrical Engineering',
         'Other': 'Other Courses'
     };
+
+    const services = [
+        { title: 'Web Development', href: '/services/web-dev' },
+        { title: 'App Development', href: '/services/app-dev' },
+        { title: 'SEO Optimization', href: '/services/seo' },
+        { title: 'Other Services', href: '/services/other' }
+    ];
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -67,7 +75,7 @@ const Header = () => {
         >
             <div className="container mx-auto px-6 py-4 flex justify-between items-center">
                 <Link to="/" className="text-2xl font-bold text-white">
-                    Tech<span className="text-blue-400">Institute</span>
+                    PG-Tech <span className="text-blue-400">Solutions</span>
                 </Link>
 
                 {/* Desktop Nav */}
@@ -143,6 +151,40 @@ const Header = () => {
                         </AnimatePresence>
                     </div>
 
+                    {/* Services Dropdown */}
+                    <div
+                        className="relative"
+                        onMouseEnter={() => setIsServicesOpen(true)}
+                        onMouseLeave={() => setIsServicesOpen(false)}
+                    >
+                        <button className="text-gray-200 hover:text-white transition-colors duration-300 flex items-center py-2">
+                            Services <ChevronDown size={16} className={`ml-1 transition-transform ${isServicesOpen ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        <AnimatePresence>
+                            {isServicesOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: 10 }}
+                                    className="absolute top-full left-0 mt-0 pt-2 w-56"
+                                >
+                                    <div className="bg-gray-800 rounded-lg shadow-xl border border-gray-700 py-2">
+                                        {services.map((service) => (
+                                            <Link
+                                                key={service.title}
+                                                to={service.href}
+                                                className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+                                            >
+                                                {service.title}
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
+
                     {navLinks.map((link) => (
                         link.href === '/' ? (
                             <Link
@@ -162,14 +204,12 @@ const Header = () => {
                             </a>
                         )
                     ))}
-                    <motion.a
-                        href="/#contact"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-lg shadow-lg"
+                    <Link
+                        to="/contact"
+                        className="px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-lg shadow-lg hover:scale-105 active:scale-95 transition-all transform flex items-center"
                     >
                         Contact Us
-                    </motion.a>
+                    </Link>
                 </div>
 
                 {/* Mobile Menu Button */}
@@ -220,39 +260,54 @@ const Header = () => {
                                 </div>
                             </div>
 
-                            <hr className="w-full border-gray-700" />
-
-                            {navLinks.map((link) => (
-                                link.href === '/' ? (
-                                    <Link
-                                        key={link.name}
-                                        to={link.href}
-                                        onClick={() => setIsMenuOpen(false)}
-                                        className="text-gray-200 hover:text-white transition-colors duration-300 text-lg font-medium"
-                                    >
-                                        {link.name}
-                                    </Link>
-                                ) : (
-                                    <a
-                                        key={link.name}
-                                        href={link.href}
-                                        onClick={() => setIsMenuOpen(false)}
-                                        className="text-gray-200 hover:text-white transition-colors duration-300 text-lg font-medium"
-                                    >
-                                        {link.name}
-                                    </a>
-                                )
-                            ))}
-                            <motion.a
-                                href="/#contact"
-                                onClick={() => setIsMenuOpen(false)}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="w-full text-center px-5 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-lg shadow-lg mt-4"
-                            >
-                                Contact Us
-                            </motion.a>
                         </div>
+
+                        <hr className="w-full border-gray-700" />
+
+                        <div className="w-full">
+                            <p className="text-gray-400 mb-4 text-sm font-semibold uppercase tracking-wider">Services</p>
+                            <div className="space-y-4 pl-2">
+                                {services.map((service) => (
+                                    <Link
+                                        key={service.title}
+                                        to={service.href}
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="block text-gray-300 hover:text-white text-sm"
+                                    >
+                                        {service.title}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+
+                        {navLinks.map((link) => (
+                            link.href === '/' ? (
+                                <Link
+                                    key={link.name}
+                                    to={link.href}
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className="text-gray-200 hover:text-white transition-colors duration-300 text-lg font-medium"
+                                >
+                                    {link.name}
+                                </Link>
+                            ) : (
+                                <a
+                                    key={link.name}
+                                    href={link.href}
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className="text-gray-200 hover:text-white transition-colors duration-300 text-lg font-medium"
+                                >
+                                    {link.name}
+                                </a>
+                            )
+                        ))}
+                        <Link
+                            to="/contact"
+                            onClick={() => setIsMenuOpen(false)}
+                            className="w-full text-center block px-5 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-lg shadow-lg mt-4"
+                        >
+                            Contact Us
+                        </Link>
                     </motion.div>
                 )}
             </AnimatePresence>

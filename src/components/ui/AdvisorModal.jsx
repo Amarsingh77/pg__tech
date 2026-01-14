@@ -74,7 +74,7 @@ const AdvisorModal = ({ onClose }) => {
     const [apiError, setApiError] = useState('');
 
     const courseList = coursesData.map(c => c.title).join(', ');
-    const systemPrompt = `You are a friendly and expert career counselor for a tech institute. A prospective student will describe their interests or goals. Your task is to analyze their input, recommend one of the institute's courses, and provide a brief (2-3 sentences) explanation for why it's a good fit. The available courses are: ${courseList}. Only recommend one of these courses. Format your response clearly with the recommended course name first.`;
+    const systemPrompt = `You are a friendly and expert career counselor for PGtech. A prospective student will describe their interests or goals. Your task is to analyze their input, recommend one of the institute's courses, and provide a brief (2-3 sentences) explanation for why it's a good fit. The available courses are: ${courseList}. Only recommend one of these courses. Format your response clearly with the recommended course name first.`;
 
     const handleSubmit = async (e) => {
         e.preventDefault();

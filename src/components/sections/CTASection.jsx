@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Send } from 'lucide-react';
 
@@ -24,14 +25,16 @@ const CTASection = () => {
                 >
                     Don't wait. The future is digital. Get in touch with our career counselors today to find the perfect course for you.
                 </motion.p>
-                <motion.button
-                    whileHover={{ scale: 1.05, boxShadow: '0px 10px 30px -5px rgba(255, 255, 255, 0.4)' }}
-                    whileTap={{ scale: 0.95 }}
-                    className="px-10 py-4 bg-white text-blue-600 font-extrabold rounded-lg shadow-2xl text-lg"
-                >
-                    Book a Free Demo Class
-                    <Send className="inline-block ml-3" size={22} />
-                </motion.button>
+                <Link to="/book-demo">
+                    <motion.button
+                        whileHover={{ scale: 1.05, boxShadow: '0px 10px 30px -5px rgba(255, 255, 255, 0.4)' }}
+                        whileTap={{ scale: 0.95 }}
+                        className="px-10 py-4 bg-white text-blue-600 font-extrabold rounded-lg shadow-2xl text-lg flex items-center gap-3 mx-auto"
+                    >
+                        Book a Free Demo Class
+                        <Send size={22} />
+                    </motion.button>
+                </Link>
             </div>
         </section>
     );

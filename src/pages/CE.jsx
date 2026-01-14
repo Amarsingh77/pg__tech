@@ -1,26 +1,28 @@
 import React from 'react';
 import StreamPage from '../components/templates/StreamPage';
+import SEO from '../components/utils/SEO';
 import { HardHat } from 'lucide-react';
+import { STREAM_THEMES } from '../data/themes';
 
 const CE = () => {
-    const theme = {
-        text: 'text-emerald-400',
-        bg: 'bg-emerald-600',
-        border: 'border-emerald-500/50',
-        gradientText: 'from-emerald-400 via-green-500 to-teal-400',
-        buttonGradient: 'from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500',
-        lightBg: 'bg-emerald-900/20',
-        color: 'emerald'
-    };
+    const theme = STREAM_THEMES.CE;
 
     return (
-        <StreamPage
-            streamName="Civil Engineering"
-            streamId="CE"
-            theme={theme}
-            icon={HardHat}
-            description="Build the infrastructure of tomorrow. Our CE courses cover everything from structural design to construction management, preparing you to shape the physical world."
-        />
+        <>
+            <SEO
+                title="Civil Engineering Courses"
+                description="Build a solid foundation with our Civil Engineering (CE) courses. Master structural design, construction management, and more."
+                keywords="civil engineering courses, CE training, structural engineering, construction management, civil design"
+                url="/courses/ce"
+            />
+            <StreamPage
+                streamName="Civil Engineering"
+                streamId="CE"
+                theme={theme}
+                icon={HardHat}
+                description="Build the infrastructure of tomorrow. Our CE courses cover everything from structural design to construction management, preparing you to shape the physical world."
+            />
+        </>
     );
 };
 

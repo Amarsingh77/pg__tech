@@ -1,26 +1,28 @@
 import React from 'react';
 import StreamPage from '../components/templates/StreamPage';
+import SEO from '../components/utils/SEO';
 import { Settings } from 'lucide-react';
+import { STREAM_THEMES } from '../data/themes';
 
 const ME = () => {
-    const theme = {
-        text: 'text-orange-400',
-        bg: 'bg-orange-600',
-        border: 'border-orange-500/50',
-        gradientText: 'from-orange-400 via-red-500 to-yellow-500',
-        buttonGradient: 'from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500',
-        lightBg: 'bg-orange-900/20',
-        color: 'orange'
-    };
+    const theme = STREAM_THEMES.ME;
 
     return (
-        <StreamPage
-            streamName="Mechanical Engineering"
-            streamId="ME"
-            theme={theme}
-            icon={Settings}
-            description="Design, analyze, and manufacture mechanical systems. Our ME courses bridge the gap between theory and practical application, mastering the mechanics of the world."
-        />
+        <>
+            <SEO
+                title="Mechanical Engineering Courses"
+                description="Advance your career with our Mechanical Engineering (ME) courses. Learn design, analysis, and manufacturing from industry experts."
+                keywords="mechanical engineering courses, ME training, CAD design, manufacturing technology, mechanical systems"
+                url="/courses/me"
+            />
+            <StreamPage
+                streamName="Mechanical Engineering"
+                streamId="ME"
+                theme={theme}
+                icon={Settings}
+                description="Design, analyze, and manufacture mechanical systems. Our ME courses bridge the gap between theory and practical application, mastering the mechanics of the world."
+            />
+        </>
     );
 };
 

@@ -8,6 +8,7 @@ export const coursesData = [
         duration: '2 Semesters',
         level: 'Advanced',
         color: 'from-blue-500 to-indigo-600',
+        image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop',
         description: 'A comprehensive curriculum covering modern software architecture, distributed systems, and full-cycle web development.'
     },
     {
@@ -17,6 +18,7 @@ export const coursesData = [
         duration: '3 Semesters',
         level: 'Post-Graduate',
         color: 'from-purple-500 to-pink-600',
+        image: 'https://images.unsplash.com/photo-1551288049-bbbda5366391?auto=format&fit=crop&w=600&q=80',
         description: 'Rigorous training in statistical analysis, machine learning algorithms, and big data technologies for predictive modeling.'
     },
     {
@@ -26,6 +28,7 @@ export const coursesData = [
         duration: '1 Semester',
         level: 'Professional',
         color: 'from-sky-500 to-cyan-600',
+        image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop',
         description: 'Specialized training in designing scalable, resilient, and secure cloud infrastructure on enterprise platforms.'
     },
     {
@@ -35,6 +38,7 @@ export const coursesData = [
         duration: '2 Semesters',
         level: 'Intermediate',
         color: 'from-red-500 to-orange-600',
+        image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=80',
         description: 'In-depth study of network security, cryptography, and ethical hacking to safeguard organizational assets.'
     },
 ];
@@ -69,7 +73,7 @@ export const testimonialsData = [
         course: 'Full-Stack Engineering',
         quote: 'The academic rigor and practical application provided a solid foundation for my career as a Senior Engineer.',
         rating: 5,
-        avatar: 'https://placehold.co/100x100/E2E8F0/4A5568?text=SL'
+        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80'
     },
     {
         id: 2,
@@ -77,7 +81,7 @@ export const testimonialsData = [
         course: 'Data Science PGP',
         quote: 'The faculty\'s expertise and the research-oriented approach gave me the analytical skills needed for complex data modeling.',
         rating: 5,
-        avatar: 'https://placehold.co/100x100/E2E8F0/4A5568?text=MB'
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80'
     },
     {
         id: 3,
@@ -85,7 +89,7 @@ export const testimonialsData = [
         course: 'Cloud Architecture',
         quote: 'This program bridged the gap between theoretical concepts and enterprise-scale cloud deployment effectively.',
         rating: 4,
-        avatar: 'https://placehold.co/100x100/E2E8F0/4A5568?text=EK'
+        avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80'
     },
 ];
 

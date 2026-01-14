@@ -42,6 +42,10 @@ export const validateCourse = [
     .optional()
     .isNumeric()
     .withMessage('Price must be a number'),
+  body('order')
+    .optional()
+    .isInt()
+    .withMessage('Order must be an integer'),
   handleValidationErrors
 ];
 
@@ -51,10 +55,10 @@ export const validateTestimonial = [
     .trim()
     .isLength({ min: 1, max: 50 })
     .withMessage('Name must be between 1 and 50 characters'),
-  body('course')
+  body('role')
     .trim()
     .isLength({ min: 1, max: 100 })
-    .withMessage('Course must be between 1 and 100 characters'),
+    .withMessage('Role must be between 1 and 100 characters'),
   body('quote')
     .trim()
     .isLength({ min: 1, max: 500 })
@@ -62,10 +66,14 @@ export const validateTestimonial = [
   body('rating')
     .isInt({ min: 1, max: 5 })
     .withMessage('Rating must be between 1 and 5'),
-  body('avatar')
+  body('image')
     .optional()
-    .isURL()
-    .withMessage('Avatar must be a valid URL'),
+    // If it's a file upload, this might be tricky, but assuming URL string for now based on JSON data
+    // Remove isURL strictly if we expect relative paths or non-standard URLs, 
+    // but keep it for now as data has http/https.
+    // Actually, let's allow it to be optional string to be safe against different formats.
+    .isString()
+    .withMessage('Image must be a valid string'),
   handleValidationErrors
 ];
 

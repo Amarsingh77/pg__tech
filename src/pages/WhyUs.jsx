@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Rocket, Target, Users, Zap, Globe, Award, BookOpen, Briefcase } from 'lucide-react';
+import SEO from '../components/utils/SEO';
 
 const WhyUs = () => {
     const stats = [
@@ -36,6 +37,12 @@ const WhyUs = () => {
 
     return (
         <div className="min-h-screen bg-gray-900 text-white pt-20">
+            <SEO
+                title="Why Choose Us"
+                description="Discover why PG Tech is the best choice for your technical education. Innovation, global excellence, and a community-driven approach."
+                keywords="why pg tech, best tech institute, coding mentorship, career growth, tech education values"
+                url="/why-us"
+            />
             {/* Hero Section */}
             <section className="relative py-20 overflow-hidden">
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
@@ -48,16 +55,16 @@ const WhyUs = () => {
                         transition={{ duration: 0.8 }}
                     >
                         <span className="inline-block py-1 px-3 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-semibold mb-6">
-                            Why Choose TechInstitute?
+                            Values & Vision
                         </span>
                         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-tight">
-                            More Than an Institute.<br />
+                            Igniting Potential.<br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">
-                                We Are Your Launchpad.
+                                Engineering the Future.
                             </span>
                         </h1>
                         <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                            In a world of rapid technological change, you need more than just a degree. You need a partner in your success. We bridge the gap between ambition and achievement.
+                            At PG-Tech Solutions, we believe that education is the most powerful weapon which you can use to change the world. We are not just an institute; we are a catalyst for transformation, empowering students with the cutting-edge skills and mindset needed to lead in the digital era.
                         </p>
                     </motion.div>
                 </div>
@@ -128,15 +135,15 @@ const WhyUs = () => {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                             >
-                                <h2 className="text-3xl md:text-4xl font-bold mb-6">Our Journey of Impact</h2>
+                                <h2 className="text-3xl md:text-4xl font-bold mb-6">A Legacy of Innovation</h2>
                                 <p className="text-gray-300 mb-6 leading-relaxed">
-                                    Founded with a vision to democratize high-quality technical education, we started as a small coding bootcamp. Today, we are a premier institute recognized globally for our rigorous curriculum and exceptional outcomes.
+                                    Our journey began with a simple yet profound realization: the gap between academic learning and industry demands was growing. We set out to bridge this chasm, creating a learning environment that mirrors the real world.
                                 </p>
                                 <p className="text-gray-300 mb-8 leading-relaxed">
-                                    We believe that talent is universal, but opportunity is not. Our mission is to provide that opportunity to every aspiring technologist.
+                                    Today, we stand as a beacon of excellence, having guided thousands of students from uncertainty to confident professionals. We don't just teach code; we teach problem-solving, resilience, and the art of continuous innovation.
                                 </p>
                                 <button className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors flex items-center">
-                                    Join Our Story <Rocket className="ml-2" size={20} />
+                                    Start Your Journey <Rocket className="ml-2" size={20} />
                                 </button>
                             </motion.div>
                         </div>

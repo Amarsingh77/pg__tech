@@ -20,17 +20,25 @@ const WhyChooseUs = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5 }}
                     >
-                        The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">TechInstitute Advantage</span>
+                        The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">PGtech Advantage</span>
                     </motion.h2>
                     <motion.p
-                        className="text-gray-400 text-lg max-w-2xl mx-auto"
+                        className="text-gray-400 text-lg max-w-4xl mx-auto mb-8 leading-relaxed text-left"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.2 }}
                     >
-                        A legacy of excellence in engineering and technology education.
-                        Experience world-class learning designed for the modern era.
+                        Success isn't an accident; it's engineered. At PG-Tech Solutions, we combine rigorous technical training with real-world application. We don't just prepare you for a job; we prepare you for a career that defines the future.
+                    </motion.p>
+                    <motion.p
+                        className="text-gray-400 text-lg max-w-4xl mx-auto leading-relaxed text-left"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                    >
+                        From Full Stack Development to Industrial Automation, our expert-led courses are designed to take you from a curious beginner to an industry-ready professional. Join a community of innovators and start building your legacy today.
                     </motion.p>
                 </div>
 

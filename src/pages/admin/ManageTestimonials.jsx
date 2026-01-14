@@ -109,34 +109,54 @@ const ManageTestimonials = () => {
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {testimonials.map((item) => (
-                    <div key={item.id} className="bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg flex flex-col">
-                        <div className="flex justify-between items-start mb-4">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-gray-700 overflow-hidden">
-                                    {item.image ? (
-                                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">No Img</div>
-                                    )}
+                    <div key={item.id} className="group bg-gray-900/40 rounded-3xl p-8 border border-gray-700/50 backdrop-blur-md shadow-2xl transition-all duration-300 hover:border-blue-500/30 hover:-translate-y-1 hover:shadow-blue-500/5 flex flex-col">
+                        <div className="flex justify-between items-start mb-6">
+                            <div className="flex items-center gap-4">
+                                <div className="relative">
+                                    <div className="absolute -inset-1 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full opacity-0 group-hover:opacity-40 blur-sm transition-opacity" />
+                                    <div className="relative w-14 h-14 rounded-full bg-gray-800 overflow-hidden border-2 border-gray-700 group-hover:border-blue-500/50 transition-colors">
+                                        {item.image ? (
+                                            <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-gray-600 bg-gray-900">
+                                                <Upload size={20} className="opacity-20" />
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                                 <div>
-                                    <h4 className="font-bold text-white">{item.name}</h4>
-                                    <p className="text-xs text-gray-400">{item.role}</p>
+                                    <h4 className="font-black text-white text-lg tracking-tight group-hover:text-blue-400 transition-colors">{item.name}</h4>
+                                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">{item.role}</p>
                                 </div>
                             </div>
-                            <div className="flex text-yellow-500">
-                                <span className="font-bold mr-1">{item.rating}</span>
-                                <Star size={16} fill="currentColor" />
+                            <div className="flex bg-gray-800/50 px-3 py-1.5 rounded-full border border-gray-700 shadow-inner">
+                                <span className="font-black text-yellow-400 mr-1 text-sm">{item.rating}</span>
+                                <Star size={14} className="text-yellow-400 self-center" fill="currentColor" />
                             </div>
                         </div>
-                        <p className="text-gray-300 text-sm italic mb-6 flex-grow">"{item.quote}"</p>
-                        <div className="flex justify-end gap-3 pt-4 border-t border-gray-700">
-                            <button onClick={() => openModal(item)} className="text-blue-400 hover:text-blue-300">
+
+                        <div className="relative flex-grow">
+                            <span className="absolute -top-4 -left-2 text-6xl text-blue-500/10 font-serif leading-none select-none">"</span>
+                            <p className="relative z-10 text-gray-300 text-sm italic leading-relaxed font-medium mb-8">
+                                {item.quote}
+                            </p>
+                        </div>
+
+                        <div className="flex justify-end gap-3 pt-6 border-t border-gray-800/50">
+                            <button
+                                onClick={() => openModal(item)}
+                                className="p-2.5 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-xl transition-all border border-transparent hover:border-gray-700"
+                                title="Edit Testimonial"
+                            >
                                 <Edit size={18} />
                             </button>
-                            <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:text-red-300">
+                            <button
+                                onClick={() => handleDelete(item.id)}
+                                className="p-2.5 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all border border-transparent hover:border-red-500/20"
+                                title="Delete Testimonial"
+                            >
                                 <Trash2 size={18} />
                             </button>
                         </div>
@@ -145,8 +165,12 @@ const ManageTestimonials = () => {
             </div>
 
             {testimonials.length === 0 && (
-                <div className="text-center py-20 text-gray-500 bg-gray-800 rounded-xl border border-gray-700">
-                    <p>No testimonials found. Add one to show social proof.</p>
+                <div className="text-center py-24 text-gray-500 bg-gray-900/40 rounded-3xl border border-gray-800 border-dashed backdrop-blur-sm">
+                    <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-700">
+                        <Star size={24} className="opacity-20" />
+                    </div>
+                    <p className="font-bold tracking-tight text-gray-400">No testimonials found</p>
+                    <p className="text-xs uppercase tracking-widest mt-2 opacity-50">Add one to show social proof</p>
                 </div>
             )}
 

@@ -22,7 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-.vercel
+.env
+.vexcel
 
 # Backend
 backend/node_modules

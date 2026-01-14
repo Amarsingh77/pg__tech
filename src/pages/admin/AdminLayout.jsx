@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, BookOpen, Calendar, MessageSquare, Image, Users, LogOut, Settings } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Calendar, Users, FileText, Settings, LogOut, MessageSquare, Image } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
 const AdminLayout = () => {
@@ -11,6 +11,7 @@ const AdminLayout = () => {
     const menuItems = [
         { path: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
         { path: '/admin/courses', icon: BookOpen, label: 'Courses' },
+        { path: '/admin/enquiries', icon: MessageSquare, label: 'Enquiries' },
         { path: '/admin/batches', icon: Calendar, label: 'Batches' },
         { path: '/admin/testimonials', icon: MessageSquare, label: 'Testimonials' },
         { path: '/admin/gallery', icon: Image, label: 'Gallery' },

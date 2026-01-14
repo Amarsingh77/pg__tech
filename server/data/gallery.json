@@ -1,0 +1,56 @@
+[
+    {
+        "id": 1733840000001,
+        "title": "AWS Cloud Practitioner Certificate",
+        "category": "Certifications",
+        "image": "file:///Users/amarpreetsingh/.gemini/antigravity/brain/8307e01a-418e-4dbe-b315-a943309d5bfb/full_stack_elegant_v2_1767254442115.png"
+    },
+    {
+        "id": 1733840000002,
+        "title": "Google Cloud Professional Certificate",
+        "category": "Certifications",
+        "image": "file:///Users/amarpreetsingh/.gemini/antigravity/brain/8307e01a-418e-4dbe-b315-a943309d5bfb/dsa_elegant_v2_1767254464792.png"
+    },
+    {
+        "id": 1733840000003,
+        "title": "Microsoft Azure Fundamentals",
+        "category": "Certifications",
+        "image": "file:///Users/amarpreetsingh/.gemini/antigravity/brain/8307e01a-418e-4dbe-b315-a943309d5bfb/cloud_elegant_v2_1767254486975.png"
+    },
+    {
+        "id": 1733840000004,
+        "title": "Best Tech Institute Award 2023",
+        "category": "Achievements",
+        "image": "file:///Users/amarpreetsingh/.gemini/antigravity/brain/8307e01a-418e-4dbe-b315-a943309d5bfb/dbms_elegant_v2_1767254506418.png"
+    },
+    {
+        "id": 1733840000005,
+        "title": "National Hackathon Winners",
+        "category": "Achievements",
+        "image": "file:///Users/amarpreetsingh/.gemini/antigravity/brain/8307e01a-418e-4dbe-b315-a943309d5bfb/autocad_me_elegant_v2_1767254525506.png"
+    },
+    {
+        "id": 1733840000006,
+        "title": "Excellence in Education Award",
+        "category": "Achievements",
+        "image": "file:///Users/amarpreetsingh/.gemini/antigravity/brain/8307e01a-418e-4dbe-b315-a943309d5bfb/automobile_elegant_v2_1767254562521.png"
+    },
+    {
+        "id": 1733840000007,
+        "title": "Annual Tech Fest 2023",
+        "category": "Festivals",
+        "image": "file:///Users/amarpreetsingh/.gemini/antigravity/brain/8307e01a-418e-4dbe-b315-a943309d5bfb/maintenance_elegant_v2_1767254583490.png"
+    },
+    {
+        "id": 1733840000008,
+        "title": "Cultural Night Celebration",
+        "category": "Festivals",
+        "image": "file:///Users/amarpreetsingh/.gemini/antigravity/brain/8307e01a-418e-4dbe-b315-a943309d5bfb/robotics_elegant_v2_1767254543556.png"
+    },
+    {
+        "id": 1733840000009,
+        "title": "Graduation Ceremony 2023",
+        "category": "Festivals",
+        "image": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80"
+    }
+]

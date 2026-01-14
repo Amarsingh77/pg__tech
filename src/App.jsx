@@ -1,5 +1,6 @@
 import React, { useState, Suspense } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
+import { HelmetProvider } from 'react-helmet-async';
 import { Loader } from 'lucide-react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
@@ -19,9 +20,15 @@ import WhyUs from './pages/WhyUs';
 import Testimonials from './pages/Testimonials';
 import Batches from './pages/Batches';
 import CourseDetail from './pages/CourseDetail';
+import JoinInstructor from './pages/JoinInstructor';
+import Services from './pages/Services';
+import Contact from './pages/Contact';
+import BookConsultation from './pages/BookConsultation';
+import BookDemo from './pages/BookDemo';
 
 // Admin Components
 import AdminLayout from './pages/admin/AdminLayout';
+import AdminEnquiries from './pages/admin/AdminEnquiries';
 import Dashboard from './pages/admin/Dashboard';
 import ManageCourses from './pages/admin/ManageCourses';
 import ManageBatches from './pages/admin/ManageBatches';
@@ -89,11 +96,17 @@ const AppContent = () => {
           <Route path="/courses/cse" element={<CSE onEnrollClick={handleEnrollClick} />} />
           <Route path="/courses/me" element={<ME onEnrollClick={handleEnrollClick} />} />
           <Route path="/courses/ce" element={<CE onEnrollClick={handleEnrollClick} />} />
+          <Route path="/services/:type" element={<Services />} />
+          <Route path="/services" element={<Services />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/why-us" element={<WhyUs />} />
           <Route path="/testimonials" element={<Testimonials />} />
           <Route path="/batches" element={<Batches onEnrollClick={handleEnrollClick} />} />
           <Route path="/course/:courseId" element={<CourseDetail onEnrollClick={handleEnrollClick} />} />
+          <Route path="/join-instructor" element={<JoinInstructor />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/book-consultation" element={<BookConsultation />} />
+          <Route path="/book-demo" element={<BookDemo />} />
 
           {/* Admin Auth Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
@@ -109,6 +122,7 @@ const AppContent = () => {
             <Route index element={<Dashboard />} />
             <Route path="courses" element={<ManageCourses />} />
             <Route path="batches" element={<ManageBatches />} />
+            <Route path="enquiries" element={<AdminEnquiries />} />
             <Route path="testimonials" element={<ManageTestimonials />} />
             <Route path="gallery" element={<ManageGallery />} />
             <Route path="enrollments" element={<ViewEnrollments />} />
@@ -149,10 +163,12 @@ import ScrollToTop from './components/utils/ScrollToTop';
 export default function App() {
   return (
     <Router>
-      <AuthProvider>
-        <ScrollToTop />
-        <AppContent />
-      </AuthProvider>
+      <HelmetProvider>
+        <AuthProvider>
+          <ScrollToTop />
+          <AppContent />
+        </AuthProvider>
+      </HelmetProvider>
     </Router>
   );
 }

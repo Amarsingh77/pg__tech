@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Award, Trophy, Music, Image as ImageIcon, X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 import { API_ENDPOINTS } from '../config/api';
+import SEO from '../components/utils/SEO';
 
 const Gallery = () => {
     const [activeTab, setActiveTab] = useState('all');
@@ -72,6 +73,12 @@ const Gallery = () => {
 
     return (
         <div className="min-h-screen bg-gray-900 pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+            <SEO
+                title="Our Gallery"
+                description="Explore our gallery of certifications, achievements, and student life at PG Tech. Witness our journey of excellence."
+                keywords="pg tech gallery, student projects, achievements, coding events, tech institute photos"
+                url="/gallery"
+            />
             <div className="max-w-7xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}

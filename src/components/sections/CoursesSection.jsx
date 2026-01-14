@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { BarChart, Users, ArrowRight, Code, Cpu, Building, Cog } from 'lucide-react';
+import { ArrowRight, Code, Cpu, Building, Cog } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config/api';
+import { getThemeByStream } from '../../data/themes';
 
 const SpotlightCard = ({ children, className = "" }) => {
     const divRef = useRef(null);
@@ -91,7 +92,6 @@ const CoursesSection = ({ onEnrollClick }) => {
         return null;
     }
 
-    const colors = ['from-blue-500 to-cyan-500', 'from-purple-500 to-pink-500', 'from-orange-500 to-red-500', 'from-green-500 to-emerald-500'];
 
     return (
         <section id="courses" className="py-32 bg-[#030014] text-white relative">
@@ -121,6 +121,8 @@ const CoursesSection = ({ onEnrollClick }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {courses.map((course, i) => {
                         const IconComponent = getIconForCourse(course.title);
+                        const theme = getThemeByStream(course.stream);
+
                         return (
                             <motion.div
                                 key={course.id}
@@ -129,33 +131,40 @@ const CoursesSection = ({ onEnrollClick }) => {
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: i * 0.1 }}
                             >
-                                <SpotlightCard className="h-full flex flex-col">
-                                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${colors[i % colors.length]} flex items-center justify-center mb-8 shadow-lg`}>
-                                        <IconComponent size={32} className="text-white" />
+                                <SpotlightCard className="h-full">
+                                    <div className="mb-8 relative group/icon">
+                                        <div className={`absolute -inset-4 bg-gradient-to-br ${theme.buttonGradient} rounded-3xl opacity-20 blur-2xl transition-all duration-500 group-hover/icon:opacity-40`} />
+                                        <div className={`relative w-24 h-24 rounded-2xl bg-gradient-to-br ${theme.buttonGradient} flex items-center justify-center shadow-xl transform transition-transform duration-500 group-hover/icon:scale-110 group-hover/icon:rotate-3`}>
+                                            <IconComponent size={40} className="text-white" strokeWidth={1.5} />
+                                        </div>
                                     </div>
 
-                                    <h3 className="text-2xl font-bold mb-4 text-white">{course.title}</h3>
-                                    <p className="text-gray-400 mb-8 flex-grow leading-relaxed">
-                                        {course.description}
-                                    </p>
+                                    <div className="flex-grow">
+                                        <h3 className="text-2xl font-bold mb-4 text-white hover:text-blue-400 transition-colors duration-300 line-clamp-2 min-h-[4rem]">
+                                            {course.title}
+                                        </h3>
+                                        <p className="text-gray-400 mb-8 leading-relaxed line-clamp-3">
+                                            {course.description}
+                                        </p>
 
-                                    <div className="space-y-4 mb-8">
-                                        <div className="flex items-center text-sm text-gray-300">
-                                            <BarChart size={16} className="mr-3 text-blue-400" />
-                                            <span>{course.level || 'All Levels'}</span>
-                                        </div>
-                                        <div className="flex items-center text-sm text-gray-300">
-                                            <Users size={16} className="mr-3 text-purple-400" />
-                                            <span>{course.duration || '6 Months'}</span>
+                                        <div className="space-y-4 mb-8">
+                                            <div className="flex items-center text-sm font-medium text-gray-300">
+                                                <div className={`w-1.5 h-1.5 rounded-full ${theme.bg} mr-3 shadow-[0_0_12px_rgba(0,0,0,0.5)]`} />
+                                                <span>{course.level || 'Professional Certification'}</span>
+                                            </div>
+                                            <div className="flex items-center text-sm font-medium text-gray-300">
+                                                <div className={`w-1.5 h-1.5 rounded-full ${theme.bg} mr-3 shadow-[0_0_12px_rgba(0,0,0,0.5)]`} />
+                                                <span>{course.duration || '6 Months Duration'}</span>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <button
                                         onClick={() => onEnrollClick(course)}
-                                        className="w-full py-4 rounded-xl bg-white text-black font-bold hover:bg-gray-200 transition-colors flex items-center justify-center group"
+                                        className={`w-full py-4 rounded-xl bg-gradient-to-r ${theme.buttonGradient} text-white font-bold shadow-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-95 flex items-center justify-center group/btn`}
                                     >
-                                        Enroll Now
-                                        <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
+                                        Explore Course
+                                        <ArrowRight className="ml-2 group-hover/btn:translate-x-1 transition-transform" size={18} />
                                     </button>
                                 </SpotlightCard>
                             </motion.div>

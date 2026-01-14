@@ -1,62 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Download, CheckCircle, Clock, BarChart, BookOpen, Share2, Star } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Download, CheckCircle, Clock, BarChart, BookOpen, Share2, Star, Users, Award, TrendingUp, Calendar } from 'lucide-react';
 import { API_ENDPOINTS } from '../config/api';
 import SyllabusDownloadModal from '../components/ui/SyllabusDownloadModal';
+import SEO from '../components/utils/SEO';
 
-const getTheme = (id) => {
-    if (id?.startsWith('me-')) {
-        return {
-            text: 'text-orange-400',
-            bg: 'bg-orange-600',
-            bgHover: 'hover:bg-orange-700',
-            border: 'border-orange-500',
-            ring: 'ring-orange-500',
-            gradientText: 'from-orange-400 via-red-400 to-yellow-400',
-            gradientBg: 'from-orange-900/40 to-red-900/20',
-            buttonGradient: 'from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700',
-            icon: 'text-orange-400',
-            lightBg: 'bg-orange-900/20',
-            lightBorder: 'border-orange-500/30'
-        };
-    } else if (id?.startsWith('ce-')) {
-        return {
-            text: 'text-emerald-400',
-            bg: 'bg-emerald-600',
-            bgHover: 'hover:bg-emerald-700',
-            border: 'border-emerald-500',
-            ring: 'ring-emerald-500',
-            gradientText: 'from-emerald-400 via-green-400 to-teal-400',
-            gradientBg: 'from-emerald-900/40 to-teal-900/20',
-            buttonGradient: 'from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700',
-            icon: 'text-emerald-400',
-            lightBg: 'bg-emerald-900/20',
-            lightBorder: 'border-emerald-500/30'
-        };
-    }
-    // Default to CSE (Blue)
-    return {
-        text: 'text-blue-400',
-        bg: 'bg-blue-600',
-        bgHover: 'hover:bg-blue-700',
-        border: 'border-blue-500',
-        ring: 'ring-blue-500',
-        gradientText: 'from-blue-400 via-indigo-400 to-violet-400',
-        gradientBg: 'from-blue-900/40 to-indigo-900/20',
-        buttonGradient: 'from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700',
-        icon: 'text-blue-400',
-        lightBg: 'bg-blue-900/20',
-        lightBorder: 'border-blue-500/30'
-    };
-};
+import { getThemeByStream } from '../data/themes';
 
 const CourseDetail = ({ onEnrollClick }) => {
     const { courseId } = useParams();
     const navigate = useNavigate();
     const [course, setCourse] = useState(null);
     const [isSyllabusModalOpen, setIsSyllabusModalOpen] = useState(false);
-    const theme = getTheme(courseId);
+    const [activeTab, setActiveTab] = useState('curriculum');
+    const theme = getThemeByStream(course?.stream);
 
     useEffect(() => {
         const fetchCourse = async () => {
@@ -103,147 +61,347 @@ const CourseDetail = ({ onEnrollClick }) => {
     }
 
     return (
-        <div className="bg-gray-900 text-white min-h-screen relative overflow-hidden">
-            {/* Background Blob */}
+        <div className="bg-gray-950 text-white min-h-screen relative overflow-hidden">
+            <SEO
+                title={course.title}
+                description={course.description}
+                image={course.image}
+                keywords={`${course.title}, ${course.stream}, ${course.level}, course, training`}
+                url={`/course/${courseId}`}
+            />
+            {/* Enhanced Background elements */}
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none"></div>
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className={`absolute top-0 right-0 w-[60%] h-[60%] rounded-full opacity-10 blur-[150px] ${theme.bg}`} />
+                <motion.div
+                    animate={{
+                        scale: [1, 1.2, 1],
+                        rotate: [0, 45, 0],
+                        x: [0, 100, 0]
+                    }}
+                    transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+                    className={`absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full opacity-10 blur-[150px] bg-gradient-to-br ${theme.buttonGradient}`}
+                />
+                <motion.div
+                    animate={{
+                        scale: [1, 1.3, 1],
+                        rotate: [0, -45, 0],
+                        x: [0, -100, 0]
+                    }}
+                    transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
+                    className={`absolute bottom-0 -left-32 w-[500px] h-[500px] rounded-full opacity-5 blur-[120px] bg-gradient-to-tr ${theme.buttonGradient}`}
+                />
             </div>
 
             <div className="container mx-auto px-6 pt-28 pb-20 relative z-10">
+                {/* Breadcrumb Navigation */}
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2 mb-8 text-sm"
+                >
+                    <Link to="/" className="text-gray-500 hover:text-gray-300 transition-colors">Home</Link>
+                    <span className="text-gray-700">/</span>
+                    <Link to={`/courses/${course.stream?.toLowerCase()}`} className="text-gray-500 hover:text-gray-300 transition-colors">{course.stream}</Link>
+                    <span className="text-gray-700">/</span>
+                    <span className="text-gray-400 font-medium">{course.title}</span>
+                </motion.div>
+
                 {/* Back Button */}
                 <motion.button
                     onClick={() => navigate(-1)}
-                    className="flex items-center text-gray-400 hover:text-white mb-10 transition-colors group"
+                    className="flex items-center text-gray-400 hover:text-white mb-10 transition-all group"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                 >
-                    <div className="bg-gray-800 p-2 rounded-lg mr-3 group-hover:bg-gray-700 transition-colors">
-                        <ArrowLeft size={20} />
+                    <div className="bg-gray-900/50 backdrop-blur-xl p-3 rounded-xl mr-3 border border-gray-800 group-hover:border-gray-700 group-hover:bg-gray-900 transition-all shadow-lg">
+                        <ArrowLeft size={18} />
                     </div>
-                    <span className="font-medium">Back to Courses</span>
+                    <span className="font-bold uppercase tracking-wider text-xs">Back</span>
                 </motion.button>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
                     {/* Main Content */}
                     <div className="lg:col-span-8">
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="mb-12"
+                            className="space-y-10"
                         >
-                            <div className="flex items-center space-x-4 mb-6">
-                                <span className={`px-4 py-1.5 rounded-full text-sm font-bold bg-gray-800 border ${theme.border} ${theme.text} uppercase tracking-wider`}>
-                                    {course.stream || 'Engineering'}
-                                </span>
-                                <span className="flex items-center text-gray-400 text-sm font-medium">
-                                    <Clock size={16} className="mr-1.5" /> {course.duration || '6 Months'}
-                                </span>
+                            {/* Enhanced Hero Section */}
+                            <div className="relative">
+
+                                {/* Category Badge & Meta */}
+                                <div className="flex flex-wrap items-center gap-4 mb-8 relative z-10">
+                                    <span className={`px-6 py-2.5 rounded-full text-xs font-black bg-gradient-to-r ${theme.buttonGradient} uppercase tracking-[0.2em] shadow-2xl shadow-${theme.color}-500/20`}>
+                                        {course.stream || 'Engineering'}
+                                    </span>
+                                    <div className="flex items-center gap-4 text-sm">
+                                        <span className="flex items-center text-gray-400 font-bold">
+                                            <Clock size={16} className="mr-2 text-gray-600" /> {course.duration || '6 Months'}
+                                        </span>
+                                        <span className="flex items-center text-gray-400 font-bold">
+                                            <BarChart size={16} className="mr-2 text-gray-600" /> {course.level || 'All Levels'}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {/* Epic Title */}
+                                <h1 className={`relative z-10 text-5xl sm:text-6xl lg:text-8xl font-black mb-8 tracking-tighter leading-[0.95] text-transparent bg-clip-text bg-gradient-to-br ${theme.gradientText} drop-shadow-2xl`}>
+                                    {course.title}
+                                </h1>
+
+                                {/* Enhanced Description */}
+                                <div className="relative mb-10">
+                                    <div className={`absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b ${theme.buttonGradient} rounded-full shadow-lg`}></div>
+                                    <p className="text-xl md:text-2xl text-gray-300 leading-relaxed pl-8 font-medium">
+                                        {course.description}
+                                    </p>
+                                </div>
+
+                                {/* Course Stats Row */}
+                                <div className="grid grid-cols-3 gap-4 mb-10">
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.2 }}
+                                        className="rounded-3xl p-6 border border-gray-800/50 hover:border-gray-700 transition-all group"
+                                    >
+                                        <Users className={`${theme.text} mb-3`} size={28} />
+                                        <div className="text-3xl font-black mb-1">1,240+</div>
+                                        <div className="text-xs text-gray-500 font-bold uppercase tracking-wider">Students Enrolled</div>
+                                    </motion.div>
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.3 }}
+                                        className="rounded-3xl p-6 border border-gray-800/50 hover:border-gray-700 transition-all group"
+                                    >
+                                        <Award className={`${theme.text} mb-3`} size={28} />
+                                        <div className="text-3xl font-black mb-1">4.8/5</div>
+                                        <div className="text-xs text-gray-500 font-bold uppercase tracking-wider">Course Rating</div>
+                                    </motion.div>
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.4 }}
+                                        className="rounded-3xl p-6 border border-gray-800/50 hover:border-gray-700 transition-all group"
+                                    >
+                                        <TrendingUp className={`${theme.text} mb-3`} size={28} />
+                                        <div className="text-3xl font-black mb-1">94%</div>
+                                        <div className="text-xs text-gray-500 font-bold uppercase tracking-wider">Completion Rate</div>
+                                    </motion.div>
+                                </div>
                             </div>
 
-                            <h1 className={`text-4xl md:text-6xl font-extrabold mb-8 leading-tight text-transparent bg-clip-text bg-gradient-to-r ${theme.gradientText}`}>
-                                {course.title}
-                            </h1>
+                            {/* Tabbed Content Section */}
+                            <div className="bg-gray-900/30 backdrop-blur-2xl rounded-[3rem] border border-gray-800/50 overflow-hidden shadow-2xl">
+                                {/* Tab Headers */}
+                                <div className="flex border-b border-gray-800/50 p-2 bg-gray-900/20">
+                                    {['curriculum', 'overview', 'outcomes'].map((tab) => (
+                                        <button
+                                            key={tab}
+                                            onClick={() => setActiveTab(tab)}
+                                            className={`flex-1 px-6 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all ${activeTab === tab
+                                                ? `bg-gradient-to-r ${theme.buttonGradient} text-white shadow-lg`
+                                                : 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/30'
+                                                }`}
+                                        >
+                                            {tab}
+                                        </button>
+                                    ))}
+                                </div>
 
-                            <p className="text-xl text-gray-300 leading-relaxed max-w-3xl border-l-4 border-gray-700 pl-6 py-2 mb-10">
-                                {course.description}
-                            </p>
-
-                            {/* What you'll learn */}
-                            <div className="bg-gray-800/50 backdrop-blur-sm rounded-3xl p-8 border border-gray-700 mb-10 relative overflow-hidden">
-                                <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${theme.gradientText}`} />
-                                <h3 className="text-2xl font-bold mb-8 flex items-center">
-                                    <Star className={`mr-3 ${theme.text}`} fill="currentColor" />
-                                    What you'll learn
-                                </h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
-                                    {course.curriculum && course.curriculum.length > 0 ? (
-                                        course.curriculum.map((item, index) => (
-                                            <motion.div
-                                                key={index}
-                                                initial={{ opacity: 0, x: -10 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                transition={{ delay: index * 0.1 }}
-                                                className="flex items-start"
-                                            >
-                                                <div className={`mt-1 mr-4 p-1 rounded-full ${theme.lightBg}`}>
-                                                    <CheckCircle className={`${theme.text}`} size={16} />
-                                                </div>
-                                                <span className="text-gray-300 font-medium">{item}</span>
-                                            </motion.div>
-                                        ))
-                                    ) : (
-                                        [1, 2, 3, 4].map((item, i) => (
-                                            <div key={item} className="flex items-start">
-                                                <CheckCircle className={`${theme.text} mr-3 mt-1 flex-shrink-0`} size={20} />
-                                                <span className="text-gray-300">
-                                                    Comprehensive curriculum covering core concepts and advanced techniques.
-                                                </span>
+                                {/* Tab Content */}
+                                <div className="p-10 md:p-14">
+                                    {activeTab === 'curriculum' && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0 }}
+                                        >
+                                            <h3 className="text-3xl font-black mb-10 flex items-center tracking-tight">
+                                                <BookOpen className={`mr-4 ${theme.text}`} size={32} />
+                                                What You'll Learn
+                                            </h3>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                {course.curriculum && course.curriculum.length > 0 ? (
+                                                    course.curriculum.map((item, index) => (
+                                                        <motion.div
+                                                            key={index}
+                                                            initial={{ opacity: 0, x: -10 }}
+                                                            animate={{ opacity: 1, x: 0 }}
+                                                            transition={{ delay: index * 0.05 }}
+                                                            className="flex items-start group cursor-pointer"
+                                                        >
+                                                            <div className={`mt-1 mr-5 p-2 rounded-xl bg-gradient-to-br ${theme.buttonGradient} shadow-md group-hover:scale-110 transition-transform`}>
+                                                                <CheckCircle className="text-white" size={18} />
+                                                            </div>
+                                                            <span className="text-gray-300 font-bold text-base leading-snug group-hover:text-white group-hover:translate-x-1 transition-all">{item}</span>
+                                                        </motion.div>
+                                                    ))
+                                                ) : (
+                                                    ['Fundamental Concepts', 'Advanced Techniques', 'Real-world Projects', 'Industry Best Practices'].map((item, i) => (
+                                                        <div key={i} className="flex items-start group">
+                                                            <div className={`mt-1 mr-5 p-2 rounded-xl bg-gradient-to-br ${theme.buttonGradient} shadow-md`}>
+                                                                <CheckCircle className="text-white" size={18} />
+                                                            </div>
+                                                            <span className="text-gray-300 font-bold text-base group-hover:text-white transition-colors">{item}</span>
+                                                        </div>
+                                                    ))
+                                                )}
                                             </div>
-                                        ))
+                                        </motion.div>
+                                    )}
+
+                                    {activeTab === 'overview' && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="space-y-6"
+                                        >
+                                            <h3 className="text-3xl font-black mb-8">Course Overview</h3>
+                                            <p className="text-gray-300 text-lg leading-relaxed">
+                                                This comprehensive {course.title} program is designed to equip you with industry-relevant skills and practical knowledge. Through hands-on projects and real-world applications, you'll gain the expertise needed to excel in your career.
+                                            </p>
+                                            <div className="grid grid-cols-2 gap-6 mt-8">
+                                                <div className="bg-gray-800/40 rounded-2xl p-6">
+                                                    <Calendar className={`${theme.text} mb-3`} size={24} />
+                                                    <h4 className="font-black text-lg mb-2">Duration</h4>
+                                                    <p className="text-gray-400">{course.duration}</p>
+                                                </div>
+                                                <div className="bg-gray-800/40 rounded-2xl p-6">
+                                                    <BarChart className={`${theme.text} mb-3`} size={24} />
+                                                    <h4 className="font-black text-lg mb-2">Difficulty</h4>
+                                                    <p className="text-gray-400">{course.level}</p>
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    )}
+
+                                    {activeTab === 'outcomes' && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="space-y-6"
+                                        >
+                                            <h3 className="text-3xl font-black mb-8">Learning Outcomes</h3>
+                                            <div className="space-y-4">
+                                                {[
+                                                    'Master core concepts and advanced techniques',
+                                                    'Build real-world projects to showcase your skills',
+                                                    'Prepare for industry certifications and interviews',
+                                                    'Network with peers and industry professionals',
+                                                    'Get career guidance and placement support'
+                                                ].map((outcome, i) => (
+                                                    <div key={i} className="flex items-start bg-gray-800/30 rounded-2xl p-5 hover:bg-gray-800/50 transition-colors">
+                                                        <Star className={`${theme.text} mr-4 mt-1 flex-shrink-0`} fill="currentColor" size={20} />
+                                                        <span className="text-gray-300 font-medium text-lg">{outcome}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </motion.div>
                                     )}
                                 </div>
                             </div>
                         </motion.div>
                     </div>
 
-                    {/* Sidebar */}
+                    {/* Enhanced Sidebar */}
                     <div className="lg:col-span-4">
                         <motion.div
-                            className="sticky top-28 space-y-8"
+                            className="sticky top-32 space-y-8"
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.2 }}
+                            transition={{ delay: 0.3 }}
                         >
-                            {/* Course Card */}
-                            <div className={`bg-gray-800 rounded-3xl p-6 border border-gray-700 shadow-2xl relative overflow-hidden group hover:border-${theme.color}-500/50 transition-colors`}>
-                                <div className="aspect-video w-full rounded-2xl overflow-hidden mb-6 relative shadow-lg">
-                                    {course.image ? (
-                                        <img src={course.image} alt={course.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" />
-                                    ) : (
-                                        <div className={`w-full h-full flex items-center justify-center ${theme.lightBg}`}>
-                                            <BookOpen size={48} className={theme.icon} />
+                            {/* Premium Course Card with Glassmorphism */}
+                            <div className="relative group">
+                                {/* Glow effect */}
+                                <div className={`absolute -inset-1 bg-gradient-to-r ${theme.buttonGradient} rounded-[3rem] opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500`}></div>
+
+                                <div className="relative bg-gray-900/60 backdrop-blur-2xl rounded-[3rem] p-8 border border-gray-800/50 shadow-[0_20px_60px_rgba(0,0,0,0.6)] overflow-hidden">
+                                    {/* Inner glow */}
+                                    <div className={`absolute top-0 right-0 w-40 h-40 bg-gradient-to-br ${theme.buttonGradient} opacity-5 rounded-full blur-3xl`}></div>
+
+                                    {/* Course Image */}
+                                    <div className="aspect-[4/3] w-full rounded-2xl overflow-hidden mb-8 relative shadow-2xl ring-1 ring-gray-800/50">
+                                        {course.image ? (
+                                            <>
+                                                <img
+                                                    src={course.image}
+                                                    alt={course.title}
+                                                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                                                />
+                                            </>
+                                        ) : (
+                                            <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900`}>
+                                                <BookOpen size={64} className={`${theme.text} opacity-20`} />
+                                            </div>
+                                        )}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent opacity-60" />
+                                    </div>
+
+                                    {/* Course Details */}
+                                    <div className="space-y-5 mb-10">
+                                        <div className="flex items-center justify-between text-gray-300 py-4 border-b border-gray-800/50">
+                                            <div className="flex items-center font-bold text-sm tracking-tight text-gray-400">
+                                                <Clock size={20} className={`mr-4 ${theme.text}`} /> Duration
+                                            </div>
+                                            <span className="font-black text-sm">{course.duration || '6 Months'}</span>
                                         </div>
-                                    )}
-                                    <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
+                                        <div className="flex items-center justify-between text-gray-300 py-4 border-b border-gray-800/50">
+                                            <div className="flex items-center font-bold text-sm tracking-tight text-gray-400">
+                                                <BarChart size={20} className={`mr-4 ${theme.text}`} /> Level
+                                            </div>
+                                            <span className="font-black text-sm">{course.level || 'All Levels'}</span>
+                                        </div>
+                                        <div className="flex items-center justify-between text-gray-300 py-4 border-b border-gray-800/50">
+                                            <div className="flex items-center font-bold text-sm tracking-tight text-gray-400">
+                                                <BookOpen size={20} className={`mr-4 ${theme.text}`} /> Format
+                                            </div>
+                                            <span className="font-black text-sm">Online • Live</span>
+                                        </div>
+                                        <div className="flex items-center justify-between text-gray-300 py-4">
+                                            <div className="flex items-center font-bold text-sm tracking-tight text-gray-400">
+                                                <Award size={20} className={`mr-4 ${theme.text}`} /> Certificate
+                                            </div>
+                                            <span className="font-black text-sm">Included</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Action Buttons */}
+                                    <div className="space-y-4">
+                                        <button
+                                            onClick={() => onEnrollClick(course)}
+                                            className={`w-full py-5 bg-gradient-to-r ${theme.buttonGradient} rounded-2xl font-black text-white text-lg shadow-2xl shadow-${theme.color}-500/30 transition-all transform hover:scale-[1.02] hover:shadow-${theme.color}-500/50 active:scale-95 flex items-center justify-center gap-3 group/btn`}
+                                        >
+                                            Enroll Now <ArrowRight size={22} className="group-hover/btn:translate-x-1 transition-transform" />
+                                        </button>
+
+                                        <button
+                                            onClick={handleDownloadClick}
+                                            className="w-full py-4 bg-gray-800/50 hover:bg-gray-800 text-gray-300 hover:text-white rounded-2xl font-bold transition-all flex items-center justify-center border border-gray-700/50 hover:border-gray-600 backdrop-blur-xl"
+                                        >
+                                            <Download size={18} className="mr-3 text-gray-500" /> Download Syllabus
+                                        </button>
+
+                                        <button className="w-full py-4 bg-transparent hover:bg-gray-800/30 text-gray-400 hover:text-white rounded-2xl font-bold transition-all flex items-center justify-center border border-gray-800/50 hover:border-gray-700">
+                                            <Share2 size={18} className="mr-3" /> Share Course
+                                        </button>
+                                    </div>
                                 </div>
-
-                                <div className="space-y-4 mb-8 text-sm font-medium">
-                                    <div className="flex items-center justify-between text-gray-300 py-2 border-b border-gray-700">
-                                        <div className="flex items-center"><Clock size={18} className="mr-3 text-gray-500" /> Duration</div>
-                                        <span>{course.duration || '6 Months'}</span>
-                                    </div>
-                                    <div className="flex items-center justify-between text-gray-300 py-2 border-b border-gray-700">
-                                        <div className="flex items-center"><BarChart size={18} className="mr-3 text-gray-500" /> Level</div>
-                                        <span>{course.level || 'Beginner to Advanced'}</span>
-                                    </div>
-                                    <div className="flex items-center justify-between text-gray-300 py-2 border-b border-gray-700">
-                                        <div className="flex items-center"><BookOpen size={18} className="mr-3 text-gray-500" /> Lectures</div>
-                                        <span>Click to view</span>
-                                    </div>
-                                </div>
-
-                                <button
-                                    onClick={() => onEnrollClick(course)}
-                                    className={`w-full py-4 bg-gradient-to-r ${theme.buttonGradient} rounded-xl font-bold text-white text-lg shadow-lg shadow-${theme.color}-500/30 transition-all transform hover:scale-[1.02] active:scale-[0.98] mb-4`}
-                                >
-                                    Enroll Now
-                                </button>
-
-                                <button
-                                    onClick={handleDownloadClick}
-                                    className="w-full py-3 bg-gray-700 hover:bg-gray-600 text-gray-200 rounded-xl font-semibold transition-colors flex items-center justify-center"
-                                >
-                                    <Download size={18} className="mr-2" /> Download Syllabus
-                                </button>
                             </div>
 
-                            {/* Need Help Card */}
-                            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl p-6 border border-gray-700">
-                                <h4 className="font-bold text-lg mb-2">Need help deciding?</h4>
-                                <p className="text-gray-400 text-sm mb-4">Contact our student counselors for a free consultation.</p>
-                                <button className="text-white text-sm font-bold hover:underline flex items-center">
-                                    Contact Support <ArrowRight size={14} className="ml-1" />
-                                </button>
+                            {/* Help Card with Enhanced Design */}
+                            <div className="relative group">
+                                <div className="relative bg-gradient-to-br from-gray-900/80 to-gray-900/40 backdrop-blur-2xl rounded-[2.5rem] p-8 border border-gray-800/50 overflow-hidden">
+                                    <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${theme.buttonGradient} opacity-10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:opacity-20 transition-opacity`} />
+                                    <h4 className="font-black text-2xl mb-4 tracking-tight relative z-10">Need Guidance?</h4>
+                                    <p className="text-gray-400 text-sm leading-relaxed mb-6 font-medium relative z-10">Talk to our expert counselors and get personalized course recommendations.</p>
+                                    <button className={`relative z-10 text-white text-sm font-black hover:tracking-widest transition-all flex items-center gap-2 group-hover:${theme.text}`}>
+                                        Book Free Consultation <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                                    </button>
+                                </div>
                             </div>
                         </motion.div>
                     </div>

@@ -103,48 +103,93 @@ const ManageBatches = () => {
                 </button>
             </div>
 
-            <div className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700">
-                <table className="w-full text-left text-gray-300">
-                    <thead className="bg-gray-700 text-gray-100 uppercase text-sm">
-                        <tr>
-                            <th className="p-4">Course</th>
-                            <th className="p-4">Start Date</th>
-                            <th className="p-4">Time</th>
-                            <th className="p-4">Mode</th>
-                            <th className="p-4">Status</th>
-                            <th className="p-4 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-700">
-                        {batches.map((batch) => (
-                            <tr key={batch.id} className="hover:bg-gray-700/50">
-                                <td className="p-4 font-medium text-white">{batch.course}</td>
-                                <td className="p-4">{batch.startDate}</td>
-                                <td className="p-4">{batch.time}</td>
-                                <td className="p-4">
-                                    <span className={`px-2 py-1 rounded text-xs ${batch.mode === 'Online' ? 'bg-green-500/20 text-green-400' : 'bg-orange-500/20 text-orange-400'
-                                        }`}>
-                                        {batch.mode}
-                                    </span>
-                                </td>
-                                <td className="p-4">{batch.status}</td>
-                                <td className="p-4 text-right space-x-2">
-                                    <button onClick={() => openModal(batch)} className="text-blue-400 hover:text-blue-300">
-                                        <Edit size={18} />
-                                    </button>
-                                    <button onClick={() => handleDelete(batch.id)} className="text-red-400 hover:text-red-300">
-                                        <Trash2 size={18} />
-                                    </button>
-                                </td>
+            <div className="bg-gray-900/40 rounded-3xl overflow-hidden border border-gray-700/50 backdrop-blur-md shadow-2xl">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="bg-gray-800/50 border-b border-gray-700/50">
+                                <th className="p-6 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Course</th>
+                                <th className="p-6 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Start Date</th>
+                                <th className="p-6 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Time & Days</th>
+                                <th className="p-6 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Mode</th>
+                                <th className="p-6 text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Status</th>
+                                <th className="p-6 text-xs font-black text-gray-400 uppercase tracking-[0.2em] text-right">Actions</th>
                             </tr>
-                        ))}
-                        {batches.length === 0 && (
-                            <tr>
-                                <td colSpan="6" className="p-8 text-center text-gray-500">No batches found. Add one to get started.</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody className="divide-y divide-gray-800/50">
+                            {batches.map((batch) => (
+                                <tr key={batch.id} className="hover:bg-gray-800/30 transition-colors group">
+                                    <td className="p-6">
+                                        <div className="flex items-center">
+                                            <div className="w-1.5 h-6 bg-blue-500 rounded-full mr-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                            <div>
+                                                <p className="font-black text-white text-base tracking-tight">{batch.course}</p>
+                                                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">{batch.stream}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="p-6">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center border border-gray-700">
+                                                <span className="text-[10px] font-black text-blue-400">{batch.startDate.split(' ')[0]}</span>
+                                            </div>
+                                            <span className="text-sm font-medium text-gray-300">{batch.startDate}</span>
+                                        </div>
+                                    </td>
+                                    <td className="p-6">
+                                        <div className="space-y-1">
+                                            <p className="text-sm font-bold text-gray-200">{batch.time}</p>
+                                            <p className="text-[10px] font-medium text-gray-500 uppercase tracking-widest">{batch.days || 'Mon, Wed, Fri'}</p>
+                                        </div>
+                                    </td>
+                                    <td className="p-6">
+                                        <span className={`inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${batch.mode === 'Online'
+                                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                                            : 'bg-orange-500/10 text-orange-400 border-orange-500/20'
+                                            }`}>
+                                            {batch.mode}
+                                        </span>
+                                    </td>
+                                    <td className="p-6">
+                                        <div className="flex items-center gap-2">
+                                            <div className={`w-2 h-2 rounded-full ${batch.status === 'Open' ? 'bg-emerald-500 animate-pulse' : 'bg-orange-500'}`} />
+                                            <span className="text-sm font-bold text-gray-300">{batch.status}</span>
+                                        </div>
+                                    </td>
+                                    <td className="p-6 text-right">
+                                        <div className="flex justify-end gap-2">
+                                            <button
+                                                onClick={() => openModal(batch)}
+                                                className="p-2 text-gray-500 hover:text-white hover:bg-gray-800 rounded-lg transition-all border border-transparent hover:border-gray-700"
+                                                title="Edit Batch"
+                                            >
+                                                <Edit size={16} />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(batch.id)}
+                                                className="p-2 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all border border-transparent hover:border-red-500/20"
+                                                title="Delete Batch"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                            {batches.length === 0 && (
+                                <tr>
+                                    <td colSpan="6" className="p-24 text-center">
+                                        <div className="w-16 h-16 bg-gray-800 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-gray-700">
+                                            <Edit size={24} className="opacity-10" />
+                                        </div>
+                                        <p className="font-black text-gray-400 tracking-tight">No active batches</p>
+                                        <p className="text-[10px] font-bold text-gray-600 uppercase tracking-widest mt-2">Create one to start enrollment</p>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {/* Modal */}

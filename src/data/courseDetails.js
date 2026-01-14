@@ -6,6 +6,7 @@ export const cseCourses = [
         title: 'Full Stack Development',
         icon: Globe,
         desc: 'Master MERN stack and build modern web apps.',
+        image: '/images/hologram/full_stack.png',
         details: {
             duration: '6 Months',
             level: 'Beginner to Advanced',
@@ -24,6 +25,7 @@ export const cseCourses = [
         title: 'Data Structures & Algo',
         icon: Code,
         desc: 'Ace coding interviews with deep DSA knowledge.',
+        image: '/images/hologram/dsa.png',
         details: {
             duration: '4 Months',
             level: 'Intermediate',
@@ -42,6 +44,7 @@ export const cseCourses = [
         title: 'Cloud Computing',
         icon: Server,
         desc: 'Learn AWS, Azure, and DevOps practices.',
+        image: '/images/hologram/cloud.png',
         details: {
             duration: '5 Months',
             level: 'Intermediate',
@@ -60,6 +63,7 @@ export const cseCourses = [
         title: 'Database Management',
         icon: Database,
         desc: 'Design scalable databases with SQL and NoSQL.',
+        image: '/images/hologram/dbms.png',
         details: {
             duration: '3 Months',
             level: 'Beginner',
@@ -72,7 +76,7 @@ export const cseCourses = [
             ],
             syllabusPdf: '/curriculum/sample_curriculum.pdf'
         }
-    },
+    }
 ];
 
 export const meCourses = [
@@ -81,6 +85,7 @@ export const meCourses = [
         title: 'AutoCAD & SolidWorks',
         icon: PenTool,
         desc: 'Master 2D drafting and 3D modeling tools.',
+        image: '/images/hologram/autocad.png',
         details: {
             duration: '3 Months',
             level: 'Beginner',
@@ -99,6 +104,7 @@ export const meCourses = [
         title: 'Robotics & Automation',
         icon: Settings,
         desc: 'Build and program intelligent robots.',
+        image: '/images/hologram/robotics.png',
         details: {
             duration: '6 Months',
             level: 'Advanced',
@@ -117,6 +123,7 @@ export const meCourses = [
         title: 'Automobile Engineering',
         icon: Truck,
         desc: 'Understand vehicle dynamics and engine systems.',
+        image: '/images/hologram/automobile.png',
         details: {
             duration: '4 Months',
             level: 'Intermediate',
@@ -135,6 +142,7 @@ export const meCourses = [
         title: 'Industrial Maintenance',
         icon: Wrench,
         desc: 'Learn machinery upkeep and safety protocols.',
+        image: '/images/hologram/maintenance.png',
         details: {
             duration: '3 Months',
             level: 'Beginner',
@@ -147,7 +155,7 @@ export const meCourses = [
             ],
             syllabusPdf: '/curriculum/sample_curriculum.pdf'
         }
-    },
+    }
 ];
 
 export const ceCourses = [
@@ -156,6 +164,7 @@ export const ceCourses = [
         title: 'Structural Analysis',
         icon: Home,
         desc: 'Analyze and design safe structures.',
+        image: '/images/hologram/structural.png',
         details: {
             duration: '5 Months',
             level: 'Advanced',
@@ -174,6 +183,7 @@ export const ceCourses = [
         title: 'Surveying & Geomatics',
         icon: Map,
         desc: 'Master land surveying techniques and GPS.',
+        image: '/images/hologram/surveying.png',
         details: {
             duration: '3 Months',
             level: 'Beginner',
@@ -192,6 +202,7 @@ export const ceCourses = [
         title: 'Construction Management',
         icon: HardHat,
         desc: 'Plan and execute construction projects efficiently.',
+        image: '/images/hologram/construction.png',
         details: {
             duration: '6 Months',
             level: 'Intermediate',
@@ -210,6 +221,7 @@ export const ceCourses = [
         title: 'AutoCAD for Civil',
         icon: Ruler,
         desc: 'Create precise architectural and engineering drawings.',
+        image: '/images/hologram/autocad.png',
         details: {
             duration: '3 Months',
             level: 'Beginner',
@@ -222,7 +234,7 @@ export const ceCourses = [
             ],
             syllabusPdf: '/curriculum/sample_curriculum.pdf'
         }
-    },
+    }
 ];
 
 export const allCourses = [...cseCourses, ...meCourses, ...ceCourses];

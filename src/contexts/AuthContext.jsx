@@ -3,6 +3,7 @@ import { API_ENDPOINTS } from '../config/api';
 
 const AuthContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
     const context = useContext(AuthContext);
     if (!context) {

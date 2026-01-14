@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Clock, MapPin, Users, Filter, ArrowRight, CheckCircle } from 'lucide-react';
 import { API_ENDPOINTS } from '../config/api';
+import SEO from '../components/utils/SEO';
 
 const Batches = ({ onEnrollClick }) => {
     const [filterCourse, setFilterCourse] = useState('All');
     const [filterMode, setFilterMode] = useState('All');
     const [batches, setBatches] = useState([]);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchBatches = async () => {
@@ -18,8 +18,6 @@ const Batches = ({ onEnrollClick }) => {
                 setBatches(data.data || []);
             } catch (error) {
                 console.error('Error fetching batches:', error);
-            } finally {
-                setLoading(false);
             }
         };
         fetchBatches();
@@ -33,6 +31,12 @@ const Batches = ({ onEnrollClick }) => {
 
     return (
         <div className="min-h-screen bg-gray-900 text-white pt-20 pb-12">
+            <SEO
+                title="Upcoming Batches"
+                description="Secure your spot in our upcoming full stack, data science, and engineering batches. Limited seats available for personalized mentorship."
+                keywords="web development batches, coding bootcamps, programming classes schedule, learn coding, punjab"
+                url="/batches"
+            />
             {/* Hero Section */}
             <section className="py-16 bg-gradient-to-b from-gray-800 to-gray-900 border-b border-white/5">
                 <div className="container mx-auto px-6 text-center">

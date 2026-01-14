@@ -35,15 +35,15 @@ const HeroSection = ({ onOpenAdvisorModal }) => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6">
-                        Innovate Your Future
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+                        Master The Future.
                         <br />
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500">
-                            with Tech
+                            Define Your Legacy.
                         </span>
                     </h1>
                     <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-lg">
-                        Cutting-edge courses, expert instructors, and a clear pathway to success in the tech industry. Your journey starts here.
+                        Don't just adapt to the future—create it. Our immersive, hands-on training in AI, Engineering, and Development transforms ambitious learners into industry-ready professionals. Your journey to excellence starts here.
                     </p>
                     <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                         <motion.a
@@ -115,7 +115,7 @@ const StatItem = ({ end, suffix, label }) => {
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting) {
-                    const controls = animate(0, end, {
+                    animate(0, end, {
                         duration: 2,
                         ease: "easeOut",
                         onUpdate(latest) {

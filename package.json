@@ -14,7 +14,7 @@
     "install:server": "cd server && npm install",
     "setup": "npm install && npm run install:server",
     "dev:full": "concurrently \"npm run dev\" \"npm run server\"",
-    "build:full": "npm run build && cd server && npm run build"
+    "build:full": "npm run build && echo 'Server does not require build step'"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
@@ -23,6 +23,7 @@
     "node-fetch": "^3.3.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-helmet-async": "^2.0.5",
     "react-router-dom": "^7.10.1"
   },
   "devDependencies": {

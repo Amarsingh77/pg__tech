@@ -83,7 +83,13 @@ export const getTestimonial = async (req, res) => {
 // @access  Private (Admin only)
 export const createTestimonial = async (req, res) => {
   try {
-    const testimonial = await Testimonial.create(req.body);
+    const testimonialData = { ...req.body };
+
+    if (req.file) {
+      testimonialData.image = `/uploads/${req.file.filename}`;
+    }
+
+    const testimonial = await Testimonial.create(testimonialData);
 
     res.status(201).json({
       success: true,
@@ -104,9 +110,15 @@ export const createTestimonial = async (req, res) => {
 // @access  Private (Admin only)
 export const updateTestimonial = async (req, res) => {
   try {
+    const testimonialData = { ...req.body };
+
+    if (req.file) {
+      testimonialData.image = `/uploads/${req.file.filename}`;
+    }
+
     const testimonial = await Testimonial.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      testimonialData,
       { new: true, runValidators: true }
     );
 

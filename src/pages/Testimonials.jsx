@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Quote, Star, User, Briefcase, Linkedin } from 'lucide-react';
 import { API_ENDPOINTS } from '../config/api';
+import SEO from '../components/utils/SEO';
 
 const Testimonials = () => {
     const [testimonials, setTestimonials] = useState([]);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchTestimonials = async () => {
@@ -13,11 +13,9 @@ const Testimonials = () => {
                 const res = await fetch(API_ENDPOINTS.testimonials);
                 if (!res.ok) throw new Error('Failed to fetch testimonials');
                 const data = await res.json();
-                setTestimonials(data);
+                setTestimonials(data.data || []);
             } catch (error) {
                 console.error('Error fetching testimonials:', error);
-            } finally {
-                setLoading(false);
             }
         };
         fetchTestimonials();
@@ -26,6 +24,12 @@ const Testimonials = () => {
 
     return (
         <div className="min-h-screen bg-gray-900 text-white pt-20">
+            <SEO
+                title="Student Testimonials"
+                description="Hear from our successful students. Discover how PG Tech transformed their careers and lives through top-notch technical education."
+                keywords="student reviews, pg tech testimonials, coding course reviews, alumni success stories"
+                url="/testimonials"
+            />
             {/* Hero Section */}
             <section className="relative py-20 overflow-hidden">
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
@@ -47,7 +51,7 @@ const Testimonials = () => {
                             </span>
                         </h1>
                         <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                            Don't just take our word for it. Hear from the thousands of students who have transformed their careers and lives with TechInstitute.
+                            Don't just take our word for it. Hear from the thousands of students who have transformed their careers and lives with PGtech.
                         </p>
                     </motion.div>
                 </div>
@@ -76,7 +80,7 @@ const Testimonials = () => {
                                     {[...Array(5)].map((_, i) => <Star key={i} size={24} fill="currentColor" />)}
                                 </div>
                                 <h3 className="text-2xl md:text-3xl font-bold italic mb-6 leading-relaxed">
-                                    "I was skeptical about online learning, but TechInstitute changed my perspective entirely. The mentorship, the community, and the rigorous curriculum are world-class. I'm now leading a team of 10 developers."
+                                    "I was skeptical about online learning, but PGtech changed my perspective entirely. The mentorship, the community, and the rigorous curriculum are world-class. I'm now leading a team of 10 developers."
                                 </h3>
                                 <div>
                                     <h4 className="text-xl font-bold text-white">Amanda Richardson</h4>
