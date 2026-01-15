@@ -114,7 +114,6 @@ app.get('/health', async (req, res) => {
     status: 'OK',
     database: dbStatus,
     mongodb_uri_set: !!process.env.MONGODB_URI,
-    mongodb_uri_prefix: process.env.MONGODB_URI ? process.env.MONGODB_URI.substring(0, 15) + '...' : 'none',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     env: process.env.NODE_ENV
