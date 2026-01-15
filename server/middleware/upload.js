@@ -3,7 +3,10 @@ import path from 'path';
 import fs from 'fs';
 
 // Ensure uploads directory exists
-const uploadDir = 'uploads/';
+// Ensure uploads directory exists
+// On Vercel (Serverless), we must use /tmp. On local/VPS, we use 'uploads/'
+const uploadDir = process.env.VERCEL ? '/tmp' : 'uploads/';
+
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
