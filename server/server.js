@@ -29,9 +29,13 @@ const __dirname = path.dirname(__filename);
 console.log('Loaded PORT from env:', process.env.PORT);
 
 // Connect to Database
+// Connect to Database (with error handling)
 connectDB().then(() => {
   // Seed default admin
-  import('./models/User.js').then(m => m.default.createDefaultAdmin());
+  import('./models/User.js').then(m => m.default.createDefaultAdmin().catch(e => console.error('Seeding failed:', e)));
+}).catch(err => {
+  console.error("CRITICAL: Database Connection Failed on Startup", err);
+  // Do not crash the process; let the API serve error responses
 });
 
 const app = express();
