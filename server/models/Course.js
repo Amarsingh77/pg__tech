@@ -10,7 +10,7 @@ const courseSchema = new mongoose.Schema({
   iconName: {
     type: String,
     required: [true, 'Icon name is required'],
-    enum: ['Code', 'Brain', 'Cloud', 'Shield', 'Database', 'Book'],
+    enum: ['Code', 'Brain', 'Cloud', 'Shield', 'Database', 'Book', 'HardHat', 'Settings', 'Cpu', 'Cog', 'Building'],
     default: 'Code'
   },
   duration: {

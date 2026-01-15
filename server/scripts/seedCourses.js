@@ -44,8 +44,8 @@ const seedCourses = async () => {
                 order: 0,
                 // Default icon mapping if not present
                 iconName: course.title.toLowerCase().includes('computer') ? 'Code' :
-                    course.title.toLowerCase().includes('mechanical') ? 'Settings' :
-                        course.title.toLowerCase().includes('civil') ? 'HardHat' : 'Book'
+                    course.title.toLowerCase().includes('mechanical') ? 'Cog' :
+                        course.title.toLowerCase().includes('civil') ? 'Building' : 'Book'
             };
         });
 
