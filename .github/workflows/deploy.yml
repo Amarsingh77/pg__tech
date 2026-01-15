@@ -26,32 +26,16 @@ jobs:
       - name: 🏗️ Build Frontend
         run: npm run build
         env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          # We inject the Vercel Backend URL directly here for the automated build
+          VITE_API_URL: https://pg-tech.vercel.app
 
-      - name: 📂 Prepare Deployment Package
-        run: |
-          mkdir deploy_artifact
-          cp server/package.json deploy_artifact/
-          cp server/server.js deploy_artifact/
-          cp -r server/routes deploy_artifact/
-          cp -r server/models deploy_artifact/
-          cp -r server/config deploy_artifact/
-          cp -r dist deploy_artifact/
-          
-          # Create .env file for production
-          echo "PORT=5001" >> deploy_artifact/.env
-          echo "NODE_ENV=production" >> deploy_artifact/.env
-          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> deploy_artifact/.env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> deploy_artifact/.env
-          echo "FRONTEND_URL=${{ secrets.FRONTEND_URL }}" >> deploy_artifact/.env
-
-      - name: 🚀 Deploy to Hostinger via FTP
+      - name: 🚀 Deploy Frontend to Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./deploy_artifact/
+          local-dir: ./dist/
           server-dir: ./public_html/
           exclude: |
             **/.git*
