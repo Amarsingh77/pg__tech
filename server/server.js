@@ -125,6 +125,47 @@ app.use('/api/courses', courseRoutes);
 app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/enrollments', enrollmentRoutes);
 app.use('/api/batches', batchRoutes);
+
+// Temporary Seeding Endpoint (Secure it with a simple query param or just use internal logic)
+app.post('/api/admin/seed-courses', async (req, res) => {
+  try {
+    const { fileURLToPath } = await import('url');
+    const path = await import('path');
+    const fs = await import('fs');
+    const Course = (await import('./models/Course.js')).default;
+
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+
+    const coursesDataPath = path.join(__dirname, 'data/courses.json');
+    const courses = JSON.parse(fs.readFileSync(coursesDataPath, 'utf-8'));
+
+    await Course.deleteMany({});
+
+    const coursesToInsert = courses.map(course => ({
+      title: course.title,
+      description: course.description,
+      duration: course.duration,
+      level: course.level || 'Beginner',
+      stream: course.stream || 'Other',
+      image: course.image || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop',
+      curriculum: course.curriculum || [],
+      syllabusPdf: course.syllabusPdf || '',
+      isActive: true,
+      showOnHomePage: true,
+      order: 0,
+      iconName: course.title.toLowerCase().includes('computer') ? 'Code' :
+        course.title.toLowerCase().includes('mechanical') ? 'Cog' :
+          course.title.toLowerCase().includes('civil') ? 'Building' : 'Book'
+    }));
+
+    await Course.insertMany(coursesToInsert);
+    res.status(200).json({ message: 'Success', count: coursesToInsert.length });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/instructors', instructorRoutes);
