@@ -1,5 +1,4 @@
-# TechInstitute - Full-Stack Educational Platform
-
+# PG Tech Education Platform with Admin Authentication (Vercel + Hostinger)
 A modern, production-ready educational platform built with React (frontend) and Node.js/Express (backend) with MongoDB. Features course management, student enrollment, AI-powered career guidance, and a comprehensive admin dashboard.
 
 ## 🚀 Features
