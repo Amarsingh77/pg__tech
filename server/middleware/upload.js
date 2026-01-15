@@ -4,11 +4,16 @@ import fs from 'fs';
 
 // Ensure uploads directory exists
 // Ensure uploads directory exists
-// On Vercel (Serverless), we must use /tmp. On local/VPS, we use 'uploads/'
-const uploadDir = process.env.VERCEL ? '/tmp' : 'uploads/';
-
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
+// Robust check for Vercel/Serverless: Always try /tmp if normal creation fails
+let uploadDir;
+try {
+    uploadDir = process.env.VERCEL ? '/tmp' : 'uploads/';
+    if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+    }
+} catch (err) {
+    console.warn('Could not create upload dir, falling back to /tmp:', err);
+    uploadDir = '/tmp';
 }
 
 // Configure storage
