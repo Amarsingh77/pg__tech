@@ -41,6 +41,9 @@ connectDB().then(() => {
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+// Trust Vercel Proxy (Required for rate-limiting and IP logging)
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(helmet());
 app.use(cors({
