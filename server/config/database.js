@@ -1,33 +1,39 @@
 import mongoose from 'mongoose';
 
+// Global variable to cache the connection across invocations in Serverless
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
 const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/techinstitute', {
+  if (cached.conn) {
+    console.log('Using cached MongoDB connection');
+    return cached.conn;
+  }
+
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false, // Disable Mongoose buffering for Serverless
       useNewUrlParser: true,
       useUnifiedTopology: true,
+    };
+
+    console.log('Creating new MongoDB connection...');
+    cached.promise = mongoose.connect(process.env.MONGODB_URI, opts).then((mongoose) => {
+      console.log('🗄️  MongoDB Connected: ' + mongoose.connection.host);
+      return mongoose;
     });
+  }
 
-    console.log(`🗄️  MongoDB Connected: ${conn.connection.host}`);
-
-    // Handle connection events
-    mongoose.connection.on('error', (err) => {
-      console.error('MongoDB connection error:', err);
-    });
-
-    mongoose.connection.on('disconnected', () => {
-      console.log('MongoDB disconnected');
-    });
-
-    // Graceful shutdown
-    process.on('SIGINT', async () => {
-      await mongoose.connection.close();
-      console.log('MongoDB connection closed through app termination');
-      process.exit(0);
-    });
-
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error.message);
-    process.exit(1);
+  try {
+    cached.conn = await cached.promise;
+    return cached.conn;
+  } catch (e) {
+    cached.promise = null;
+    console.error('MongoDB Connection Error:', e);
+    throw e;
   }
 };
 

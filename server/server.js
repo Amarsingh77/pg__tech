@@ -186,26 +186,29 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-const server = app.listen(PORT, () => {
-  console.log(`🚀 TechInstitute Backend Server running on port ${PORT}`);
-  console.log(`📊 Health check: http://localhost:${PORT}/health`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-});
-
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
-  server.close(() => {
-    console.log('HTTP server closed');
+// Only listen if not running in Vercel (Vercel exports the app instead)
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  const server = app.listen(PORT, () => {
+    console.log(`🚀 TechInstitute Backend Server running on port ${PORT}`);
+    console.log(`📊 Health check: http://localhost:${PORT}/health`);
+    console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
   });
-});
 
-process.on('SIGINT', () => {
-  console.log('SIGINT signal received: closing HTTP server');
-  server.close(() => {
-    console.log('HTTP server closed');
+  // Graceful shutdown
+  process.on('SIGTERM', () => {
+    console.log('SIGTERM signal received: closing HTTP server');
+    server.close(() => {
+      console.log('HTTP server closed');
+    });
   });
-});
+
+  process.on('SIGINT', () => {
+    console.log('SIGINT signal received: closing HTTP server');
+    server.close(() => {
+      console.log('HTTP server closed');
+    });
+  });
+}
 
 export default app;
 
