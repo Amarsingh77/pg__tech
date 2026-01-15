@@ -117,14 +117,13 @@ app.use('/api/*', (req, res) => {
   });
 });
 
-// Serve frontend in production
-if (process.env.NODE_ENV === 'production') {
+// Serve frontend in production (BUT NOT ON VERCEL SERVERLESS)
+if (process.env.NODE_ENV === 'production' && !process.env.VERCEL) {
   // Serve static files from the dist directory
-  // Try both relative paths for flexibility in deployment
   const distPath = path.join(__dirname, 'dist');
   const parentDistPath = path.join(__dirname, '../dist');
 
-  // Check if local dist exists, otherwise use parent (for dev repo structure)
+  // Check if local dist exists, otherwise use parent
   const finalDistPath = fs.existsSync(distPath) ? distPath : parentDistPath;
 
   app.use(express.static(finalDistPath));
@@ -134,9 +133,9 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(finalDistPath, 'index.html'));
   });
 } else {
-  // Simple default route for development if not in production
+  // Default route for Vercel or DB checks
   app.get('/', (req, res) => {
-    res.send('API is running...');
+    res.send('API is running... (Backend Only Mode)');
   });
 }
 
