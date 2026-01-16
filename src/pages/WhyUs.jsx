@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Rocket, Target, Users, Zap, Globe, Award, BookOpen, Briefcase } from 'lucide-react';
 import SEO from '../components/utils/SEO';
 
@@ -142,9 +143,9 @@ const WhyUs = () => {
                                 <p className="text-gray-300 mb-8 leading-relaxed">
                                     Today, we stand as a beacon of excellence, having guided thousands of students from uncertainty to confident professionals. We don't just teach code; we teach problem-solving, resilience, and the art of continuous innovation.
                                 </p>
-                                <button className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors flex items-center">
+                                <Link to="/start-project" className="inline-flex px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors items-center shadow-lg hover:shadow-blue-500/25">
                                     Start Your Journey <Rocket className="ml-2" size={20} />
-                                </button>
+                                </Link>
                             </motion.div>
                         </div>
                         <div className="md:w-1/2 relative">

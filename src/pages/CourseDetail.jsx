@@ -371,6 +371,18 @@ const CourseDetail = ({ onEnrollClick }) => {
 
                                     {/* Action Buttons */}
                                     <div className="space-y-4">
+                                        <div className="flex items-end gap-3 mb-2">
+                                            {course.discountedPrice > 0 ? (
+                                                <>
+                                                    <span className="text-4xl font-black text-white">₹{course.discountedPrice.toLocaleString()}</span>
+                                                    <span className="text-lg text-gray-500 line-through mb-1">₹{course.price.toLocaleString()}</span>
+                                                </>
+                                            ) : (
+                                                <span className="text-4xl font-black text-white">
+                                                    {course.price > 0 ? `₹${course.price.toLocaleString()}` : <span className="text-green-400">Free</span>}
+                                                </span>
+                                            )}
+                                        </div>
                                         <button
                                             onClick={() => onEnrollClick(course)}
                                             className={`w-full py-5 bg-gradient-to-r ${theme.buttonGradient} rounded-2xl font-black text-white text-lg shadow-2xl shadow-${theme.color}-500/30 transition-all transform hover:scale-[1.02] hover:shadow-${theme.color}-500/50 active:scale-95 flex items-center justify-center gap-3 group/btn`}

@@ -25,6 +25,7 @@ import Services from './pages/Services';
 import Contact from './pages/Contact';
 import BookConsultation from './pages/BookConsultation';
 import BookDemo from './pages/BookDemo';
+import StartProject from './pages/StartProject';
 
 // Admin Components
 import AdminLayout from './pages/admin/AdminLayout';
@@ -107,6 +108,7 @@ const AppContent = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/book-consultation" element={<BookConsultation />} />
           <Route path="/book-demo" element={<BookDemo />} />
+          <Route path="/start-project" element={<StartProject />} />
 
           {/* Admin Auth Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />

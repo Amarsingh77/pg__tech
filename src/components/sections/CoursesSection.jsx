@@ -104,6 +104,19 @@ const CoursesSection = ({ onEnrollClick }) => {
                                                 <span>{course.duration || '6 Months'}</span>
                                             </div>
                                         </div>
+
+                                        <div className="mb-6 flex items-baseline gap-2">
+                                            {course.discountedPrice > 0 ? (
+                                                <>
+                                                    <span className="text-xl font-bold text-white">₹{course.discountedPrice.toLocaleString()}</span>
+                                                    <span className="text-sm text-gray-500 line-through">₹{course.price.toLocaleString()}</span>
+                                                </>
+                                            ) : (
+                                                <span className="text-xl font-bold text-white">
+                                                    {course.price > 0 ? `₹${course.price.toLocaleString()}` : 'Free'}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
 
                                     <button

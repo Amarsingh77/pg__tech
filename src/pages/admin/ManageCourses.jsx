@@ -17,7 +17,9 @@ const ManageCourses = () => {
         curriculum: '',
         syllabusPdf: null,
         showOnHomePage: true,
-        order: 0
+        order: 0,
+        price: 0,
+        discountedPrice: 0
     });
 
     const fetchCourses = async () => {
@@ -61,6 +63,8 @@ const ManageCourses = () => {
         }
         data.append('showOnHomePage', formData.showOnHomePage);
         data.append('order', formData.order);
+        data.append('price', formData.price);
+        data.append('discountedPrice', formData.discountedPrice);
 
         if (formData.image instanceof File) {
             data.append('image', formData.image);
@@ -100,7 +104,9 @@ const ManageCourses = () => {
                 image: item.image, // Keep existing URL
                 curriculum: Array.isArray(item.curriculum) ? item.curriculum.join('\n') : (item.curriculum || ''),
                 syllabusPdf: item.syllabusPdf || '',
-                order: item.order || 0
+                order: item.order || 0,
+                price: item.price || 0,
+                discountedPrice: item.discountedPrice || 0
             });
         } else {
             setCurrentCourse(null);
@@ -114,7 +120,9 @@ const ManageCourses = () => {
                 curriculum: '',
                 syllabusPdf: null,
                 showOnHomePage: true,
-                order: 0
+                order: 0,
+                price: 0,
+                discountedPrice: 0
             });
         }
         setIsModalOpen(true);
@@ -298,6 +306,28 @@ const ManageCourses = () => {
                                         <option value="Intermediate">Intermediate</option>
                                         <option value="Advanced">Advanced</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm text-gray-400 mb-1">Price (₹)</label>
+                                    <input
+                                        type="number"
+                                        placeholder="Original Price"
+                                        value={formData.price}
+                                        onChange={(e) => setFormData({ ...formData, price: parseInt(e.target.value) || 0 })}
+                                        className="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:outline-none focus:border-blue-500"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm text-gray-400 mb-1">Discounted Price (₹)</label>
+                                    <input
+                                        type="number"
+                                        placeholder="Sale Price"
+                                        value={formData.discountedPrice}
+                                        onChange={(e) => setFormData({ ...formData, discountedPrice: parseInt(e.target.value) || 0 })}
+                                        className="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:outline-none focus:border-blue-500"
+                                    />
                                 </div>
                             </div>
                             <div>
