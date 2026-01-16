@@ -133,6 +133,10 @@ app.post('/api/admin/seed-courses', async (req, res) => {
     const path = await import('path');
     const fs = await import('fs');
     const Course = (await import('./models/Course.js')).default;
+    const connectDB = (await import('./config/database.js')).default;
+
+    // Ensure DB is connected
+    await connectDB();
 
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
