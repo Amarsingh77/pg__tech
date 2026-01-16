@@ -137,7 +137,19 @@ app.post('/api/admin/seed-courses', async (req, res) => {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
 
-    const coursesDataPath = path.join(__dirname, 'data/courses.json');
+    // Attempt multiple paths for Vercel vs Local
+    let coursesDataPath = path.join(__dirname, 'data/courses.json');
+    if (!fs.existsSync(coursesDataPath)) {
+      coursesDataPath = path.join(process.cwd(), 'data/courses.json');
+    }
+    if (!fs.existsSync(coursesDataPath)) {
+      coursesDataPath = path.join(process.cwd(), 'server/data/courses.json');
+    }
+
+    if (!fs.existsSync(coursesDataPath)) {
+      throw new Error(`Could not find courses.json. Checked: ${path.join(__dirname, 'data/courses.json')} and ${path.join(process.cwd(), 'data/courses.json')}`);
+    }
+
     const courses = JSON.parse(fs.readFileSync(coursesDataPath, 'utf-8'));
 
     await Course.deleteMany({});
