@@ -196,12 +196,12 @@ const CourseDetail = ({ onEnrollClick }) => {
                             {/* Tabbed Content Section */}
                             <div className="bg-gray-900/30 backdrop-blur-2xl rounded-[3rem] border border-gray-800/50 overflow-hidden shadow-2xl">
                                 {/* Tab Headers */}
-                                <div className="flex border-b border-gray-800/50 p-2 bg-gray-900/20">
+                                <div className="flex border-b border-gray-800/50 p-2 bg-gray-900/20 overflow-x-auto no-scrollbar">
                                     {['curriculum', 'overview', 'outcomes'].map((tab) => (
                                         <button
                                             key={tab}
                                             onClick={() => setActiveTab(tab)}
-                                            className={`flex-1 px-6 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all ${activeTab === tab
+                                            className={`flex-none px-6 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === tab
                                                 ? `bg-gradient-to-r ${theme.buttonGradient} text-white shadow-lg`
                                                 : 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/30'
                                                 }`}
