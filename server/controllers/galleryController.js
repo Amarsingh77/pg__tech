@@ -24,22 +24,18 @@ export const addGalleryImage = async (req, res) => {
         }
 
         const { title, category } = req.body;
+        const file = req.file;
+        const base64 = file.buffer.toString('base64');
+        const image = `data:${file.mimetype};base64,${base64}`;
 
         const galleryImage = await Gallery.create({
             title,
             category,
-            image: `/uploads/${req.file.filename}`
+            image
         });
 
         res.status(201).json({ success: true, data: galleryImage });
     } catch (error) {
-        // Delete uploaded file if database creation fails
-        if (req.file) {
-            const filePath = path.join('uploads', req.file.filename);
-            if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath);
-            }
-        }
         res.status(400).json({ success: false, message: error.message });
     }
 };

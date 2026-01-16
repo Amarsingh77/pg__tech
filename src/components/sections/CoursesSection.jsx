@@ -1,63 +1,8 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Code, Cpu, Building, Cog } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config/api';
 import { getThemeByStream } from '../../data/themes';
-
-const SpotlightCard = ({ children, className = "" }) => {
-    const divRef = useRef(null);
-    const [isFocused, setIsFocused] = useState(false);
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [opacity, setOpacity] = useState(0);
-
-    const handleMouseMove = (e) => {
-        if (!divRef.current || isFocused) return;
-
-        const div = divRef.current;
-        const rect = div.getBoundingClientRect();
-
-        setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-    };
-
-    const handleFocus = () => {
-        setIsFocused(true);
-        setOpacity(1);
-    };
-
-    const handleBlur = () => {
-        setIsFocused(false);
-        setOpacity(0);
-    };
-
-    const handleMouseEnter = () => {
-        setOpacity(1);
-    };
-
-    const handleMouseLeave = () => {
-        setOpacity(0);
-    };
-
-    return (
-        <div
-            ref={divRef}
-            onMouseMove={handleMouseMove}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            className={`relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 px-8 py-10 shadow-2xl ${className}`}
-        >
-            <div
-                className="pointer-events-none absolute -inset-px opacity-0 transition duration-300"
-                style={{
-                    opacity,
-                    background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(255,255,255,.1), transparent 40%)`,
-                }}
-            />
-            <div className="relative h-full flex flex-col">{children}</div>
-        </div>
-    );
-};
 
 // Map course titles to icons
 const getIconForCourse = (title) => {
@@ -92,13 +37,15 @@ const CoursesSection = ({ onEnrollClick }) => {
         return null;
     }
 
-
     return (
-        <section id="courses" className="py-32 bg-[#030014] text-white relative">
+        <section id="courses" className="py-24 bg-[#030014] text-white relative overflow-hidden">
+            {/* Optimized Background - Removed excessive gradients for performance on mobile */}
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
+
             <div className="container mx-auto px-6 relative z-10">
-                <div className="text-center mb-20">
+                <div className="text-center mb-16">
                     <motion.h2
-                        className="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight"
+                        className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -113,12 +60,11 @@ const CoursesSection = ({ onEnrollClick }) => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.2 }}
                     >
-                        Comprehensive curriculum designed by industry leaders and academic experts.
-                        From foundational diplomas to advanced post-graduate certifications.
+                        Comprehensive curriculum designed by industry leaders.
                     </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {courses.map((course, i) => {
                         const IconComponent = getIconForCourse(course.title);
                         const theme = getThemeByStream(course.stream);
@@ -128,45 +74,46 @@ const CoursesSection = ({ onEnrollClick }) => {
                                 key={course.id}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.5, delay: i * 0.1 }}
+                                viewport={{ once: true, margin: "-50px" }} // Load slightly earlier
+                                transition={{ duration: 0.4, delay: Math.min(i * 0.1, 0.4) }} // Cap delay
                             >
-                                <SpotlightCard className="h-full">
-                                    <div className="mb-8 relative group/icon">
-                                        <div className={`absolute -inset-4 bg-gradient-to-br ${theme.buttonGradient} rounded-3xl opacity-20 blur-2xl transition-all duration-500 group-hover/icon:opacity-40`} />
-                                        <div className={`relative w-24 h-24 rounded-2xl bg-gradient-to-br ${theme.buttonGradient} flex items-center justify-center shadow-xl transform transition-transform duration-500 group-hover/icon:scale-110 group-hover/icon:rotate-3`}>
-                                            <IconComponent size={40} className="text-white" strokeWidth={1.5} />
+                                <div className="h-full relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 px-6 py-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:bg-white/10 group">
+
+                                    <div className="mb-6 relative">
+                                        <div className={`absolute -inset-2 bg-gradient-to-br ${theme.buttonGradient} rounded-3xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300`} />
+                                        <div className={`relative w-16 h-16 rounded-xl bg-gradient-to-br ${theme.buttonGradient} flex items-center justify-center shadow-lg transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}>
+                                            <IconComponent size={32} className="text-white" strokeWidth={1.5} />
                                         </div>
                                     </div>
 
                                     <div className="flex-grow">
-                                        <h3 className="text-2xl font-bold mb-4 text-white hover:text-blue-400 transition-colors duration-300 line-clamp-2 min-h-[4rem]">
+                                        <h3 className="text-xl font-bold mb-3 text-white group-hover:text-blue-400 transition-colors duration-300 line-clamp-2 min-h-[3.5rem]">
                                             {course.title}
                                         </h3>
-                                        <p className="text-gray-400 mb-8 leading-relaxed line-clamp-3">
+                                        <p className="text-gray-400 text-sm mb-6 leading-relaxed line-clamp-3">
                                             {course.description}
                                         </p>
 
-                                        <div className="space-y-4 mb-8">
-                                            <div className="flex items-center text-sm font-medium text-gray-300">
-                                                <div className={`w-1.5 h-1.5 rounded-full ${theme.bg} mr-3 shadow-[0_0_12px_rgba(0,0,0,0.5)]`} />
-                                                <span>{course.level || 'Professional Certification'}</span>
+                                        <div className="space-y-3 mb-6">
+                                            <div className="flex items-center text-xs font-medium text-gray-300">
+                                                <div className={`w-1.5 h-1.5 rounded-full ${theme.bg} mr-2`} />
+                                                <span>{course.level || 'Professional'}</span>
                                             </div>
-                                            <div className="flex items-center text-sm font-medium text-gray-300">
-                                                <div className={`w-1.5 h-1.5 rounded-full ${theme.bg} mr-3 shadow-[0_0_12px_rgba(0,0,0,0.5)]`} />
-                                                <span>{course.duration || '6 Months Duration'}</span>
+                                            <div className="flex items-center text-xs font-medium text-gray-300">
+                                                <div className={`w-1.5 h-1.5 rounded-full ${theme.bg} mr-2`} />
+                                                <span>{course.duration || '6 Months'}</span>
                                             </div>
                                         </div>
                                     </div>
 
                                     <button
                                         onClick={() => onEnrollClick(course)}
-                                        className={`w-full py-4 rounded-xl bg-gradient-to-r ${theme.buttonGradient} text-white font-bold shadow-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-95 flex items-center justify-center group/btn`}
+                                        className={`w-full py-3 rounded-lg bg-gradient-to-r ${theme.buttonGradient} text-white font-semibold text-sm shadow-md transition-all duration-300 transform group-hover:scale-[1.02] active:scale-95 flex items-center justify-center`}
                                     >
                                         Explore Course
-                                        <ArrowRight className="ml-2 group-hover/btn:translate-x-1 transition-transform" size={18} />
+                                        <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={16} />
                                     </button>
-                                </SpotlightCard>
+                                </div>
                             </motion.div>
                         );
                     })}

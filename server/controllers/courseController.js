@@ -88,13 +88,17 @@ export const createCourse = async (req, res) => {
   try {
     const courseData = { ...req.body };
 
-    // Handle file uploads
+    // Handle file uploads (Base64 conversion for Vercel/MongoDB)
     if (req.files) {
       if (req.files.image) {
-        courseData.image = `/uploads/${req.files.image[0].filename}`;
+        const file = req.files.image[0];
+        const base64 = file.buffer.toString('base64');
+        courseData.image = `data:${file.mimetype};base64,${base64}`;
       }
       if (req.files.syllabusPdf) {
-        courseData.syllabusPdf = `/uploads/${req.files.syllabusPdf[0].filename}`;
+        const file = req.files.syllabusPdf[0];
+        const base64 = file.buffer.toString('base64');
+        courseData.syllabusPdf = `data:${file.mimetype};base64,${base64}`;
       }
     }
 
@@ -130,13 +134,17 @@ export const updateCourse = async (req, res) => {
   try {
     const courseData = { ...req.body };
 
-    // Handle file uploads
+    // Handle file uploads (Base64 conversion for Vercel/MongoDB)
     if (req.files) {
       if (req.files.image) {
-        courseData.image = `/uploads/${req.files.image[0].filename}`;
+        const file = req.files.image[0];
+        const base64 = file.buffer.toString('base64');
+        courseData.image = `data:${file.mimetype};base64,${base64}`;
       }
       if (req.files.syllabusPdf) {
-        courseData.syllabusPdf = `/uploads/${req.files.syllabusPdf[0].filename}`;
+        const file = req.files.syllabusPdf[0];
+        const base64 = file.buffer.toString('base64');
+        courseData.syllabusPdf = `data:${file.mimetype};base64,${base64}`;
       }
     }
 

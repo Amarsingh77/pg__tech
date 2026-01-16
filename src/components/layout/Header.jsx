@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, ChevronDown, ChevronRight, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Menu, X, ChevronDown, ChevronRight, Sparkles, BookOpen, Layers } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 import { API_ENDPOINTS } from '../../config/api';
 
 const Header = () => {
@@ -10,6 +10,31 @@ const Header = () => {
     const [isServicesOpen, setIsServicesOpen] = useState(false);
     const [activeStream, setActiveStream] = useState(null);
     const [coursesByStream, setCoursesByStream] = useState({});
+
+    // Mobile accordion states
+    const [mobileCoursesOpen, setMobileCoursesOpen] = useState(false);
+    const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+
+    const location = useLocation();
+
+    // Close menu when route changes
+    useEffect(() => {
+        setIsMenuOpen(false);
+        setMobileCoursesOpen(false);
+        setMobileServicesOpen(false);
+    }, [location]);
+
+    // Prevent scrolling when menu is open
+    useEffect(() => {
+        if (isMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isMenuOpen]);
 
     const navLinks = [
         { name: 'Home', href: '/' },
@@ -58,12 +83,35 @@ const Header = () => {
         fetchCourses();
     }, []);
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-        if (!isMenuOpen) {
-            // Reset states when opening menu
-            setActiveStream(null);
+    // Animation Variants
+    const menuVariants = {
+        closed: {
+            opacity: 0,
+            x: "100%",
+            transition: {
+                type: "spring",
+                stiffness: 300,
+                damping: 30,
+                staggerChildren: 0.05,
+                staggerDirection: -1
+            }
+        },
+        open: {
+            opacity: 1,
+            x: "0%",
+            transition: {
+                type: "spring",
+                stiffness: 300,
+                damping: 30,
+                staggerChildren: 0.07,
+                delayChildren: 0.1
+            }
         }
+    };
+
+    const itemVariants = {
+        closed: { opacity: 0, x: 50 },
+        open: { opacity: 1, x: 0 }
     };
 
     return (
@@ -71,10 +119,11 @@ const Header = () => {
             initial={{ y: -100 }}
             animate={{ y: 0 }}
             transition={{ duration: 0.5 }}
-            className="fixed top-0 left-0 right-0 z-50 bg-white/10 backdrop-blur-lg border-b border-white/20 shadow-md"
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isMenuOpen ? 'bg-transparent' : 'bg-white/10 backdrop-blur-lg border-b border-white/20'
+                }`}
         >
-            <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-                <Link to="/" className="text-2xl font-bold text-white">
+            <div className="container mx-auto px-6 py-4 flex justify-between items-center relative z-50">
+                <Link to="/" className="text-2xl font-bold text-white relative z-50">
                     PG-Tech <span className="text-blue-400">Solutions</span>
                 </Link>
 
@@ -89,8 +138,8 @@ const Header = () => {
                             setActiveStream(null);
                         }}
                     >
-                        <button className="text-gray-200 hover:text-white transition-colors duration-300 flex items-center py-2">
-                            Courses <ChevronDown size={16} className={`ml-1 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                        <button className="text-gray-200 hover:text-white transition-colors duration-300 flex items-center py-2 group">
+                            Courses <ChevronDown size={16} className={`ml-1 transition-transform group-hover:text-blue-400 ${isDropdownOpen ? 'rotate-180' : ''}`} />
                         </button>
 
                         <AnimatePresence>
@@ -99,19 +148,19 @@ const Header = () => {
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: 10 }}
-                                    className="absolute top-full left-0 mt-0 pt-2 w-64"
+                                    className="absolute top-full left-0 mt-0 pt-2 w-72"
                                 >
-                                    <div className="bg-gray-800 rounded-lg shadow-xl border border-gray-700 py-2">
+                                    <div className="bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 overflow-hidden py-2">
                                         {Object.keys(coursesByStream).length > 0 ? (
                                             Object.keys(coursesByStream).map((stream) => (
                                                 <div
                                                     key={stream}
-                                                    className="relative group"
+                                                    className="relative group/item"
                                                     onMouseEnter={() => setActiveStream(stream)}
                                                 >
-                                                    <div className="flex items-center justify-between px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors cursor-pointer">
-                                                        <span>{streamLabels[stream] || stream}</span>
-                                                        <ChevronRight size={14} className="text-gray-500 group-hover:text-white" />
+                                                    <div className="flex items-center justify-between px-4 py-3 text-gray-300 hover:bg-white/5 hover:text-white transition-all cursor-pointer">
+                                                        <span className="font-medium">{streamLabels[stream] || stream}</span>
+                                                        <ChevronRight size={14} className="text-gray-500 group-hover/item:text-blue-400 transition-colors" />
                                                     </div>
 
                                                     {/* Nested Menu */}
@@ -119,23 +168,24 @@ const Header = () => {
                                                         <motion.div
                                                             initial={{ opacity: 0, x: -10 }}
                                                             animate={{ opacity: 1, x: 0 }}
-                                                            className="absolute left-full top-0 ml-1 w-60 bg-gray-800 rounded-lg shadow-xl border border-gray-700 py-2"
+                                                            className="absolute left-full top-0 ml-2 w-64 bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 py-2 overflow-hidden"
                                                         >
-                                                            {coursesByStream[stream].slice(0, 3).map((course) => (
+                                                            {coursesByStream[stream].slice(0, 4).map((course) => (
                                                                 <Link
                                                                     key={course.id}
                                                                     to={`/course/${course.id}`}
-                                                                    className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+                                                                    className="block px-4 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors border-l-2 border-transparent hover:border-blue-500"
                                                                 >
                                                                     {course.title}
                                                                 </Link>
                                                             ))}
-                                                            <div className="border-t border-gray-700 mt-2 pt-2">
+                                                            <div className="border-t border-white/10 mt-2 pt-2">
                                                                 <Link
                                                                     to={`/courses/${stream.toLowerCase()}`}
-                                                                    className="block px-4 py-2 text-xs font-semibold text-blue-400 hover:text-blue-300 text-center uppercase tracking-wide"
+                                                                    className="flex items-center justify-center px-4 py-2 text-xs font-bold text-blue-400 hover:text-blue-300 uppercase tracking-wide group/more"
                                                                 >
-                                                                    Show More
+                                                                    View all {stream}
+                                                                    <ArrowWrapper />
                                                                 </Link>
                                                             </div>
                                                         </motion.div>
@@ -143,7 +193,10 @@ const Header = () => {
                                                 </div>
                                             ))
                                         ) : (
-                                            <div className="px-4 py-2 text-gray-400 text-sm">Loading courses...</div>
+                                            <div className="px-4 py-3 text-gray-400 text-sm flex items-center justify-center">
+                                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                                Loading...
+                                            </div>
                                         )}
                                     </div>
                                 </motion.div>
@@ -157,8 +210,8 @@ const Header = () => {
                         onMouseEnter={() => setIsServicesOpen(true)}
                         onMouseLeave={() => setIsServicesOpen(false)}
                     >
-                        <button className="text-gray-200 hover:text-white transition-colors duration-300 flex items-center py-2">
-                            Services <ChevronDown size={16} className={`ml-1 transition-transform ${isServicesOpen ? 'rotate-180' : ''}`} />
+                        <button className="text-gray-200 hover:text-white transition-colors duration-300 flex items-center py-2 group">
+                            Services <ChevronDown size={16} className={`ml-1 transition-transform group-hover:text-blue-400 ${isServicesOpen ? 'rotate-180' : ''}`} />
                         </button>
 
                         <AnimatePresence>
@@ -167,14 +220,14 @@ const Header = () => {
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: 10 }}
-                                    className="absolute top-full left-0 mt-0 pt-2 w-56"
+                                    className="absolute top-full left-0 mt-0 pt-2 w-60"
                                 >
-                                    <div className="bg-gray-800 rounded-lg shadow-xl border border-gray-700 py-2">
+                                    <div className="bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 py-2 overflow-hidden">
                                         {services.map((service) => (
                                             <Link
                                                 key={service.title}
                                                 to={service.href}
-                                                className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+                                                className="block px-4 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors border-l-2 border-transparent hover:border-purple-500"
                                             >
                                                 {service.title}
                                             </Link>
@@ -186,133 +239,178 @@ const Header = () => {
                     </div>
 
                     {navLinks.map((link) => (
-                        link.href === '/' ? (
-                            <Link
-                                key={link.name}
-                                to={link.href}
-                                className="text-gray-200 hover:text-white transition-colors duration-300"
-                            >
-                                {link.name}
-                            </Link>
-                        ) : (
-                            <a
-                                key={link.name}
-                                href={link.href}
-                                className="text-gray-200 hover:text-white transition-colors duration-300"
-                            >
-                                {link.name}
-                            </a>
-                        )
+                        <Link
+                            key={link.name}
+                            to={link.href}
+                            className="text-gray-200 hover:text-white transition-colors duration-300 text-sm font-medium hover:tracking-wide"
+                        >
+                            {link.name}
+                        </Link>
                     ))}
                     <Link
                         to="/contact"
-                        className="px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-lg shadow-lg hover:scale-105 active:scale-95 transition-all transform flex items-center"
+                        className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-blue-500/30 hover:scale-105 active:scale-95 transition-all transform flex items-center gap-2 group"
                     >
                         Contact Us
+                        <Sparkles size={16} className="text-yellow-300 group-hover:rotate-12 transition-transform" />
                     </Link>
                 </div>
 
-                {/* Mobile Menu Button */}
-                <div className="md:hidden">
-                    <button onClick={toggleMenu} className="text-white">
-                        {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                {/* Mobile Menu Button - Z-index fixed to stay above menu */}
+                <div className="md:hidden relative z-50">
+                    <button
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white border border-white/10"
+                    >
+                        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
                 </div>
             </div>
 
-            {/* Mobile Menu */}
+            {/* Mobile Menu Overlay */}
             <AnimatePresence>
                 {isMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-gray-900/95 backdrop-blur-lg border-t border-gray-800 overflow-y-auto max-h-[80vh]"
+                        initial="closed"
+                        animate="open"
+                        exit="closed"
+                        variants={menuVariants}
+                        className="fixed inset-0 bg-gray-950/95 backdrop-blur-2xl z-40 flex flex-col pt-24 px-6 md:hidden overflow-y-auto"
                     >
-                        <div className="flex flex-col px-6 py-6 space-y-4">
-                            <div className="w-full">
-                                <p className="text-gray-400 mb-4 text-sm font-semibold uppercase tracking-wider">Courses</p>
-                                <div className="space-y-4 pl-2">
-                                    {Object.keys(coursesByStream).map((stream) => (
-                                        <div key={stream}>
-                                            <p className="text-blue-400 font-medium mb-2 text-sm">{streamLabels[stream] || stream}</p>
-                                            <div className="pl-4 border-l border-gray-700 space-y-2">
-                                                {coursesByStream[stream].map((course) => (
+                        <div className="flex flex-col space-y-2 pb-10">
+
+                            {/* Mobile Courses Accordion */}
+                            <motion.div variants={itemVariants} className="border-b border-white/10 pb-2">
+                                <button
+                                    onClick={() => setMobileCoursesOpen(!mobileCoursesOpen)}
+                                    className="flex items-center justify-between w-full py-4 text-xl font-semibold text-white group"
+                                >
+                                    <span className="flex items-center gap-3">
+                                        <BookOpen size={24} className="text-blue-400" />
+                                        Courses
+                                    </span>
+                                    <ChevronDown size={20} className={`text-gray-400 transition-transform duration-300 ${mobileCoursesOpen ? 'rotate-180' : ''}`} />
+                                </button>
+
+                                <AnimatePresence>
+                                    {mobileCoursesOpen && (
+                                        <motion.div
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: 'auto', opacity: 1 }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                            className="overflow-hidden"
+                                        >
+                                            <div className="pl-4 pb-4 space-y-4">
+                                                {Object.keys(coursesByStream).length > 0 ? (
+                                                    Object.keys(coursesByStream).map((stream) => (
+                                                        <div key={stream} className="space-y-2">
+                                                            <div className="text-sm font-semibold text-blue-400 uppercase tracking-wider pl-2 border-l-2 border-blue-500/30">
+                                                                {streamLabels[stream] || stream}
+                                                            </div>
+                                                            <div className="pl-2 space-y-1">
+                                                                {coursesByStream[stream].slice(0, 3).map((course) => (
+                                                                    <Link
+                                                                        key={course.id}
+                                                                        to={`/course/${course.id}`}
+                                                                        className="block py-2 text-gray-300 hover:text-white hover:translate-x-1 transition-all text-sm"
+                                                                    >
+                                                                        {course.title}
+                                                                    </Link>
+                                                                ))}
+                                                                <Link
+                                                                    to={`/courses/${stream.toLowerCase()}`}
+                                                                    className="block py-2 text-xs font-bold text-blue-400 uppercase hover:text-blue-300"
+                                                                >
+                                                                    View All {stream} &rarr;
+                                                                </Link>
+                                                            </div>
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <div className="text-gray-500 italic px-4">Loading courses...</div>
+                                                )}
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </motion.div>
+
+                            {/* Mobile Services Accordion */}
+                            <motion.div variants={itemVariants} className="border-b border-white/10 pb-2">
+                                <button
+                                    onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                                    className="flex items-center justify-between w-full py-4 text-xl font-semibold text-white group"
+                                >
+                                    <span className="flex items-center gap-3">
+                                        <Layers size={24} className="text-purple-400" />
+                                        Services
+                                    </span>
+                                    <ChevronDown size={20} className={`text-gray-400 transition-transform duration-300 ${mobileServicesOpen ? 'rotate-180' : ''}`} />
+                                </button>
+
+                                <AnimatePresence>
+                                    {mobileServicesOpen && (
+                                        <motion.div
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: 'auto', opacity: 1 }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                            className="overflow-hidden"
+                                        >
+                                            <div className="pl-9 pb-4 space-y-2">
+                                                {services.map((service) => (
                                                     <Link
-                                                        key={course.id}
-                                                        to={`/course/${course.id}`}
-                                                        onClick={() => setIsMenuOpen(false)}
-                                                        className="block text-gray-300 hover:text-white text-sm"
+                                                        key={service.title}
+                                                        to={service.href}
+                                                        className="block py-2 text-gray-300 hover:text-white hover:translate-x-1 transition-all text-sm"
                                                     >
-                                                        {course.title}
+                                                        {service.title}
                                                     </Link>
                                                 ))}
-                                                <Link
-                                                    to={`/courses/${stream.toLowerCase()}`}
-                                                    onClick={() => setIsMenuOpen(false)}
-                                                    className="block text-xs text-blue-500 hover:text-blue-400 mt-2 font-medium"
-                                                >
-                                                    View All {stream}
-                                                </Link>
                                             </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </motion.div>
 
-                        </div>
-
-                        <hr className="w-full border-gray-700" />
-
-                        <div className="w-full">
-                            <p className="text-gray-400 mb-4 text-sm font-semibold uppercase tracking-wider">Services</p>
-                            <div className="space-y-4 pl-2">
-                                {services.map((service) => (
+                            {/* Standard Links */}
+                            {navLinks.map((link) => (
+                                <motion.div variants={itemVariants} key={link.name} className="border-b border-white/5 last:border-0 pointer-events-auto">
                                     <Link
-                                        key={service.title}
-                                        to={service.href}
-                                        onClick={() => setIsMenuOpen(false)}
-                                        className="block text-gray-300 hover:text-white text-sm"
+                                        to={link.href}
+                                        className="block py-4 text-xl font-medium text-gray-200 hover:text-white transition-colors hover:pl-2"
                                     >
-                                        {service.title}
+                                        {link.name}
                                     </Link>
-                                ))}
-                            </div>
-                        </div>
+                                </motion.div>
+                            ))}
 
-                        {navLinks.map((link) => (
-                            link.href === '/' ? (
+                            <motion.div variants={itemVariants} className="pt-6">
                                 <Link
-                                    key={link.name}
-                                    to={link.href}
-                                    onClick={() => setIsMenuOpen(false)}
-                                    className="text-gray-200 hover:text-white transition-colors duration-300 text-lg font-medium"
+                                    to="/contact"
+                                    className="w-full block text-center py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-lg font-bold rounded-xl shadow-xl shadow-blue-900/20 active:scale-95 transition-transform"
                                 >
-                                    {link.name}
+                                    Get In Touch
                                 </Link>
-                            ) : (
-                                <a
-                                    key={link.name}
-                                    href={link.href}
-                                    onClick={() => setIsMenuOpen(false)}
-                                    className="text-gray-200 hover:text-white transition-colors duration-300 text-lg font-medium"
-                                >
-                                    {link.name}
-                                </a>
-                            )
-                        ))}
-                        <Link
-                            to="/contact"
-                            onClick={() => setIsMenuOpen(false)}
-                            className="w-full text-center block px-5 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-lg shadow-lg mt-4"
-                        >
-                            Contact Us
-                        </Link>
+                            </motion.div>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
         </motion.nav>
     );
 };
+
+// Helper for desktop menu arrow
+const ArrowWrapper = () => (
+    <motion.span
+        initial={{ x: 0 }}
+        whileHover={{ x: 4 }}
+        className="inline-block ml-1"
+    >
+        <ChevronRight size={12} />
+    </motion.span>
+);
 
 export default Header;

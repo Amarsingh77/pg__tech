@@ -86,7 +86,9 @@ export const createTestimonial = async (req, res) => {
     const testimonialData = { ...req.body };
 
     if (req.file) {
-      testimonialData.image = `/uploads/${req.file.filename}`;
+      const file = req.file;
+      const base64 = file.buffer.toString('base64');
+      testimonialData.image = `data:${file.mimetype};base64,${base64}`;
     }
 
     const testimonial = await Testimonial.create(testimonialData);
@@ -113,7 +115,9 @@ export const updateTestimonial = async (req, res) => {
     const testimonialData = { ...req.body };
 
     if (req.file) {
-      testimonialData.image = `/uploads/${req.file.filename}`;
+      const file = req.file;
+      const base64 = file.buffer.toString('base64');
+      testimonialData.image = `data:${file.mimetype};base64,${base64}`;
     }
 
     const testimonial = await Testimonial.findByIdAndUpdate(

@@ -8,7 +8,9 @@ export const applyInstructor = async (req, res) => {
         const applicationData = { ...req.body };
 
         if (req.file) {
-            applicationData.resume = `/uploads/${req.file.filename}`;
+            const file = req.file;
+            const base64 = file.buffer.toString('base64');
+            applicationData.resume = `data:${file.mimetype};base64,${base64}`;
         } else {
             return res.status(400).json({
                 success: false,
