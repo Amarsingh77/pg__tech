@@ -201,12 +201,12 @@ const StreamPage = ({ streamName, streamId, theme, description, icon: Icon }) =>
                             </div>
 
                             {/* Level Filter */}
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
                                 {['all', 'Beginner', 'Intermediate', 'Advanced'].map((level) => (
                                     <button
                                         key={level}
                                         onClick={() => setFilterLevel(level)}
-                                        className={`px-6 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all ${filterLevel === level
+                                        className={`px-6 py-4 rounded-2xl font-bold text-sm uppercase tracking-widest transition-all whitespace-nowrap flex-shrink-0 ${filterLevel === level
                                             ? `bg-gradient-to-r ${theme.buttonGradient} text-white shadow-lg`
                                             : 'bg-gray-800/30 text-gray-400 hover:bg-gray-800/50 hover:text-gray-300'
                                             }`}
