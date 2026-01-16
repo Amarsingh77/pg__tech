@@ -120,6 +120,17 @@ app.get('/health', async (req, res) => {
   });
 });
 
+// Middleware to ensure DB connection for API routes (Serverless fix)
+app.use('/api', async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error('DB Connection middleware error:', err);
+    res.status(500).json({ error: 'Database connection failed' });
+  }
+});
+
 // API Routes
 app.use('/api/courses', courseRoutes);
 app.use('/api/testimonials', testimonialRoutes);
