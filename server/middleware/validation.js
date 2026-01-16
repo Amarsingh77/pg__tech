@@ -42,6 +42,10 @@ export const validateCourse = [
     .optional()
     .isNumeric()
     .withMessage('Price must be a number'),
+  body('discountedPrice')
+    .optional()
+    .isNumeric()
+    .withMessage('Discounted price must be a number'),
   body('order')
     .optional()
     .isInt()
