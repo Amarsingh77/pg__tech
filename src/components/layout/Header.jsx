@@ -150,7 +150,7 @@ const Header = () => {
                                     exit={{ opacity: 0, y: 10 }}
                                     className="absolute top-full left-0 mt-0 pt-2 w-72"
                                 >
-                                    <div className="bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 overflow-hidden py-2">
+                                    <div className="bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 py-2">
                                         {Object.keys(coursesByStream).length > 0 ? (
                                             Object.keys(coursesByStream).map((stream) => (
                                                 <div
