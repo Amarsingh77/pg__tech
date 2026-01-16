@@ -146,14 +146,29 @@ const ManageCourses = () => {
             </div>
 
             <div className="space-y-12">
-                {['CSE', 'ME', 'CE'].map((stream) => {
+                {/* Dynamically get all unique streams from courses + default ones */}
+                {[...new Set([...courses.map(c => c.stream), 'CSE', 'ME', 'CE', 'EE'])].map((stream) => {
+                    // Filter courses for this stream
                     const streamCourses = courses.filter(c => c.stream === stream);
+
+                    // Skip if no courses and not in our default main list (optional, but keeps UI clean)
+                    if (streamCourses.length === 0 && !['CSE', 'ME', 'CE', 'EE'].includes(stream)) return null;
+
                     const streamConfig = {
                         'CSE': { label: 'Computer Science (CSE)', color: 'blue', border: 'border-blue-500/30', shadow: 'hover:shadow-blue-500/10', badge: 'bg-blue-600/80' },
                         'ME': { label: 'Mechanical Engineering (ME)', color: 'orange', border: 'border-orange-500/30', shadow: 'hover:shadow-orange-500/10', badge: 'bg-orange-600/80' },
-                        'CE': { label: 'Civil Engineering (CE)', color: 'emerald', border: 'border-emerald-500/30', shadow: 'hover:shadow-emerald-500/10', badge: 'bg-emerald-600/80' }
+                        'CE': { label: 'Civil Engineering (CE)', color: 'emerald', border: 'border-emerald-500/30', shadow: 'hover:shadow-emerald-500/10', badge: 'bg-emerald-600/80' },
+                        'EE': { label: 'Electrical Engineering (EE)', color: 'yellow', border: 'border-yellow-500/30', shadow: 'hover:shadow-yellow-500/10', badge: 'bg-yellow-600/80' }
                     };
-                    const config = streamConfig[stream] || streamConfig['CSE'];
+
+                    // Fallback config for unknown streams
+                    const config = streamConfig[stream] || {
+                        label: `${stream} Courses`,
+                        color: 'gray',
+                        border: 'border-gray-500/30',
+                        shadow: 'hover:shadow-gray-500/10',
+                        badge: 'bg-gray-600/80'
+                    };
 
                     return (
                         <div key={stream} className="bg-gray-800/40 rounded-3xl p-8 border border-gray-700/50 backdrop-blur-sm">
@@ -234,7 +249,7 @@ const ManageCourses = () => {
                                 </div>
                             ) : (
                                 <div className="text-center py-12 border-2 border-dashed border-gray-700 rounded-xl bg-gray-800/30">
-                                    <p className="text-gray-500 mb-4">No courses added for {streamConfig[stream]?.label || stream} yet.</p>
+                                    <p className="text-gray-500 mb-4">No courses added for {config.label} yet.</p>
                                     <button
                                         onClick={() => {
                                             openModal();

@@ -56,7 +56,7 @@ const courseSchema = new mongoose.Schema({
   },
   stream: {
     type: String,
-    enum: ['CSE', 'ME', 'CE', 'Other'],
+    enum: ['CSE', 'ME', 'CE', 'EE', 'ECE', 'Other'],
     default: 'Other'
   },
   image: {
