@@ -83,27 +83,13 @@ const StreamPage = ({ streamName, streamId, theme, description, icon: Icon }) =>
             {/* Enhanced Background Elements */}
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none"></div>
 
-            {/* Animated Gradient Orbs */}
+            {/* Static Gradient Orbs (Performance Optimized) */}
             <div className={`absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none`}>
-                <motion.div
-                    animate={{
-                        scale: [1, 1.2, 1],
-                        rotate: [0, 180, 0],
-                        x: [0, 100, 0],
-                        y: [0, -50, 0]
-                    }}
-                    transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-                    className={`absolute -top-[20%] -left-[10%] w-[60%] h-[60%] rounded-full opacity-15 blur-[150px] bg-gradient-to-br ${theme.buttonGradient}`}
+                <div
+                    className={`absolute -top-[20%] -left-[10%] w-[60%] h-[60%] rounded-full opacity-20 blur-[100px] bg-gradient-to-br ${theme.buttonGradient}`}
                 />
-                <motion.div
-                    animate={{
-                        scale: [1, 1.3, 1],
-                        rotate: [0, -180, 0],
-                        x: [0, -100, 0],
-                        y: [0, 50, 0]
-                    }}
-                    transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-                    className={`absolute top-[50%] -right-[15%] w-[50%] h-[50%] rounded-full opacity-10 blur-[130px] bg-gradient-to-tl ${theme.buttonGradient}`}
+                <div
+                    className={`absolute top-[50%] -right-[15%] w-[50%] h-[50%] rounded-full opacity-15 blur-[100px] bg-gradient-to-tl ${theme.buttonGradient}`}
                 />
             </div>
 

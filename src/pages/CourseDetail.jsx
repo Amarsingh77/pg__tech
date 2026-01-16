@@ -72,23 +72,11 @@ const CourseDetail = ({ onEnrollClick }) => {
             {/* Enhanced Background elements */}
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none"></div>
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <motion.div
-                    animate={{
-                        scale: [1, 1.2, 1],
-                        rotate: [0, 45, 0],
-                        x: [0, 100, 0]
-                    }}
-                    transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-                    className={`absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full opacity-10 blur-[150px] bg-gradient-to-br ${theme.buttonGradient}`}
+                <div
+                    className={`absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full opacity-15 blur-[100px] bg-gradient-to-br ${theme.buttonGradient}`}
                 />
-                <motion.div
-                    animate={{
-                        scale: [1, 1.3, 1],
-                        rotate: [0, -45, 0],
-                        x: [0, -100, 0]
-                    }}
-                    transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-                    className={`absolute bottom-0 -left-32 w-[500px] h-[500px] rounded-full opacity-5 blur-[120px] bg-gradient-to-tr ${theme.buttonGradient}`}
+                <div
+                    className={`absolute bottom-0 -left-32 w-[500px] h-[500px] rounded-full opacity-10 blur-[100px] bg-gradient-to-tr ${theme.buttonGradient}`}
                 />
             </div>
 
