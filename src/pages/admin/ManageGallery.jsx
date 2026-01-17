@@ -214,9 +214,12 @@ const ManageGallery = () => {
                                         className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 outline-none"
                                     >
                                         <option value="General">General</option>
-                                        <option value="Events">Events</option>
-                                        <option value="Campus">Campus</option>
+                                        <option value="Certifications">Certifications</option>
+                                        <option value="Achievements">Achievements</option>
+                                        <option value="Festivals">Festivals</option>
                                         <option value="Students">Students</option>
+                                        <option value="Campus">Campus</option>
+                                        <option value="Events">Events</option>
                                     </select>
                                 </div>
 
