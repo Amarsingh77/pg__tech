@@ -114,14 +114,13 @@ export const validateBatch = [
     .isLength({ min: 1, max: 100 })
     .withMessage('Course must be between 1 and 100 characters'),
   body('startDate')
-    .isISO8601()
-    .withMessage('Start date must be a valid date'),
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage('Start date is required'),
   body('endDate')
-    .optional()
-    .isISO8601()
-    .withMessage('End date must be a valid date'),
+    .optional(),
   body('mode')
-    .isIn(['Online (Live)', 'Offline (Weekday)', 'Offline (Weekend)', 'Hybrid (Online + Offline)'])
+    .isIn(['Online (Live)', 'Offline (Weekday)', 'Offline (Weekend)', 'Hybrid (Online + Offline)', 'On-Campus', 'Evening School', 'Hybrid', 'Online', 'Offline'])
     .withMessage('Invalid mode'),
   body('capacity')
     .isInt({ min: 1 })
