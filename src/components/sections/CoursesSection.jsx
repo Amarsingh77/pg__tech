@@ -20,7 +20,9 @@ const CoursesSection = ({ onEnrollClick }) => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const res = await fetch(`${API_ENDPOINTS.courses}?homePage=true&limit=8&sort=order`);
+                const res = await fetch(`${API_ENDPOINTS.courses}?homePage=true&limit=8&sort=order`, {
+                    headers: { 'Cache-Control': 'no-cache' }
+                });
                 if (!res.ok) throw new Error('Failed to fetch courses');
                 const data = await res.json();
                 setCourses(Array.isArray(data) ? data : (data.data || []));

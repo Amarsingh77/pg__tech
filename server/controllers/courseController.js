@@ -111,6 +111,14 @@ export const createCourse = async (req, res) => {
       }
     }
 
+    // Explicitly handle booleans from FormData
+    if (courseData.showOnHomePage !== undefined) {
+      courseData.showOnHomePage = courseData.showOnHomePage === 'true' || courseData.showOnHomePage === true;
+    }
+    if (courseData.isActive !== undefined) {
+      courseData.isActive = courseData.isActive === 'true' || courseData.isActive === true;
+    }
+
     const course = await Course.create(courseData);
 
     res.status(201).json({
@@ -156,6 +164,14 @@ export const updateCourse = async (req, res) => {
         // Keep existing if parse fails or handle as needed
         delete courseData.curriculum;
       }
+    }
+
+    // Explicitly handle booleans from FormData (which might be strings)
+    if (courseData.showOnHomePage !== undefined) {
+      courseData.showOnHomePage = courseData.showOnHomePage === 'true' || courseData.showOnHomePage === true;
+    }
+    if (courseData.isActive !== undefined) {
+      courseData.isActive = courseData.isActive === 'true' || courseData.isActive === true;
     }
 
     const course = await Course.findByIdAndUpdate(
