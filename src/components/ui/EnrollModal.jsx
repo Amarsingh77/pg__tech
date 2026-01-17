@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
+import { API_ENDPOINTS } from '../../config/api';
 
 // Check icon component for the success message
 const Check = (props) => (
@@ -26,19 +27,47 @@ const EnrollModal = ({ course, onClose }) => {
 
     if (!course) return null;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        // Simulate API call
-        setTimeout(() => {
+
+        try {
+            const formData = {
+                name: e.target.name.value,
+                email: e.target.email.value,
+                phone: e.target.phone.value,
+                courseName: course.title || course.course,
+                status: 'New',
+                enrollmentDate: new Date().toISOString()
+            };
+
+            const response = await fetch(API_ENDPOINTS.enrollments, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setIsSubmitted(true);
+                // Automatically close after 3 seconds
+                setTimeout(() => {
+                    onClose();
+                    setIsSubmitted(false); // Reset for next time
+                }, 3000);
+            } else {
+                console.error('Enrollment failed:', data.message);
+                alert(data.message || 'Failed to submit enrollment');
+            }
+        } catch (error) {
+            console.error('Error submitting enrollment:', error);
+            alert('An error occurred. Please try again.');
+        } finally {
             setIsSubmitting(false);
-            setIsSubmitted(true);
-            // Automatically close after 3 seconds
-            setTimeout(() => {
-                onClose();
-                setIsSubmitted(false); // Reset for next time
-            }, 3000);
-        }, 1500);
+        }
     };
 
     return (

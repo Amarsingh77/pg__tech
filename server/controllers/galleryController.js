@@ -51,16 +51,16 @@ export const deleteGalleryImage = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Image not found' });
         }
 
-        // Delete file from filesystem
-        if (image.image) {
-            const fileName = image.image.split('/uploads/')[1];
-            if (fileName) {
-                const filePath = path.join('uploads', fileName);
-                if (fs.existsSync(filePath)) {
-                    fs.unlinkSync(filePath);
-                }
-            }
-        }
+        // Delete file from filesystem - REMOVED for Vercel Base64 compatibility
+        // if (image.image) {
+        //     const fileName = image.image.split('/uploads/')[1];
+        //     if (fileName) {
+        //         const filePath = path.join('uploads', fileName);
+        //         if (fs.existsSync(filePath)) {
+        //             fs.unlinkSync(filePath);
+        //         }
+        //     }
+        // }
 
         await image.deleteOne();
         res.json({ success: true, data: {} });
