@@ -134,14 +134,14 @@ const CourseDetail = ({ onEnrollClick }) => {
                                 </div>
 
                                 {/* Epic Title */}
-                                <h1 className={`relative z-10 text-5xl sm:text-6xl lg:text-8xl font-black mb-8 tracking-tighter leading-[0.95] text-transparent bg-clip-text bg-gradient-to-br ${theme.gradientText} drop-shadow-2xl`}>
+                                <h1 className={`relative z-10 text-4xl sm:text-6xl lg:text-8xl font-black mb-8 tracking-tighter leading-[0.95] text-transparent bg-clip-text bg-gradient-to-br ${theme.gradientText} drop-shadow-2xl`}>
                                     {course.title}
                                 </h1>
 
                                 {/* Enhanced Description */}
                                 <div className="relative mb-10">
                                     <div className={`absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b ${theme.buttonGradient} rounded-full shadow-lg`}></div>
-                                    <p className="text-xl md:text-2xl text-gray-300 leading-relaxed pl-8 font-medium">
+                                    <p className="text-lg md:text-2xl text-gray-300 leading-relaxed pl-8 font-medium">
                                         {course.description}
                                     </p>
                                 </div>

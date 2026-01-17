@@ -34,6 +34,7 @@ const HeroSection = ({ onOpenAdvisorModal }) => {
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8 }}
+                    className="text-center md:text-left flex flex-col items-center md:items-start"
                 >
                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
                         Master The Future.
@@ -42,15 +43,15 @@ const HeroSection = ({ onOpenAdvisorModal }) => {
                             Define Your Legacy.
                         </span>
                     </h1>
-                    <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-lg">
+                    <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-lg mx-auto md:mx-0">
                         Don't just adapt to the future—create it. Our immersive, hands-on training in AI, Engineering, and Development transforms ambitious learners into industry-ready professionals. Your journey to excellence starts here.
                     </p>
-                    <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto justify-center md:justify-start">
                         <motion.a
                             href="#courses"
                             whileHover={{ scale: 1.05, boxShadow: '0px 10px 30px -5px rgba(99, 102, 241, 0.5)' }}
                             whileTap={{ scale: 0.95 }}
-                            className="px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-lg shadow-lg text-center"
+                            className="px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-lg shadow-lg text-center w-full sm:w-auto"
                         >
                             Explore Courses
                             <ArrowRight className="inline-block ml-2" size={20} />
@@ -59,7 +60,7 @@ const HeroSection = ({ onOpenAdvisorModal }) => {
                             onClick={onOpenAdvisorModal}
                             whileHover={{ scale: 1.05, backgroundColor: '#fff', color: '#4f46e5' }}
                             whileTap={{ scale: 0.95 }}
-                            className="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-lg shadow-lg text-center transition-colors duration-300"
+                            className="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-lg shadow-lg text-center transition-colors duration-300 w-full sm:w-auto"
                         >
                             ✨ Find Your Path
                         </motion.button>
