@@ -48,6 +48,10 @@ const ManageGallery = () => {
         }
     };
 
+    import { compressImage } from '../../utils/compressImage';
+
+    // ... inside component ...
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!selectedFile) return;
@@ -55,16 +59,19 @@ const ManageGallery = () => {
         setUploading(true);
         setError(null);
 
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('category', category);
-        formData.append('image', selectedFile);
-
         try {
+            // Compress image before upload
+            const compressedFile = await compressImage(selectedFile);
+
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('category', category);
+            formData.append('image', compressedFile);
+
             const res = await fetch(API_ENDPOINTS.gallery, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}` // FormData doesn't need Content-Type header
+                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
                 },
                 body: formData
             });
