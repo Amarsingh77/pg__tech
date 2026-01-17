@@ -264,15 +264,29 @@ const ManageBatches = () => {
                                     />
                                 </div>
                             </div>
-                            <div>
-                                <label className="block text-sm text-gray-400 mb-1">Instructor</label>
-                                <input
-                                    type="text"
-                                    value={formData.instructor}
-                                    onChange={(e) => setFormData({ ...formData, instructor: e.target.value })}
-                                    className="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:outline-none focus:border-blue-500"
-                                    required
-                                />
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm text-gray-400 mb-1">Instructor</label>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. John Doe"
+                                        value={formData.instructor}
+                                        onChange={(e) => setFormData({ ...formData, instructor: e.target.value })}
+                                        className="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:outline-none focus:border-blue-500"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm text-gray-400 mb-1">Days</label>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. Mon, Wed, Fri"
+                                        value={formData.days}
+                                        onChange={(e) => setFormData({ ...formData, days: e.target.value })}
+                                        className="w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:outline-none focus:border-blue-500"
+                                        required
+                                    />
+                                </div>
                             </div>
                             <button
                                 type="submit"
