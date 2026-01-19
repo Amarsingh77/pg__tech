@@ -22,9 +22,12 @@ const ManageCourses = () => {
         discountedPrice: 0
     });
 
+    const [uploading, setUploading] = useState(false);
+
     const fetchCourses = async () => {
         try {
-            const res = await fetch(API_ENDPOINTS.courses);
+            // Fetch all courses (inactive included) with a higher limit for admin view
+            const res = await fetch(`${API_ENDPOINTS.courses}?limit=100&active=all`);
             if (!res.ok) throw new Error('Failed to fetch courses');
             const data = await res.json();
             setCourses(Array.isArray(data) ? data : (data.data || []));
@@ -39,6 +42,8 @@ const ManageCourses = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setUploading(true);
+
         const url = currentCourse
             ? API_ENDPOINTS.course(currentCourse.id)
             : API_ENDPOINTS.courses;
@@ -98,11 +103,14 @@ const ManageCourses = () => {
                 throw new Error(errorData.message || 'Failed to save course');
             }
 
+            alert('Course saved successfully!');
             fetchCourses();
             closeModal();
         } catch (error) {
             console.error('Error saving course:', error);
             alert(`Error: ${error.message}`);
+        } finally {
+            setUploading(false);
         }
     };
 
