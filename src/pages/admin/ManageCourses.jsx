@@ -52,6 +52,20 @@ const ManageCourses = () => {
         data.append('level', formData.level);
         data.append('stream', formData.stream);
 
+        // Auto-assign required fields based on stream
+        const streamConfig = {
+            'CSE': { icon: 'Code', color: 'from-blue-500 to-indigo-600' },
+            'ME': { icon: 'Cog', color: 'from-orange-500 to-red-600' },
+            'CE': { icon: 'Building', color: 'from-emerald-500 to-teal-600' },
+            'EE': { icon: 'Cpu', color: 'from-yellow-500 to-amber-600' },
+            'ECE': { icon: 'Cpu', color: 'from-purple-500 to-pink-600' },
+            'Other': { icon: 'Book', color: 'from-gray-500 to-slate-600' }
+        };
+
+        const config = streamConfig[formData.stream] || streamConfig['Other'];
+        data.append('iconName', config.icon);
+        data.append('color', config.color);
+
         // Handle curriculum as JSON string
         const curriculumArray = formData.curriculum.split('\n').filter(line => line.trim() !== '');
         data.append('curriculum', JSON.stringify(curriculumArray));
@@ -74,14 +88,21 @@ const ManageCourses = () => {
         }
 
         try {
-            await fetch(url, {
+            const res = await fetch(url, {
                 method,
                 body: data
             });
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.message || 'Failed to save course');
+            }
+
             fetchCourses();
             closeModal();
         } catch (error) {
             console.error('Error saving course:', error);
+            alert(`Error: ${error.message}`);
         }
     };
 
