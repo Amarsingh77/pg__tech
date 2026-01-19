@@ -32,7 +32,7 @@ const courseSchema = new mongoose.Schema({
   description: {
     type: String,
     required: [true, 'Description is required'],
-    maxlength: [300, 'Description cannot exceed 300 characters']
+    maxlength: [5000, 'Description cannot exceed 5000 characters']
   },
   price: {
     type: Number,

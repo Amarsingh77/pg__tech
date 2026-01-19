@@ -36,8 +36,8 @@ export const validateCourse = [
     .withMessage('Level must be Beginner, Intermediate, or Advanced'),
   body('description')
     .trim()
-    .isLength({ min: 1, max: 300 })
-    .withMessage('Description must be between 1 and 300 characters'),
+    .isLength({ min: 1, max: 5000 })
+    .withMessage('Description must be between 1 and 5000 characters'),
   body('price')
     .optional()
     .isNumeric()

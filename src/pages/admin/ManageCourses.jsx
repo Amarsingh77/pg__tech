@@ -100,7 +100,10 @@ const ManageCourses = () => {
 
             if (!res.ok) {
                 const errorData = await res.json();
-                throw new Error(errorData.message || 'Failed to save course');
+                const errorMessage = errorData.errors
+                    ? errorData.errors.map(e => `${e.field}: ${e.message}`).join('\n')
+                    : (errorData.message || 'Failed to save course');
+                throw new Error(errorMessage);
             }
 
             alert('Course saved successfully!');
@@ -108,7 +111,7 @@ const ManageCourses = () => {
             closeModal();
         } catch (error) {
             console.error('Error saving course:', error);
-            alert(`Error: ${error.message}`);
+            alert(`Error:\n${error.message}`);
         } finally {
             setUploading(false);
         }
