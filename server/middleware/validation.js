@@ -25,7 +25,7 @@ export const validateCourse = [
     .withMessage('Title must be between 1 and 100 characters'),
   body('iconName')
     .optional()
-    .isIn(['Code', 'Brain', 'Cloud', 'Shield', 'Database', 'Book'])
+    .isIn(['Code', 'Brain', 'Cloud', 'Shield', 'Database', 'Book', 'HardHat', 'Settings', 'Cpu', 'Cog', 'Building'])
     .withMessage('Invalid icon name'),
   body('duration')
     .trim()
