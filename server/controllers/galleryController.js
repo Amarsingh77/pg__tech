@@ -1,6 +1,5 @@
 import Gallery from '../models/Gallery.js';
-import fs from 'fs';
-import path from 'path';
+
 
 // @desc    Get all gallery images
 // @route   GET /api/gallery

@@ -27,9 +27,9 @@ const AdminSettings = () => {
         if (activeTab === 'team') {
             fetchAdmins();
         }
-    }, [activeTab]);
+    }, [activeTab, fetchAdmins]);
 
-    const fetchAdmins = async () => {
+    const fetchAdmins = React.useCallback(async () => {
         try {
             const res = await fetch(API_ENDPOINTS.admins, {
                 headers: {
@@ -42,7 +42,7 @@ const AdminSettings = () => {
         } catch (error) {
             console.error('Error fetching admins:', error);
         }
-    };
+    }, [token]);
 
     const handlePasswordChange = async (e) => {
         e.preventDefault();

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, MessageSquare, User, Mail, CheckCircle, Loader, ArrowRight } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 import SEO from '../components/utils/SEO';
 
 const BookConsultation = () => {

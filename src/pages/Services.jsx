@@ -102,21 +102,23 @@ const ServiceCard = ({ icon: Icon, title, desc, delay }) => (
 const Services = () => {
     const { type } = useParams();
 
-    if (type === 'start-project') {
-        return <StartProject />;
-    }
-
-    const serviceType = type || 'web-dev';
-    const data = serviceData[serviceType] || serviceData['web-dev'];
-
-    // Scroll animations
     const { scrollYProgress } = useScroll();
     const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
     const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
+    const serviceType = type || 'web-dev';
+
     useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [serviceType]);
+        if (type !== 'start-project') {
+            window.scrollTo(0, 0);
+        }
+    }, [serviceType, type]);
+
+    if (type === 'start-project') {
+        return <StartProject />;
+    }
+
+    const data = serviceData[serviceType] || serviceData['web-dev'];
 
     return (
         <div className="min-h-screen bg-gray-900 text-white overflow-hidden selection:bg-blue-500/30">

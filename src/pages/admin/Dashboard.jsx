@@ -46,7 +46,7 @@ const Dashboard = () => {
         };
 
         fetchStats();
-    }, []);
+    }, [token]);
 
     const statCards = [
         { label: 'Total Enrollments', value: stats.enrollments, icon: Users, color: 'bg-blue-500' },

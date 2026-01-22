@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle, Loader, User, MessageSquare, Briefcase } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 import SEO from '../components/utils/SEO';
 
 const Contact = () => {

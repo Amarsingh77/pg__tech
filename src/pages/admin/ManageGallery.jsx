@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trash2, Plus, Image as ImageIcon, Loader, X } from 'lucide-react';
 import { API_ENDPOINTS, getAuthHeaders } from '../../config/api';
+import { compressImage } from '../../utils/compressImage';
 
 const ManageGallery = () => {
     const [images, setImages] = useState([]);
@@ -48,7 +49,7 @@ const ManageGallery = () => {
         }
     };
 
-    import { compressImage } from '../../utils/compressImage';
+
 
     // ... inside component ...
 

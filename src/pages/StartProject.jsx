@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, CheckCircle, Loader, Rocket, Code, Smartphone, Brain, Globe, DollarSign, Calendar } from 'lucide-react';
+import { API_ENDPOINTS } from '../config/api';
 import SEO from '../components/utils/SEO';
 
 const StartProject = () => {
