@@ -22,7 +22,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.3",
     "morgan": "^1.10.0",
-    "multer": "^2.0.2"
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.12"
   },
   "devDependencies": {
     "jest": "^29.7.0",

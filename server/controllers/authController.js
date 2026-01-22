@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import User from '../models/User.js';
+import sendEmail from '../utils/emailService.js';
 
 // Generate JWT token
 const generateToken = (userId) => {
@@ -45,11 +46,32 @@ export const login = async (req, res) => {
       user.otpExpire = Date.now() + 10 * 60 * 1000; // 10 mins
       await user.save();
 
-      return res.status(200).json({
-        success: true,
-        message: 'OTP sent to your email',
-        otp // In production, don't send this!
-      });
+      // Send OTP via Email
+      const message = `Your Admin Login OTP is: ${otp}\n\nThis OTP is valid for 10 minutes.`;
+
+      try {
+        await sendEmail({
+          email: user.email,
+          subject: 'PG Tech Admin Login OTP',
+          message
+        });
+
+        return res.status(200).json({
+          success: true,
+          message: `OTP sent to ${user.email}`,
+          // otp: otp // REMOVED FOR SECURITY
+        });
+      } catch (err) {
+        console.error('Email send failure:', err);
+        user.otp = undefined;
+        user.otpExpire = undefined;
+        await user.save();
+
+        return res.status(500).json({
+          success: false,
+          message: 'Email could not be sent'
+        });
+      }
     }
 
     // For non-admins, direct login
@@ -145,6 +167,7 @@ export const logout = async (req, res) => {
       message: 'Logout successful'
     });
   } catch (error) {
+    // ...
     console.error('Logout error:', error);
     res.status(500).json({
       success: false,
@@ -394,15 +417,44 @@ export const forgotPassword = async (req, res) => {
 
     await user.save({ validateBeforeSave: false });
 
-    // In a real app, you would send an email here.
-    // For this project, we'll just return the token for demonstration/testing.
-    // The user would then use this token to reset their password.
+    // Create reset url
+    const resetUrl = `${req.protocol}://${req.get('host')}/reset-password/${resetToken}`;
+    // Or if frontend is separate (which it is):
+    // const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/admin/reset-password/${resetToken}`; 
+    // Let's use a generic approach assuming we want the admin reset page:
+    const resetLink = `${process.env.FRONTEND_URL || 'https://red-anteater-976251.hostingersite.com'}/admin/reset-password/${resetToken}`;
 
-    res.status(200).json({
-      success: true,
-      message: 'Password reset token generated',
-      resetToken // In production, don't send this in response!
-    });
+    const message = `
+      You are receiving this email because you (or someone else) has requested the reset of a password.
+      Please make a PUT request to: \n\n ${resetLink}
+      \n\n
+      (Or paste this token into the reset page: ${resetToken})
+    `;
+
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: 'Password Reset Token',
+        message
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Email sent'
+        // resetToken // REMOVED FOR SECURITY
+      });
+    } catch (err) {
+      console.error(err);
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save({ validateBeforeSave: false });
+
+      return res.status(500).json({
+        success: false,
+        message: 'Email could not be sent'
+      });
+    }
+
   } catch (error) {
     console.error('Forgot password error:', error);
     res.status(500).json({
