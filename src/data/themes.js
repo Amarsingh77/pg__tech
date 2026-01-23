@@ -39,17 +39,17 @@ export const STREAM_THEMES = {
         iconColor: 'text-orange-400'
     },
     'EE': {
-        text: 'text-yellow-400',
-        bg: 'bg-yellow-600',
-        bgHover: 'hover:bg-yellow-700',
-        border: 'border-yellow-500/30',
-        ring: 'ring-yellow-500',
-        gradientText: 'from-yellow-400 via-amber-500 to-orange-500',
-        buttonGradient: 'from-yellow-600 to-amber-600 hover:from-yellow-700 hover:to-amber-700',
-        lightBg: 'bg-yellow-500/10',
-        lightBorder: 'border-yellow-500/30',
-        color: 'yellow',
-        iconColor: 'text-yellow-400'
+        text: 'text-violet-400',
+        bg: 'bg-violet-600',
+        bgHover: 'hover:bg-violet-700',
+        border: 'border-violet-500/30',
+        ring: 'ring-violet-500',
+        gradientText: 'from-violet-400 via-purple-500 to-fuchsia-500',
+        buttonGradient: 'from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700',
+        lightBg: 'bg-violet-500/10',
+        lightBorder: 'border-violet-500/30',
+        color: 'violet',
+        iconColor: 'text-violet-400'
     }
 };
 
