@@ -140,7 +140,12 @@ const ManageCourses = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this course?')) {
             try {
-                await fetch(API_ENDPOINTS.course(id), { method: 'DELETE' });
+                await fetch(API_ENDPOINTS.course(id), {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
                 fetchCourses();
             } catch (error) {
                 console.error('Error deleting course:', error);
