@@ -8,16 +8,18 @@ if (!cached) {
 }
 
 const connectDB = async () => {
-  if (cached.conn) {
-    console.log('Using cached MongoDB connection');
+  if (cached.conn && mongoose.connection.readyState === 1) {
+    // console.log('Using cached MongoDB connection');
     return cached.conn;
+  }
+
+  if (!process.env.MONGODB_URI) {
+    throw new Error('MONGODB_URI is not defined in environment variables');
   }
 
   if (!cached.promise) {
     const opts = {
       bufferCommands: false, // Disable Mongoose buffering for Serverless
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
     };
 
     console.log('Creating new MongoDB connection...');
