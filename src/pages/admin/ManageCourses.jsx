@@ -4,8 +4,11 @@ import { Plus, Edit, Trash2, Upload, X } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config/api';
 import { compressImage } from '../../utils/compressImage';
 import ImageUpload from '../../components/ui/ImageUpload';
+import { useAuth } from '../../contexts/AuthContext';
 
 const ManageCourses = () => {
+    const { token } = useAuth(); // Get token from context
+
     const [courses, setCourses] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentCourse, setCurrentCourse] = useState(null);
@@ -29,7 +32,11 @@ const ManageCourses = () => {
     const fetchCourses = async () => {
         try {
             // Fetch all courses (inactive included) with a higher limit for admin view
-            const res = await fetch(`${API_ENDPOINTS.courses}?limit=100&active=all`);
+            const res = await fetch(`${API_ENDPOINTS.courses}?limit=100&active=all`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             if (!res.ok) throw new Error('Failed to fetch courses');
             const data = await res.json();
             setCourses(Array.isArray(data) ? data : (data.data || []));
@@ -39,8 +46,10 @@ const ManageCourses = () => {
     };
 
     useEffect(() => {
-        fetchCourses();
-    }, []);
+        if (token) {
+            fetchCourses();
+        }
+    }, [token]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -103,6 +112,9 @@ const ManageCourses = () => {
         try {
             const res = await fetch(url, {
                 method,
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
                 body: data
             });
 
