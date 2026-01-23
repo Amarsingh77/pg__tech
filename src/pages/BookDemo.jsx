@@ -61,7 +61,8 @@ const BookDemo = () => {
                     time: ''
                 });
             } else {
-                throw new Error(data.message || 'Failed to submit form');
+                console.error('Server Error Response:', data);
+                throw new Error(data.message || `Server Error (${response.status}): ${JSON.stringify(data)}`);
             }
         } catch (error) {
             console.error('Error submitting form:', error);
