@@ -256,10 +256,15 @@ const ManageCourses = () => {
                                                 )}
 
                                                 {/* Gradient Overlay */}
-                                                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60" />
+                                                <div className={`absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60 ${!course.isActive ? 'bg-red-900/40' : ''}`} />
 
                                                 {/* Badges */}
                                                 <div className="absolute top-4 left-4 flex flex-col gap-2">
+                                                    {!course.isActive && (
+                                                        <span className="bg-red-500/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black text-white border border-red-400/20 uppercase tracking-widest shadow-lg">
+                                                            Inactive
+                                                        </span>
+                                                    )}
                                                     <span className="bg-black/40 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black text-white border border-white/10 uppercase tracking-widest">
                                                         {course.level}
                                                     </span>
@@ -271,7 +276,7 @@ const ManageCourses = () => {
                                                 </div>
                                             </div>
 
-                                            <div className="p-6 flex-grow flex flex-col">
+                                            <div className={`p-6 flex-grow flex flex-col ${!course.isActive ? 'opacity-50 grayscale' : ''}`}>
                                                 <h3 className="text-xl font-bold text-white mb-2 line-clamp-1 group-hover:text-blue-400 transition-colors" title={course.title}>{course.title}</h3>
                                                 <p className="text-gray-400 text-sm mb-6 line-clamp-2 h-10 leading-relaxed font-medium">{course.description}</p>
 
