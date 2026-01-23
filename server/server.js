@@ -127,7 +127,12 @@ app.use('/api', async (req, res, next) => {
     next();
   } catch (err) {
     console.error('DB Connection middleware error:', err);
-    res.status(500).json({ error: 'Database connection failed' });
+    res.status(500).json({
+      error: 'Database connection failed',
+      details: err.message,
+      // Only show stack in non-production or if we need deep debug
+      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    });
   }
 });
 
