@@ -16,14 +16,18 @@ const BookDemo = () => {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [error, setError] = useState('');
 
     const handleChange = (e) => {
         setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+        if (error) setError(''); // Clear error on change
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
+        setError('');
+
         try {
             const response = await fetch(API_ENDPOINTS.enquiries, {
                 method: 'POST',
@@ -42,6 +46,8 @@ const BookDemo = () => {
                 })
             });
 
+            const data = await response.json();
+
             if (response.ok) {
                 setIsSuccess(true);
                 setTimeout(() => setIsSuccess(false), 5000);
@@ -54,9 +60,12 @@ const BookDemo = () => {
                     date: '',
                     time: ''
                 });
+            } else {
+                throw new Error(data.message || 'Failed to submit form');
             }
         } catch (error) {
             console.error('Error submitting form:', error);
+            setError(error.message || 'Something went wrong. Please try again.');
         } finally {
             setIsSubmitting(false);
         }
@@ -251,6 +260,16 @@ const BookDemo = () => {
                                     </div>
                                 </div>
                             </div>
+
+                            {error && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center font-medium"
+                                >
+                                    {error}
+                                </motion.div>
+                            )}
 
                             <button
                                 type="submit"
