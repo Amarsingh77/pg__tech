@@ -16,7 +16,7 @@ const StreamPage = ({ streamName, streamId, theme, description, icon: Icon }) =>
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const res = await fetch(API_ENDPOINTS.courses);
+                const res = await fetch(`${API_ENDPOINTS.courses}?limit=100`);
                 if (!res.ok) throw new Error('Failed to fetch courses');
                 const data = await res.json();
                 const courseList = Array.isArray(data) ? data : (data.data || []);
