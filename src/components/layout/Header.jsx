@@ -62,7 +62,7 @@ const Header = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const res = await fetch(API_ENDPOINTS.courses);
+                const res = await fetch(`${API_ENDPOINTS.courses}?limit=100&active=true`);
                 if (!res.ok) throw new Error('Failed to fetch courses');
                 const data = await res.json();
                 const courses = Array.isArray(data) ? data : (data.data || []);
