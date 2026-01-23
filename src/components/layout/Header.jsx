@@ -151,26 +151,26 @@ const Header = () => {
                                     className="absolute top-full left-0 mt-0 pt-2 w-72"
                                 >
                                     <div className="bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 py-2">
-                                        {Object.keys(coursesByStream).length > 0 ? (
-                                            Object.keys(coursesByStream).map((stream) => (
-                                                <div
-                                                    key={stream}
-                                                    className="relative group/item"
-                                                    onMouseEnter={() => setActiveStream(stream)}
-                                                >
-                                                    <div className="flex items-center justify-between px-4 py-3 text-gray-300 hover:bg-white/5 hover:text-white transition-all cursor-pointer">
-                                                        <span className="font-medium">{streamLabels[stream] || stream}</span>
-                                                        <ChevronRight size={14} className="text-gray-500 group-hover/item:text-blue-400 transition-colors" />
-                                                    </div>
+                                        {Object.keys(streamLabels).map((stream) => (
+                                            <div
+                                                key={stream}
+                                                className="relative group/item"
+                                                onMouseEnter={() => setActiveStream(stream)}
+                                            >
+                                                <div className="flex items-center justify-between px-4 py-3 text-gray-300 hover:bg-white/5 hover:text-white transition-all cursor-pointer">
+                                                    <span className="font-medium">{streamLabels[stream]}</span>
+                                                    <ChevronRight size={14} className="text-gray-500 group-hover/item:text-blue-400 transition-colors" />
+                                                </div>
 
-                                                    {/* Nested Menu */}
-                                                    {activeStream === stream && (
-                                                        <motion.div
-                                                            initial={{ opacity: 0, x: -10 }}
-                                                            animate={{ opacity: 1, x: 0 }}
-                                                            className="absolute left-full top-0 ml-2 w-64 bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 py-2 overflow-hidden"
-                                                        >
-                                                            {coursesByStream[stream].slice(0, 4).map((course) => (
+                                                {/* Nested Menu */}
+                                                {activeStream === stream && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, x: -10 }}
+                                                        animate={{ opacity: 1, x: 0 }}
+                                                        className="absolute left-full top-0 ml-2 w-64 bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 py-2 overflow-hidden"
+                                                    >
+                                                        {coursesByStream[stream] && coursesByStream[stream].length > 0 ? (
+                                                            coursesByStream[stream].slice(0, 4).map((course) => (
                                                                 <Link
                                                                     key={course.id}
                                                                     to={`/course/${course.id}`}
@@ -178,26 +178,25 @@ const Header = () => {
                                                                 >
                                                                     {course.title}
                                                                 </Link>
-                                                            ))}
-                                                            <div className="border-t border-white/10 mt-2 pt-2">
-                                                                <Link
-                                                                    to={`/courses/${stream.toLowerCase()}`}
-                                                                    className="flex items-center justify-center px-4 py-2 text-xs font-bold text-blue-400 hover:text-blue-300 uppercase tracking-wide group/more"
-                                                                >
-                                                                    View all {stream}
-                                                                    <ArrowWrapper />
-                                                                </Link>
+                                                            ))
+                                                        ) : (
+                                                            <div className="px-4 py-3 text-sm text-gray-500 italic">
+                                                                No active courses
                                                             </div>
-                                                        </motion.div>
-                                                    )}
-                                                </div>
-                                            ))
-                                        ) : (
-                                            <div className="px-4 py-3 text-gray-400 text-sm flex items-center justify-center">
-                                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                                Loading...
+                                                        )}
+                                                        <div className="border-t border-white/10 mt-2 pt-2">
+                                                            <Link
+                                                                to={`/courses/${stream.toLowerCase()}`}
+                                                                className="flex items-center justify-center px-4 py-2 text-xs font-bold text-blue-400 hover:text-blue-300 uppercase tracking-wide group/more"
+                                                            >
+                                                                View all {stream}
+                                                                <ArrowWrapper />
+                                                            </Link>
+                                                        </div>
+                                                    </motion.div>
+                                                )}
                                             </div>
-                                        )}
+                                        ))}
                                     </div>
                                 </motion.div>
                             )}
@@ -302,14 +301,14 @@ const Header = () => {
                                             className="overflow-hidden"
                                         >
                                             <div className="pl-4 pb-4 space-y-4">
-                                                {Object.keys(coursesByStream).length > 0 ? (
-                                                    Object.keys(coursesByStream).map((stream) => (
-                                                        <div key={stream} className="space-y-2">
-                                                            <div className="text-sm font-semibold text-blue-400 uppercase tracking-wider pl-2 border-l-2 border-blue-500/30">
-                                                                {streamLabels[stream] || stream}
-                                                            </div>
-                                                            <div className="pl-2 space-y-1">
-                                                                {coursesByStream[stream].slice(0, 3).map((course) => (
+                                                {Object.keys(streamLabels).map((stream) => (
+                                                    <div key={stream} className="space-y-2">
+                                                        <div className="text-sm font-semibold text-blue-400 uppercase tracking-wider pl-2 border-l-2 border-blue-500/30">
+                                                            {streamLabels[stream]}
+                                                        </div>
+                                                        <div className="pl-2 space-y-1">
+                                                            {coursesByStream[stream] && coursesByStream[stream].length > 0 ? (
+                                                                coursesByStream[stream].slice(0, 3).map((course) => (
                                                                     <Link
                                                                         key={course.id}
                                                                         to={`/course/${course.id}`}
@@ -317,19 +316,19 @@ const Header = () => {
                                                                     >
                                                                         {course.title}
                                                                     </Link>
-                                                                ))}
-                                                                <Link
-                                                                    to={`/courses/${stream.toLowerCase()}`}
-                                                                    className="block py-2 text-xs font-bold text-blue-400 uppercase hover:text-blue-300"
-                                                                >
-                                                                    View All {stream} &rarr;
-                                                                </Link>
-                                                            </div>
+                                                                ))
+                                                            ) : (
+                                                                <div className="text-xs text-gray-600 italic py-1">No active courses</div>
+                                                            )}
+                                                            <Link
+                                                                to={`/courses/${stream.toLowerCase()}`}
+                                                                className="block py-2 text-xs font-bold text-blue-400 uppercase hover:text-blue-300"
+                                                            >
+                                                                View All {stream} &rarr;
+                                                            </Link>
                                                         </div>
-                                                    ))
-                                                ) : (
-                                                    <div className="text-gray-500 italic px-4">Loading courses...</div>
-                                                )}
+                                                    </div>
+                                                ))}
                                             </div>
                                         </motion.div>
                                     )}
