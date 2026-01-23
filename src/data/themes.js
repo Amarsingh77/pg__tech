@@ -37,6 +37,19 @@ export const STREAM_THEMES = {
         lightBorder: 'border-orange-500/30',
         color: 'orange',
         iconColor: 'text-orange-400'
+    },
+    'EE': {
+        text: 'text-yellow-400',
+        bg: 'bg-yellow-600',
+        bgHover: 'hover:bg-yellow-700',
+        border: 'border-yellow-500/30',
+        ring: 'ring-yellow-500',
+        gradientText: 'from-yellow-400 via-amber-500 to-orange-500',
+        buttonGradient: 'from-yellow-600 to-amber-600 hover:from-yellow-700 hover:to-amber-700',
+        lightBg: 'bg-yellow-500/10',
+        lightBorder: 'border-yellow-500/30',
+        color: 'yellow',
+        iconColor: 'text-yellow-400'
     }
 };
 
