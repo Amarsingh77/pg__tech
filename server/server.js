@@ -54,7 +54,9 @@ app.use(cors({
       'https://pgtech.in',
       'https://red-anteater-976251.hostingersite.com',
       'http://localhost:5173',
-      'http://localhost:5001'
+      'http://127.0.0.1:5173',
+      'http://localhost:5001',
+      'http://localhost:5000'
     ];
 
     // Allow requests with no origin (like mobile apps or curl requests)
@@ -63,6 +65,7 @@ app.use(cors({
     if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app') || origin.endsWith('.hostingersite.com')) {
       callback(null, true);
     } else {
+      console.log('Blocked by CORS:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
@@ -110,28 +113,41 @@ app.get('/health', async (req, res) => {
     dbStatus = 'Connection Error: ' + err.message;
   }
 
+  const maskedUri = process.env.MONGODB_URI
+    ? process.env.MONGODB_URI.replace(/:([^:@]+)@/, ':****@')
+    : 'NOT_SET';
+
   res.status(200).json({
     status: 'OK',
     database: dbStatus,
-    mongodb_uri_set: !!process.env.MONGODB_URI,
+    mongodb_uri_status: process.env.MONGODB_URI ? 'Loaded' : 'Missing',
+    mongodb_uri_preview: maskedUri,
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    env: process.env.NODE_ENV
+    env: process.env.NODE_ENV,
+    vercel: !!process.env.VERCEL
   });
 });
 
 // Middleware to ensure DB connection for API routes (Serverless fix)
 app.use('/api', async (req, res, next) => {
   try {
+    if (!process.env.MONGODB_URI) {
+      return res.status(503).json({
+        success: false,
+        error: 'Database configuration missing',
+        message: 'The server is not configured with a database. Please set MONGODB_URI.'
+      });
+    }
     await connectDB();
     next();
   } catch (err) {
     console.error('DB Connection middleware error:', err);
     res.status(500).json({
+      success: false,
       error: 'Database connection failed',
-      details: err.message,
-      // Only show stack in non-production or if we need deep debug
-      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+      message: 'Unable to connect to the database. Please try again later.',
+      details: process.env.NODE_ENV === 'development' ? err.message : undefined
     });
   }
 });

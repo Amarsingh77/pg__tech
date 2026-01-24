@@ -8,7 +8,7 @@ export const coursesData = [
         duration: '2 Semesters',
         level: 'Advanced',
         color: 'from-blue-500 to-indigo-600',
-        image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop',
+        image: '/images/hologram/full_stack.png',
         description: 'A comprehensive curriculum covering modern software architecture, distributed systems, and full-cycle web development.'
     },
     {
@@ -18,7 +18,7 @@ export const coursesData = [
         duration: '3 Semesters',
         level: 'Post-Graduate',
         color: 'from-purple-500 to-pink-600',
-        image: 'https://images.unsplash.com/photo-1551288049-bbbda5366391?auto=format&fit=crop&w=600&q=80',
+        image: '/images/hologram/dbms.png',
         description: 'Rigorous training in statistical analysis, machine learning algorithms, and big data technologies for predictive modeling.'
     },
     {
@@ -28,7 +28,7 @@ export const coursesData = [
         duration: '1 Semester',
         level: 'Professional',
         color: 'from-sky-500 to-cyan-600',
-        image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop',
+        image: '/images/hologram/cloud.png',
         description: 'Specialized training in designing scalable, resilient, and secure cloud infrastructure on enterprise platforms.'
     },
     {
@@ -38,7 +38,7 @@ export const coursesData = [
         duration: '2 Semesters',
         level: 'Intermediate',
         color: 'from-red-500 to-orange-600',
-        image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=80',
+        image: '/images/hologram/dsa.png',
         description: 'In-depth study of network security, cryptography, and ethical hacking to safeguard organizational assets.'
     },
 ];

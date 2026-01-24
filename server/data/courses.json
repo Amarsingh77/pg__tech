@@ -74,7 +74,7 @@
         "duration": "3 Months",
         "level": "Beginner",
         "stream": "ME",
-        "image": "/images/hologram/autocad.png",
+        "image": "/images/hologram/autocad_me.png",
         "curriculum": [
             "AutoCAD Interface and Basic Drawing",
             "Advanced Drafting Techniques",
@@ -193,7 +193,7 @@
         "duration": "3 Months",
         "level": "Beginner",
         "stream": "CE",
-        "image": "/images/hologram/autocad.png",
+        "image": "/images/hologram/autocad_civil.png",
         "curriculum": [
             "Architectural Drafting Standards",
             "Floor Plans and Elevations",

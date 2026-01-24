@@ -221,7 +221,7 @@ export const ceCourses = [
         title: 'AutoCAD for Civil',
         icon: Ruler,
         desc: 'Create precise architectural and engineering drawings.',
-        image: '/images/hologram/autocad.png',
+        image: '/images/hologram/autocad_civil.png',
         details: {
             duration: '3 Months',
             level: 'Beginner',
