@@ -49,6 +49,7 @@ const Header = () => {
         'ME': 'Mechanical Engineering',
         'CE': 'Civil Engineering',
         'EE': 'Electrical Engineering',
+        'ECE': 'Electronics & Communication',
         'Other': 'Other Courses'
     };
 

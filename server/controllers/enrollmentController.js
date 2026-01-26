@@ -104,9 +104,21 @@ export const createEnrollment = async (req, res) => {
     });
   } catch (error) {
     console.error('Create enrollment error:', error);
+
+    // Check for Mongoose validation error
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(val => val.message);
+      return res.status(400).json({
+        success: false,
+        message: 'Validation Error',
+        errors: messages
+      });
+    }
+
     res.status(500).json({
       success: false,
-      message: 'Server error submitting enrollment'
+      message: 'Server error submitting enrollment',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };

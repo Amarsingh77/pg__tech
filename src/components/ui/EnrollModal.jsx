@@ -37,7 +37,7 @@ const EnrollModal = ({ course, onClose }) => {
                 email: e.target.email.value,
                 phone: e.target.phone.value,
                 courseName: course.title || course.course,
-                status: 'New',
+                status: 'Pending',
                 enrollmentDate: new Date().toISOString()
             };
 

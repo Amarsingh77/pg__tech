@@ -50,6 +50,19 @@ export const STREAM_THEMES = {
         lightBorder: 'border-violet-500/30',
         color: 'violet',
         iconColor: 'text-violet-400'
+    },
+    'ECE': {
+        text: 'text-cyan-400',
+        bg: 'bg-cyan-600',
+        bgHover: 'hover:bg-cyan-700',
+        border: 'border-cyan-500/30',
+        ring: 'ring-cyan-500',
+        gradientText: 'from-cyan-400 via-blue-400 to-indigo-500',
+        buttonGradient: 'from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700',
+        lightBg: 'bg-cyan-500/10',
+        lightBorder: 'border-cyan-500/30',
+        color: 'cyan',
+        iconColor: 'text-cyan-400'
     }
 };
 

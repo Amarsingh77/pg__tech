@@ -16,6 +16,7 @@ import CSE from './pages/CSE';
 import ME from './pages/ME';
 import CE from './pages/CE';
 import EE from './pages/EE';
+import ECE from './pages/ECE';
 import Gallery from './pages/Gallery';
 import WhyUs from './pages/WhyUs';
 import Testimonials from './pages/Testimonials';
@@ -99,6 +100,7 @@ const AppContent = () => {
           <Route path="/courses/me" element={<ME onEnrollClick={handleEnrollClick} />} />
           <Route path="/courses/ce" element={<CE onEnrollClick={handleEnrollClick} />} />
           <Route path="/courses/ee" element={<EE onEnrollClick={handleEnrollClick} />} />
+          <Route path="/courses/ece" element={<ECE onEnrollClick={handleEnrollClick} />} />
           <Route path="/services/:type" element={<Services />} />
           <Route path="/services" element={<Services />} />
           <Route path="/gallery" element={<Gallery />} />

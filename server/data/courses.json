@@ -6,6 +6,7 @@
         "duration": "6 Months",
         "level": "Beginner to Advanced",
         "stream": "CSE",
+        "order": 1,
         "image": "/images/hologram/full_stack.png",
         "curriculum": [
             "HTML, CSS, JavaScript Fundamentals",
@@ -17,12 +18,85 @@
         "syllabusPdf": "/curriculum/sample_curriculum.pdf"
     },
     {
+        "id": "ce-structural",
+        "title": "Structural Analysis",
+        "description": "Analyze and design safe structures.",
+        "duration": "5 Months",
+        "level": "Advanced",
+        "stream": "CE",
+        "order": 2,
+        "image": "/images/hologram/structural.png",
+        "curriculum": [
+            "Statics and Strength of Materials",
+            "Structural Analysis Methods",
+            "Reinforced Concrete Design",
+            "Steel Structure Design",
+            "Seismic Analysis"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
+    },
+    {
+        "id": "me-robotics",
+        "title": "Robotics & Automation",
+        "description": "Build and program intelligent robots.",
+        "duration": "6 Months",
+        "level": "Advanced",
+        "stream": "ME",
+        "order": 3,
+        "image": "/images/hologram/robotics.png",
+        "curriculum": [
+            "Introduction to Robotics",
+            "Sensors and Actuators",
+            "Microcontrollers (Arduino/Raspberry Pi)",
+            "Kinematics and Dynamics",
+            "Robot Programming (ROS)"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
+    },
+    {
+        "id": "ee-circuits",
+        "title": "Circuit Analysis",
+        "description": "Master the fundamentals of electrical circuits and components.",
+        "duration": "4 Months",
+        "level": "Beginner",
+        "stream": "EE",
+        "order": 4,
+        "image": "/images/hologram/autocad.png",
+        "curriculum": [
+            "Ohm's Law and Kirchhoff's Laws",
+            "AC and DC Circuits",
+            "Semiconductors and Diodes",
+            "Operational Amplifiers",
+            "Circuit Simulation with SPICE"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
+    },
+    {
+        "id": "ece-embedded",
+        "title": "Embedded Systems",
+        "description": "Design and program smart devices using microcontrollers.",
+        "duration": "6 Months",
+        "level": "Intermediate",
+        "stream": "ECE",
+        "order": 5,
+        "image": "/images/hologram/robotics.png",
+        "curriculum": [
+            "Microcontroller Architecture (8051, ARM)",
+            "Embedded C Programming",
+            "Interfacing Sensors and Actuators",
+            "Real-Time OS (RTOS) Basics",
+            "IoT Integration"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
+    },
+    {
         "id": "cse-dsa",
         "title": "Data Structures & Algo",
         "description": "Ace coding interviews with deep DSA knowledge.",
         "duration": "4 Months",
         "level": "Intermediate",
         "stream": "CSE",
+        "order": 6,
         "image": "/images/hologram/dsa.png",
         "curriculum": [
             "Arrays, Linked Lists, Stacks, Queues",
@@ -34,12 +108,49 @@
         "syllabusPdf": "/curriculum/sample_curriculum.pdf"
     },
     {
+        "id": "ce-surveying",
+        "title": "Surveying & Geomatics",
+        "description": "Master land surveying techniques and GPS.",
+        "duration": "3 Months",
+        "level": "Beginner",
+        "stream": "CE",
+        "order": 7,
+        "image": "/images/hologram/surveying.png",
+        "curriculum": [
+            "Linear and Angular Measurements",
+            "Leveling and Contouring",
+            "Total Station Surveying",
+            "GPS and GIS Applications",
+            "Remote Sensing Basics"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
+    },
+    {
+        "id": "me-automobile",
+        "title": "Automobile Engineering",
+        "description": "Understand vehicle dynamics and engine systems.",
+        "duration": "4 Months",
+        "level": "Intermediate",
+        "stream": "ME",
+        "order": 8,
+        "image": "/images/hologram/automobile.png",
+        "curriculum": [
+            "Internal Combustion Engines",
+            "Vehicle Aerodynamics",
+            "Transmission Systems",
+            "Electric Vehicle Technology",
+            "Automotive Safety Systems"
+        ],
+        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
+    },
+    {
         "id": "cse-cloud",
         "title": "Cloud Computing",
         "description": "Learn AWS, Azure, and DevOps practices.",
         "duration": "5 Months",
         "level": "Intermediate",
         "stream": "CSE",
+        "order": 9,
         "image": "/images/hologram/cloud.png",
         "curriculum": [
             "Cloud Concepts and Architecture",
@@ -57,6 +168,7 @@
         "duration": "3 Months",
         "level": "Beginner",
         "stream": "CSE",
+        "order": 10,
         "image": "/images/hologram/dbms.png",
         "curriculum": [
             "Relational Database Design (SQL)",
@@ -74,6 +186,7 @@
         "duration": "3 Months",
         "level": "Beginner",
         "stream": "ME",
+        "order": 11,
         "image": "/images/hologram/autocad_me.png",
         "curriculum": [
             "AutoCAD Interface and Basic Drawing",
@@ -85,46 +198,13 @@
         "syllabusPdf": "/curriculum/sample_curriculum.pdf"
     },
     {
-        "id": "me-robotics",
-        "title": "Robotics & Automation",
-        "description": "Build and program intelligent robots.",
-        "duration": "6 Months",
-        "level": "Advanced",
-        "stream": "ME",
-        "image": "/images/hologram/robotics.png",
-        "curriculum": [
-            "Introduction to Robotics",
-            "Sensors and Actuators",
-            "Microcontrollers (Arduino/Raspberry Pi)",
-            "Kinematics and Dynamics",
-            "Robot Programming (ROS)"
-        ],
-        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
-    },
-    {
-        "id": "me-automobile",
-        "title": "Automobile Engineering",
-        "description": "Understand vehicle dynamics and engine systems.",
-        "duration": "4 Months",
-        "level": "Intermediate",
-        "stream": "ME",
-        "image": "/images/hologram/automobile.png",
-        "curriculum": [
-            "Internal Combustion Engines",
-            "Vehicle Aerodynamics",
-            "Transmission Systems",
-            "Electric Vehicle Technology",
-            "Automotive Safety Systems"
-        ],
-        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
-    },
-    {
         "id": "me-maintenance",
         "title": "Industrial Maintenance",
         "description": "Learn machinery upkeep and safety protocols.",
         "duration": "3 Months",
         "level": "Beginner",
         "stream": "ME",
+        "order": 12,
         "image": "/images/hologram/maintenance.png",
         "curriculum": [
             "Preventive Maintenance Strategies",
@@ -136,47 +216,14 @@
         "syllabusPdf": "/curriculum/sample_curriculum.pdf"
     },
     {
-        "id": "ce-structural",
-        "title": "Structural Analysis",
-        "description": "Analyze and design safe structures.",
-        "duration": "5 Months",
-        "level": "Advanced",
-        "stream": "CE",
-        "image": "/images/hologram/structural.png",
-        "curriculum": [
-            "Statics and Strength of Materials",
-            "Structural Analysis Methods",
-            "Reinforced Concrete Design",
-            "Steel Structure Design",
-            "Seismic Analysis"
-        ],
-        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
-    },
-    {
-        "id": "ce-surveying",
-        "title": "Surveying & Geomatics",
-        "description": "Master land surveying techniques and GPS.",
-        "duration": "3 Months",
-        "level": "Beginner",
-        "stream": "CE",
-        "image": "/images/hologram/surveying.png",
-        "curriculum": [
-            "Linear and Angular Measurements",
-            "Leveling and Contouring",
-            "Total Station Surveying",
-            "GPS and GIS Applications",
-            "Remote Sensing Basics"
-        ],
-        "syllabusPdf": "/curriculum/sample_curriculum.pdf"
-    },
-    {
         "id": "ce-construction",
         "title": "Construction Management",
         "description": "Plan and execute construction projects efficiently.",
         "duration": "6 Months",
         "level": "Intermediate",
         "stream": "CE",
-        "image": "/images/hologram/construction.png",
+        "order": 13,
+        "image": "/images/hologram/construction_v2.png",
         "curriculum": [
             "Project Planning and Scheduling",
             "Cost Estimation and Budgeting",
@@ -193,7 +240,8 @@
         "duration": "3 Months",
         "level": "Beginner",
         "stream": "CE",
-        "image": "/images/hologram/autocad_civil.png",
+        "order": 14,
+        "image": "/images/hologram/autocad_civil_v2.png",
         "curriculum": [
             "Architectural Drafting Standards",
             "Floor Plans and Elevations",
