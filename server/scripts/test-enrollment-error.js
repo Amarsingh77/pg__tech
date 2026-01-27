@@ -27,7 +27,7 @@ const testEnrollmentError = async () => {
         console.log('Status:', response.status);
         console.log('Response:', JSON.stringify(data, null, 2));
 
-        if (response.status === 400 && data.message === 'Validation Error') {
+        if (response.status === 400 && (data.message === 'Validation failed' || data.message === 'Validation Error')) {
             console.log('✅ Correctly handled validation error with 400 status.');
         } else {
             console.error('❌ Error handling verification failed.');

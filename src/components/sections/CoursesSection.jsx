@@ -79,7 +79,7 @@ const CoursesSection = ({ onEnrollClick }) => {
                                 viewport={{ once: true, margin: "-50px" }} // Load slightly earlier
                                 transition={{ duration: 0.4, delay: Math.min(i * 0.1, 0.4) }} // Cap delay
                             >
-                                <div className="h-full relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 px-6 py-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:bg-white/10 group">
+                                <div className="h-full flex flex-col relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 px-6 py-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:bg-white/10 group">
 
                                     <div className="mb-6 relative">
                                         <div className={`absolute -inset-2 bg-gradient-to-br ${theme.buttonGradient} rounded-3xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300`} />
@@ -88,11 +88,11 @@ const CoursesSection = ({ onEnrollClick }) => {
                                         </div>
                                     </div>
 
-                                    <div className="flex-grow">
+                                    <div className="flex-grow flex flex-col">
                                         <h3 className="text-xl font-bold mb-3 text-white group-hover:text-blue-400 transition-colors duration-300 line-clamp-2 min-h-[3.5rem]">
                                             {course.title}
                                         </h3>
-                                        <p className="text-gray-400 text-sm mb-6 leading-relaxed line-clamp-3">
+                                        <p className="text-gray-400 text-sm mb-6 leading-relaxed line-clamp-3 flex-grow">
                                             {course.description}
                                         </p>
 

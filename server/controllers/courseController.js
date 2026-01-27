@@ -46,10 +46,15 @@ export const getCourses = async (req, res) => {
       data: courses
     });
   } catch (error) {
-    console.error('Get courses error:', error);
+    console.error('Get courses error:', {
+      message: error.message,
+      stack: error.stack,
+      query: req.query
+    });
     res.status(500).json({
       success: false,
-      message: 'Server error getting courses'
+      message: 'Server error getting courses',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };

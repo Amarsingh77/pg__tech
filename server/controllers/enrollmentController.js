@@ -103,7 +103,11 @@ export const createEnrollment = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Create enrollment error:', error);
+    console.error('Create enrollment error:', {
+      message: error.message,
+      stack: error.stack,
+      body: req.body
+    });
 
     // Check for Mongoose validation error
     if (error.name === 'ValidationError') {

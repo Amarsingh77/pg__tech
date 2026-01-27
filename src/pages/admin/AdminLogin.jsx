@@ -32,8 +32,8 @@ const AdminLogin = () => {
             console.log('📨 Login response status:', res.status);
 
             if (!res.ok) {
-                const text = await res.text();
-                throw new Error(text || 'Login failed');
+                const errorData = await res.json().catch(() => ({}));
+                throw new Error(errorData.message || 'Login failed');
             }
 
             const data = await res.json();
@@ -50,7 +50,7 @@ const AdminLogin = () => {
             }
         } catch (error) {
             console.error('💥 Login error:', error);
-            setError('Login failed. Please check if the backend server is running.');
+            setError(error.message || 'Login failed. Please check if the backend server is running.');
         } finally {
             setLoading(false);
         }

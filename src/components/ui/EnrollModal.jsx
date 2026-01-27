@@ -59,8 +59,9 @@ const EnrollModal = ({ course, onClose }) => {
                     setIsSubmitted(false); // Reset for next time
                 }, 3000);
             } else {
-                console.error('Enrollment failed:', data.message);
-                alert(data.message || 'Failed to submit enrollment');
+                console.error('Enrollment failed:', data.message || data.errors);
+                const errorMessage = data.errors ? data.errors.join(', ') : (data.message || 'Failed to submit enrollment');
+                alert(errorMessage);
             }
         } catch (error) {
             console.error('Error submitting enrollment:', error);

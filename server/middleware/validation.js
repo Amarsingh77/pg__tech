@@ -99,6 +99,10 @@ export const validateEnrollment = [
     .trim()
     .isLength({ min: 1, max: 100 })
     .withMessage('Course name must be between 1 and 100 characters'),
+  body('status')
+    .optional()
+    .isIn(['Pending', 'Approved', 'Rejected', 'Completed'])
+    .withMessage('Invalid status'),
   body('notes')
     .optional()
     .trim()

@@ -63,6 +63,21 @@ export const login = async (req, res) => {
         });
       } catch (err) {
         console.error('Email send failure:', err);
+        console.log('------------------------------------');
+        console.log('👉 DEVELOPMENT FALLBACK:');
+        console.log(`🔑 Admin Login OTP for ${user.email}: ${otp}`);
+        console.log('------------------------------------');
+
+        // In development, we can still succeed even if email fails
+        if (process.env.NODE_ENV === 'development') {
+          return res.status(200).json({
+            success: true,
+            message: `OTP logged to console (Email failed)`,
+            tempEmail: user.email,
+            otp: otp // Provide OTP in response for dev convenience
+          });
+        }
+
         user.otp = undefined;
         user.otpExpire = undefined;
         await user.save();

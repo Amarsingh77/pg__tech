@@ -17,7 +17,6 @@ if (!cached) {
 
 const connectDB = async () => {
   if (cached.conn && mongoose.connection.readyState === 1) {
-    // console.log('Using cached MongoDB connection');
     return cached.conn;
   }
 
@@ -32,6 +31,9 @@ const connectDB = async () => {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false, // Disable Mongoose buffering for Serverless
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+      socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
     };
 
     console.log(`Creating new MongoDB connection to: ${maskedUri}`);
@@ -45,8 +47,8 @@ const connectDB = async () => {
     cached.conn = await cached.promise;
     return cached.conn;
   } catch (e) {
-    cached.promise = null;
     console.error('MongoDB Connection Error:', e);
+    cached.promise = null; // Clear promise so we can try again on next request
     throw e;
   }
 };
