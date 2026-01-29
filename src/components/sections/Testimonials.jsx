@@ -69,7 +69,7 @@ const Testimonials = () => {
                                     <AnimatePresence mode="wait">
                                         <motion.img
                                             key={testimonial.id}
-                                            src={testimonial.avatar}
+                                            src={testimonial.image}
                                             alt={testimonial.name}
                                             initial={{ opacity: 0, scale: 0.8 }}
                                             animate={{ opacity: 1, scale: 1 }}
@@ -112,7 +112,7 @@ const Testimonials = () => {
                                             exit={{ opacity: 0 }}
                                         >
                                             <h4 className="text-2xl font-bold text-white mb-1">{testimonial.name}</h4>
-                                            <p className="text-blue-400 font-medium">{testimonial.course}</p>
+                                            <p className="text-blue-400 font-medium">{testimonial.role}</p>
                                         </motion.div>
                                     </AnimatePresence>
                                 </div>

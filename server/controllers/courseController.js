@@ -17,11 +17,13 @@ export const getCourses = async (req, res) => {
     }
 
     // Calculate pagination
-    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const limitNum = Math.max(1, parseInt(limit) || 10);
+    const skip = (pageNum - 1) * limitNum;
 
     // Build sort object
     const sortObj = {};
-    const sortField = sort.replace('-', '');
+    const sortField = sort.replace('-', '') || 'order';
     const sortOrder = sort.startsWith('-') ? -1 : 1;
     sortObj[sortField] = sortOrder;
 
@@ -29,7 +31,7 @@ export const getCourses = async (req, res) => {
     const courses = await Course.find(query)
       .sort(sortObj)
       .skip(skip)
-      .limit(parseInt(limit));
+      .limit(limitNum);
 
     // Get total count for pagination
     const total = await Course.countDocuments(query);
@@ -39,9 +41,9 @@ export const getCourses = async (req, res) => {
       count: courses.length,
       total,
       pagination: {
-        page: parseInt(page),
-        pages: Math.ceil(total / parseInt(limit)),
-        limit: parseInt(limit)
+        page: pageNum,
+        pages: Math.ceil(total / limitNum),
+        limit: limitNum
       },
       data: courses
     });
@@ -54,7 +56,7 @@ export const getCourses = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Server error getting courses',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      details: process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production' ? error.message : undefined
     });
   }
 };
