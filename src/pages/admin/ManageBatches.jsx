@@ -13,7 +13,7 @@ const ManageBatches = () => {
         time: '',
         days: '',
         mode: 'Online',
-        status: 'Open',
+        status: 'Upcoming',
         seatsLeft: 20,
         instructor: ''
     });
@@ -42,15 +42,24 @@ const ManageBatches = () => {
         const method = currentBatch ? 'PUT' : 'POST';
 
         try {
-            await fetch(url, {
+            const res = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.message || 'Failed to save batch');
+            }
+
+            alert(currentBatch ? 'Batch updated successfully!' : 'Batch created successfully!');
             fetchBatches();
             closeModal();
         } catch (error) {
             console.error('Error saving batch:', error);
+            alert(`Error: ${error.message}`);
         }
     };
 
@@ -78,7 +87,7 @@ const ManageBatches = () => {
                 time: '',
                 days: '',
                 mode: 'Online',
-                status: 'Open',
+                status: 'Upcoming',
                 seatsLeft: 20,
                 instructor: ''
             });
@@ -152,7 +161,7 @@ const ManageBatches = () => {
                                     </td>
                                     <td className="p-6">
                                         <div className="flex items-center gap-2">
-                                            <div className={`w-2 h-2 rounded-full ${batch.status === 'Open' ? 'bg-emerald-500 animate-pulse' : 'bg-orange-500'}`} />
+                                            <div className={`w-2 h-2 rounded-full ${batch.status === 'Upcoming' || batch.status === 'Ongoing' ? 'bg-emerald-500 animate-pulse' : 'bg-gray-500'}`} />
                                             <span className="text-sm font-bold text-gray-300">{batch.status}</span>
                                         </div>
                                     </td>
