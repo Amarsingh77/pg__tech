@@ -26,6 +26,7 @@ const ManageBatches = () => {
             setBatches(Array.isArray(data) ? data : (data.data || []));
         } catch (error) {
             console.error('Error fetching batches:', error);
+            alert(`Failed into load batches: ${error.message}`);
         }
     };
 
