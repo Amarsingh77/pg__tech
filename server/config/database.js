@@ -37,10 +37,15 @@ const connectDB = async () => {
     };
 
     console.log(`Creating new MongoDB connection to: ${maskedUri}`);
-    cached.promise = mongoose.connect(process.env.MONGODB_URI, opts).then((mongoose) => {
-      console.log('🗄️  MongoDB Connected: ' + mongoose.connection.host);
-      return mongoose;
-    });
+    cached.promise = mongoose.connect(process.env.MONGODB_URI, opts)
+      .then((mongoose) => {
+        console.log('🗄️  MongoDB Connected: ' + mongoose.connection.host);
+        return mongoose;
+      })
+      .catch((err) => {
+        console.error('❌ MongoDB Initial Connection Error:', err.message);
+        throw err;
+      });
   }
 
   try {
