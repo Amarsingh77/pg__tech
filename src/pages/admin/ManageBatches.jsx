@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, X } from 'lucide-react';
-import { API_ENDPOINTS } from '../../config/api';
+import { API_ENDPOINTS, getAuthHeaders } from '../../config/api';
 
 const ManageBatches = () => {
     const [batches, setBatches] = useState([]);
@@ -45,7 +45,10 @@ const ManageBatches = () => {
         try {
             const res = await fetch(url, {
                 method,
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAuthHeaders()
+                },
                 body: JSON.stringify(formData)
             });
 
@@ -67,7 +70,10 @@ const ManageBatches = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this batch?')) {
             try {
-                await fetch(API_ENDPOINTS.batch(id), { method: 'DELETE' });
+                await fetch(API_ENDPOINTS.batch(id), {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
                 fetchBatches();
             } catch (error) {
                 console.error('Error deleting batch:', error);
