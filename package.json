@@ -16,7 +16,8 @@
     "start": "cd server && npm start",
     "setup": "npm install && npm run install:server",
     "dev:full": "concurrently \"npm run dev\" \"npm run server\"",
-    "build:full": "npm run build && echo 'Server does not require build step'"
+    "build:full": "npm run build && echo 'Server does not require build step'",
+    "deploy:frontend": "npm run build && node deploy-manual.js"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
@@ -34,6 +35,7 @@
     "@types/react-dom": "^19.2.2",
     "@vitejs/plugin-react": "^5.1.0",
     "autoprefixer": "^10.4.22",
+    "basic-ftp": "^5.1.0",
     "concurrently": "^8.2.2",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
