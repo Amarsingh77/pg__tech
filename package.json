@@ -17,7 +17,7 @@
     "setup": "npm install && npm run install:server",
     "dev:full": "concurrently \"npm run dev\" \"npm run server\"",
     "build:full": "npm run build && echo 'Server does not require build step'",
-    "deploy:frontend": "npm run build && node deploy-manual.js"
+    "deploy:frontend": "npm run build && node deploy-interactive.js"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
