@@ -28,3 +28,7 @@ dist-ssr
 # Backend
 backend/node_modules
 backend/uploads
+
+# Debug logs
+debug_curl_output.txt
+
